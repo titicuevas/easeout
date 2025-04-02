@@ -1,0 +1,146 @@
+/* Estilos para el contenedor del diario */
+.journal-container {
+    padding: 2rem 0;
+}
+
+.journal-paper {
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    background-color: #FFFFFF;
+    padding: 2rem;
+}
+
+/* Estilos para los botones de estado de ánimo */
+.mood-button {
+    margin: 0.5rem;
+    padding: 1rem;
+    font-size: 2rem;
+    min-width: 100px;
+    height: 100px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    border-width: 2px;
+    border-style: solid;
+}
+
+.mood-button:hover {
+    transform: translateY(-5px);
+}
+
+.mood-button .emoji {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.mood-button .label {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Estilos para el campo de texto */
+.journal-textarea {
+    width: 100%;
+    background-color: #F8FAFC;
+    border-radius: 16px;
+    transition: all 0.3s ease;
+}
+
+.journal-textarea textarea {
+    min-height: 120px;
+    padding: 16px;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #2C3E50;
+    border: none;
+    background: transparent;
+    width: 100%;
+    resize: vertical;
+}
+
+.journal-textarea:hover,
+.journal-textarea:focus-within {
+    background-color: #FFFFFF;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.journal-textarea textarea::placeholder {
+    color: #34495E;
+    opacity: 0.8;
+}
+
+/* Estilos para el botón de guardar */
+.save-button {
+    padding: 12px 32px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    background-color: #7C9885;
+    color: white;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.save-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    background-color: #5A7267;
+}
+
+.save-button:disabled {
+    background-color: #E2E8F0;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Estilos para los títulos */
+.journal-title {
+    font-family: "Segoe UI", "Roboto", "Arial", sans-serif;
+    font-weight: 500;
+    color: #2C3E50;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.journal-subtitle {
+    font-family: "Segoe UI", "Roboto", "Arial", sans-serif;
+    font-weight: 400;
+    color: #34495E;
+    margin-bottom: 1rem;
+}
+
+/* Estilos específicos para cada estado de ánimo */
+.mood-happy { border-color: #FFD93D; }
+.mood-happy.selected { background-color: #FFD93D; color: white; }
+.mood-happy:hover { background-color: rgba(255, 217, 61, 0.1); }
+
+.mood-neutral { border-color: #98B4AA; }
+.mood-neutral.selected { background-color: #98B4AA; color: white; }
+.mood-neutral:hover { background-color: rgba(152, 180, 170, 0.1); }
+
+.mood-sad { border-color: #95B1DB; }
+.mood-sad.selected { background-color: #95B1DB; color: white; }
+.mood-sad:hover { background-color: rgba(149, 177, 219, 0.1); }
+
+.mood-angry { border-color: #FF6B6B; }
+.mood-angry.selected { background-color: #FF6B6B; color: white; }
+.mood-angry:hover { background-color: rgba(255, 107, 107, 0.1); }
+
+.mood-frustrated { border-color: #B088F9; }
+.mood-frustrated.selected { background-color: #B088F9; color: white; }
+.mood-frustrated:hover { background-color: rgba(176, 136, 249, 0.1); }
+
+/* Espaciado */
+.my-6 {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.mt-6 {
+    margin-top: 1.5rem;
+} 

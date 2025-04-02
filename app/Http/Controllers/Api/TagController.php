@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Tag;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Inertia\Inertia;
 
 class TagController extends Controller
 {
@@ -19,7 +19,17 @@ class TagController extends Controller
             ->latest()
             ->get();
 
-        return response()->json($tags);
+        return Inertia::render('Tags/Index', [
+            'tags' => $tags
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return Inertia::render('Tags/Create');
     }
 
     /**
@@ -34,7 +44,8 @@ class TagController extends Controller
 
         $tag = auth()->user()->tags()->create($validated);
 
-        return response()->json($tag, Response::HTTP_CREATED);
+        return redirect()->route('tags.index')
+            ->with('message', 'Etiqueta creada exitosamente');
     }
 
     /**
@@ -43,7 +54,22 @@ class TagController extends Controller
     public function show(Tag $tag)
     {
         $this->authorize('view', $tag);
-        return response()->json($tag->load('journalEntries'));
+        
+        return Inertia::render('Tags/Show', [
+            'tag' => $tag->load('journalEntries')
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Tag $tag)
+    {
+        $this->authorize('update', $tag);
+        
+        return Inertia::render('Tags/Edit', [
+            'tag' => $tag
+        ]);
     }
 
     /**
@@ -60,7 +86,8 @@ class TagController extends Controller
 
         $tag->update($validated);
 
-        return response()->json($tag);
+        return redirect()->route('tags.index')
+            ->with('message', 'Etiqueta actualizada exitosamente');
     }
 
     /**
@@ -71,6 +98,8 @@ class TagController extends Controller
         $this->authorize('delete', $tag);
         
         $tag->delete();
-        return response()->noContent();
+        
+        return redirect()->route('tags.index')
+            ->with('message', 'Etiqueta eliminada exitosamente');
     }
 }

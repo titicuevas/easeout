@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\AudioRecording;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 class AudioRecordingController extends Controller
 {
@@ -19,7 +19,17 @@ class AudioRecordingController extends Controller
             ->latest()
             ->paginate(10);
 
-        return response()->json($recordings);
+        return Inertia::render('AudioRecordings/Index', [
+            'recordings' => $recordings
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return Inertia::render('AudioRecordings/Create');
     }
 
     /**
@@ -29,20 +39,24 @@ class AudioRecordingController extends Controller
     {
         $validated = $request->validate([
             'audio' => 'required|file|mimes:mp3,wav,m4a|max:10240', // 10MB max
+            'duration' => 'required|integer',
             'mood' => 'nullable|string',
             'metadata' => 'nullable|array'
         ]);
 
-        $path = $request->file('audio')->store('audio-recordings', 'public');
+        // Guardar el archivo de audio
+        $audioPath = $request->file('audio')->store('audios', 'public');
 
+        // Crear el registro en la base de datos
         $recording = auth()->user()->audioRecordings()->create([
-            'file_path' => $path,
-            'duration' => $request->input('duration', 0),
-            'mood' => $validated['mood'],
-            'metadata' => $validated['metadata']
+            'file_path' => $audioPath,
+            'duration' => $validated['duration'],
+            'mood' => $validated['mood'] ?? null,
+            'metadata' => $validated['metadata'] ?? null
         ]);
 
-        return response()->json($recording, Response::HTTP_CREATED);
+        return redirect()->route('audio-recordings.index')
+            ->with('message', 'Grabación guardada exitosamente');
     }
 
     /**
@@ -51,7 +65,24 @@ class AudioRecordingController extends Controller
     public function show(AudioRecording $audioRecording)
     {
         $this->authorize('view', $audioRecording);
-        return response()->json($audioRecording);
+
+        return Inertia::render('AudioRecordings/Show', [
+            'recording' => $audioRecording,
+            'audioUrl' => Storage::disk('public')->url($audioRecording->file_path)
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(AudioRecording $audioRecording)
+    {
+        $this->authorize('update', $audioRecording);
+
+        return Inertia::render('AudioRecordings/Edit', [
+            'recording' => $audioRecording,
+            'audioUrl' => Storage::disk('public')->url($audioRecording->file_path)
+        ]);
     }
 
     /**
@@ -66,9 +97,26 @@ class AudioRecordingController extends Controller
             'metadata' => 'nullable|array'
         ]);
 
+        // Si hay un nuevo archivo de audio
+        if ($request->hasFile('audio')) {
+            $request->validate([
+                'audio' => 'required|file|mimes:mp3,wav,m4a|max:10240',
+                'duration' => 'required|integer'
+            ]);
+
+            // Eliminar el archivo anterior
+            Storage::disk('public')->delete($audioRecording->file_path);
+
+            // Guardar el nuevo archivo
+            $audioPath = $request->file('audio')->store('audios', 'public');
+            $validated['file_path'] = $audioPath;
+            $validated['duration'] = $request->input('duration');
+        }
+
         $audioRecording->update($validated);
 
-        return response()->json($audioRecording);
+        return redirect()->route('audio-recordings.index')
+            ->with('message', 'Grabación actualizada exitosamente');
     }
 
     /**
@@ -78,17 +126,23 @@ class AudioRecordingController extends Controller
     {
         $this->authorize('delete', $audioRecording);
 
-        // Eliminar el archivo de audio
+        // Eliminar el archivo físico
         Storage::disk('public')->delete($audioRecording->file_path);
         
+        // Eliminar el registro de la base de datos
         $audioRecording->delete();
-        return response()->noContent();
+
+        return redirect()->route('audio-recordings.index')
+            ->with('message', 'Grabación eliminada exitosamente');
     }
 
     public function download(AudioRecording $audioRecording)
     {
         $this->authorize('view', $audioRecording);
-        
-        return Storage::disk('public')->download($audioRecording->file_path);
+
+        return Storage::disk('public')->download(
+            $audioRecording->file_path,
+            'audio-' . $audioRecording->created_at->format('Y-m-d-H-i-s') . '.mp3'
+        );
     }
 }
