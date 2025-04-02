@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../../css/journal.css';
 import AudioRecorder from './AudioRecorder';
+import { Expand } from "@theme-toggles/react";
+import "@theme-toggles/react/css/Expand.css";
 
 const moods = [
     { emoji: '😊', label: 'Alegre', value: 'happy' },
@@ -14,6 +16,24 @@ const JournalEntry = () => {
     const [selectedMood, setSelectedMood] = useState(null);
     const [content, setContent] = useState('');
     const [audioBlob, setAudioBlob] = useState(null);
+    const [isDarkMode, setIsDarkMode] = useState(false);
+
+    useEffect(() => {
+        // Verificar si hay una preferencia guardada
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            setIsDarkMode(true);
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    }, []);
+
+    const toggleTheme = () => {
+        setIsDarkMode(!isDarkMode);
+        document.documentElement.setAttribute('data-theme', isDarkMode ? 'light' : 'dark');
+        localStorage.setItem('theme', isDarkMode ? 'light' : 'dark');
+    };
 
     const handleMoodSelect = (mood) => {
         setSelectedMood(mood);
@@ -61,10 +81,19 @@ const JournalEntry = () => {
 
     return (
         <div className="journal-container">
+            <button
+                onClick={toggleTheme}
+                className="theme-toggle"
+                aria-label="Cambiar tema"
+            >
+                <Expand 
+                    toggled={isDarkMode}
+                    duration={750}
+                    className="theme-toggle-icon"
+                />
+            </button>
             <div className="journal-paper">
-                <h1 className="journal-title">
-                    ¿Cómo te sientes hoy?
-                </h1>
+                <h1 className="journal-title">¿Cómo te sientes hoy?</h1>
 
                 <div className="my-6">
                     <div className="flex justify-center flex-wrap gap-2">

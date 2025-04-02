@@ -1,49 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Box, Button, Typography, CircularProgress, Paper } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import MicIcon from '@mui/icons-material/Mic';
 import StopIcon from '@mui/icons-material/Stop';
 import GraphicEqIcon from '@mui/icons-material/GraphicEq';
-
-const RecorderContainer = styled(Paper)(({ theme }) => ({
-    padding: theme.spacing(3),
-    borderRadius: 16,
-    backgroundColor: theme.palette.background.paper,
-    border: `1px solid ${theme.palette.primary.light}`,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: theme.spacing(2),
-}));
-
-const RecordButton = styled(Button)(({ theme, isrecording }) => ({
-    width: '200px',
-    height: '60px',
-    borderRadius: '30px',
-    fontSize: '1.1rem',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-    transition: 'all 0.3s ease',
-    backgroundColor: isrecording === 'true' ? theme.palette.error.main : theme.palette.primary.main,
-    color: '#FFF',
-    '&:hover': {
-        backgroundColor: isrecording === 'true' ? theme.palette.error.dark : theme.palette.primary.dark,
-        transform: 'translateY(-2px)',
-        boxShadow: '0 6px 16px rgba(0,0,0,0.15)',
-    },
-    '&.Mui-disabled': {
-        backgroundColor: theme.palette.grey[300],
-    },
-}));
-
-const RecordingIndicator = styled(Box)(({ theme }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    gap: theme.spacing(2),
-    padding: theme.spacing(2),
-    borderRadius: 8,
-    backgroundColor: theme.palette.error.light,
-    color: theme.palette.error.dark,
-}));
 
 const AudioRecorder = ({ onRecordingComplete }) => {
     const [isRecording, setIsRecording] = useState(false);
@@ -107,25 +65,29 @@ const AudioRecorder = ({ onRecordingComplete }) => {
     };
 
     return (
-        <RecorderContainer elevation={0}>
-            <RecordButton
-                variant="contained"
-                isrecording={isRecording.toString()}
+        <div className="audio-recorder">
+            <button
+                className={`record-button ${isRecording ? 'recording' : ''}`}
                 onClick={isRecording ? stopRecording : startRecording}
-                startIcon={isRecording ? <StopIcon /> : <MicIcon />}
             >
-                {isRecording ? 'Detener grabación' : 'Iniciar grabación'}
-            </RecordButton>
+                {isRecording ? (
+                    <>
+                        <StopIcon /> Detener grabación
+                    </>
+                ) : (
+                    <>
+                        <MicIcon /> Iniciar grabación
+                    </>
+                )}
+            </button>
             
             {isRecording && (
-                <RecordingIndicator>
+                <div className="recording-indicator">
                     <GraphicEqIcon />
-                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                        Grabando: {formatTime(recordingTime)}
-                    </Typography>
-                </RecordingIndicator>
+                    <span>Grabando: {formatTime(recordingTime)}</span>
+                </div>
             )}
-        </RecorderContainer>
+        </div>
     );
 };
 

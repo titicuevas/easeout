@@ -1,23 +1,57 @@
+/* Variables para el tema */
+:root {
+    --background-color: #F5F5F5;
+    --paper-color: #FAFAFA;
+    --text-primary: #2C3E50;
+    --text-secondary: #34495E;
+    --primary-color: #7C9885;
+    --primary-hover: #5A7267;
+    --box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    --textarea-bg: #F8FAFC;
+}
+
+[data-theme="dark"] {
+    --background-color: #1A1A1A;
+    --paper-color: #2D2D2D;
+    --text-primary: #E0E0E0;
+    --text-secondary: #BDBDBD;
+    --primary-color: #8FB299;
+    --primary-hover: #A8C3B0;
+    --box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    --textarea-bg: #363636;
+}
+
+/* Estilos base */
+body {
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 /* Estilos para el contenedor del diario */
 .journal-container {
-    padding: 2rem 0;
+    padding: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    background-color: var(--paper-color);
+    border-radius: 16px;
+    box-shadow: var(--box-shadow);
 }
 
 .journal-paper {
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-    background-color: #FFFFFF;
-    padding: 2rem;
+    width: 100%;
+    transition: background-color 0.3s ease;
 }
 
 /* Estilos para los botones de estado de ánimo */
 .mood-button {
-    margin: 0.5rem;
-    padding: 1rem;
-    font-size: 2rem;
-    min-width: 100px;
-    height: 100px;
-    border-radius: 16px;
+    margin: 0.25rem;
+    padding: 0.75rem;
+    font-size: 1.5rem;
+    min-width: 90px;
+    height: 85px;
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -25,6 +59,8 @@
     transition: all 0.3s ease;
     border-width: 2px;
     border-style: solid;
+    background: transparent;
+    cursor: pointer;
 }
 
 .mood-button:hover {
@@ -32,29 +68,33 @@
 }
 
 .mood-button .emoji {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
+    filter: grayscale(0);
+    transition: transform 0.3s ease, filter 0.3s ease;
 }
 
 .mood-button .label {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 500;
+    color: var(--text-primary);
 }
 
 /* Estilos para el campo de texto */
 .journal-textarea {
     width: 100%;
-    background-color: #F8FAFC;
+    background-color: var(--textarea-bg);
     border-radius: 16px;
     transition: all 0.3s ease;
+    padding: 0.75rem;
 }
 
 .journal-textarea textarea {
-    min-height: 120px;
-    padding: 16px;
-    font-size: 1rem;
+    min-height: 100px;
+    padding: 0;
+    font-size: 0.95rem;
     line-height: 1.6;
-    color: #2C3E50;
+    color: var(--text-primary);
     border: none;
     background: transparent;
     width: 100%;
@@ -63,13 +103,17 @@
 
 .journal-textarea:hover,
 .journal-textarea:focus-within {
-    background-color: #FFFFFF;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    background-color: var(--paper-color);
+    box-shadow: var(--box-shadow);
 }
 
 .journal-textarea textarea::placeholder {
-    color: #34495E;
+    color: var(--text-secondary);
     opacity: 0.8;
+}
+
+.journal-textarea textarea:focus {
+    outline: none;
 }
 
 /* Estilos para el botón de guardar */
@@ -77,10 +121,10 @@
     padding: 12px 32px;
     font-size: 1.1rem;
     border-radius: 8px;
-    background-color: #7C9885;
+    background-color: var(--primary-color);
     color: white;
     border: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: var(--box-shadow);
     transition: all 0.3s ease;
     cursor: pointer;
 }
@@ -88,7 +132,7 @@
 .save-button:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-    background-color: #5A7267;
+    background-color: var(--primary-hover);
 }
 
 .save-button:disabled {
@@ -102,16 +146,18 @@
 .journal-title {
     font-family: "Segoe UI", "Roboto", "Arial", sans-serif;
     font-weight: 500;
-    color: #2C3E50;
-    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
     text-align: center;
+    font-size: 1.5rem;
 }
 
 .journal-subtitle {
     font-family: "Segoe UI", "Roboto", "Arial", sans-serif;
     font-weight: 400;
-    color: #34495E;
-    margin-bottom: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
 }
 
 /* Estilos específicos para cada estado de ánimo */
@@ -135,12 +181,114 @@
 .mood-frustrated.selected { background-color: #B088F9; color: white; }
 .mood-frustrated:hover { background-color: rgba(176, 136, 249, 0.1); }
 
-/* Espaciado */
+/* Estilos para el grabador de audio */
+.audio-recorder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: 16px;
+    background-color: var(--textarea-bg);
+    transition: all 0.3s ease;
+}
+
+.record-button {
+    padding: 8px 24px;
+    font-size: 0.95rem;
+    border-radius: 24px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.record-button:hover {
+    transform: translateY(-2px);
+    background-color: var(--primary-hover);
+}
+
+.record-button.recording {
+    background-color: #FF6B6B;
+}
+
+.recording-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+}
+
+/* Botón de tema */
+.theme-toggle {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--textarea-bg);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 0;
+}
+
+.theme-toggle:hover {
+    background-color: var(--paper-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.theme-toggle-icon {
+    width: 18px !important;
+    height: 18px !important;
+    color: var(--text-primary);
+}
+
+/* Sobrescribir estilos del componente Expand */
+.theme-toggle .theme-toggle-icon button {
+    all: unset;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Utilidades */
+.flex {
+    display: flex;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.justify-end {
+    justify-content: flex-end;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.gap-2 {
+    gap: 0.5rem;
+}
+
 .my-6 {
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .mt-6 {
-    margin-top: 1.5rem;
+    margin-top: 1rem;
 } 
