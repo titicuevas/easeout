@@ -1,6 +1,6 @@
+/* Importar estilos del diario */
+@import 'journal.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Importar estilos del diario */
-@import 'journal.css';

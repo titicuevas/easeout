@@ -1,13 +1,10 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\JournalEntryController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\Api\AudioRecordingController;
-use App\Http\Controllers\Api\JournalEntryController as ApiJournalEntryController;
-use App\Http\Controllers\Api\TagController;
-use App\Http\Controllers\JournalEntryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +17,7 @@ use App\Http\Controllers\JournalEntryController;
 |
 */
 
+// Ruta principal
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -29,26 +27,23 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Rutas autenticadas
+Route::middleware(['auth', 'verified'])->group(function () {
+    // Dashboard
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+    // Rutas del diario
+    Route::get('/journal-entries', [JournalEntryController::class, 'index'])->name('journal-entries.index');
+    Route::get('/journal-entries/create', [JournalEntryController::class, 'create'])->name('journal-entries.create');
+    Route::post('/journal-entries', [JournalEntryController::class, 'store'])->name('journal-entries.store');
+    Route::delete('/journal-entries/{journalEntry}', [JournalEntryController::class, 'destroy'])->name('journal-entries.destroy');
+
+    // Rutas del perfil
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    // Rutas para entradas del diario
-    Route::get('/journal-entries', [JournalEntryController::class, 'index'])->name('journal-entries.index');
-    Route::get('/journal-entries/create', [JournalEntryController::class, 'create'])->name('journal-entries.create');
-    
-    // Rutas API
-    Route::prefix('api')->group(function () {
-        Route::apiResource('journal-entries', ApiJournalEntryController::class);
-        Route::resource('audio-recordings', AudioRecordingController::class);
-        Route::get('audio-recordings/{audioRecording}/download', [AudioRecordingController::class, 'download']);
-        Route::resource('tags', TagController::class);
-    });
 });
 
 require __DIR__.'/auth.php';

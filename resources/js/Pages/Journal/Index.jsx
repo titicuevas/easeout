@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { Expand } from "@theme-toggles/react";
 import "@theme-toggles/react/css/Expand.css";
 import '../../../css/journal.css';
+import { router } from '@inertiajs/react';
+import Calendar from '@/Components/Journal/Calendar';
+import JournalEntryModal from '@/Components/Journal/JournalEntryModal';
 
 export default function Index({ entries }) {
     const [isDarkMode, setIsDarkMode] = useState(false);
+    const [selectedEntry, setSelectedEntry] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         const savedTheme = localStorage.getItem('theme');
@@ -23,72 +28,72 @@ export default function Index({ entries }) {
         localStorage.setItem('theme', newTheme ? 'dark' : 'light');
     };
 
+    const handleEntryClick = (entry) => {
+        setSelectedEntry(entry);
+        setIsModalOpen(true);
+    };
+
+    const handleCreateNew = () => {
+        router.visit('/journal-entries/create');
+    };
+
+    const handleDelete = async (entryId) => {
+        if (confirm('¿Estás seguro de que quieres borrar esta entrada?')) {
+            await router.delete(route('journal-entries.destroy', entryId), {
+                onSuccess: () => {
+                    setIsModalOpen(false);
+                    setSelectedEntry(null);
+                },
+            });
+        }
+    };
+
     return (
         <>
             <Head title="Mi Diario" />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="journal-container">
-                        <button
-                            onClick={toggleTheme}
-                            className="theme-toggle"
-                            aria-label="Cambiar tema"
-                        >
-                            <Expand 
-                                toggled={isDarkMode}
-                                duration={750}
-                                className="theme-toggle-icon"
-                            />
-                        </button>
-
-                        <div className="journal-paper">
-                            <h1 className="journal-title">Mi Diario</h1>
-                            
-                            <div className="entries-grid">
-                                {entries.data.map((entry) => (
-                                    <div key={entry.id} className="entry-card">
-                                        <div className="entry-header">
-                                            <span className="entry-date">
-                                                {new Date(entry.created_at).toLocaleDateString('es-ES', {
-                                                    day: 'numeric',
-                                                    month: 'long',
-                                                    year: 'numeric'
-                                                })}
-                                            </span>
-                                            {entry.mood && (
-                                                <span className={`mood-indicator mood-${entry.mood}`}>
-                                                    {entry.mood === 'happy' && '😊'}
-                                                    {entry.mood === 'neutral' && '😐'}
-                                                    {entry.mood === 'sad' && '😢'}
-                                                    {entry.mood === 'angry' && '😠'}
-                                                    {entry.mood === 'frustrated' && '😫'}
-                                                </span>
-                                            )}
-                                        </div>
-                                        
-                                        <div className="entry-content">
-                                            {entry.content}
-                                        </div>
-                                        
-                                        {entry.metadata?.audio_url && (
-                                            <div className="entry-audio">
-                                                <audio controls src={entry.metadata.audio_url}>
-                                                    Tu navegador no soporta el elemento de audio.
-                                                </audio>
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
+                    <div className="flex justify-between items-center mb-6">
+                        <div className="flex items-center gap-4">
+                            <h1 className="text-2xl font-semibold text-primary">Mi Diario</h1>
+                            <button
+                                onClick={toggleTheme}
+                                className="theme-toggle"
+                                aria-label="Cambiar tema"
+                            >
+                                <Expand 
+                                    toggled={isDarkMode}
+                                    duration={750}
+                                    className="theme-toggle-icon"
+                                />
+                            </button>
                         </div>
+                        <button
+                            onClick={handleCreateNew}
+                            className="bg-primary hover:bg-primary-hover text-paper px-4 py-2 rounded-md transition-colors"
+                        >
+                            Nueva Entrada
+                        </button>
                     </div>
 
-                    <Link href={route('journal-entries.create')} className="new-entry-button" title="Nueva entrada">
-                        ✏️
-                    </Link>
+                    <div className="bg-paper dark:bg-modal-bg overflow-hidden shadow-sm sm:rounded-lg">
+                        <div className="p-6">
+                            <Calendar entries={entries} onEntryClick={handleEntryClick} />
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <JournalEntryModal
+                entry={selectedEntry}
+                isOpen={isModalOpen}
+                onClose={() => {
+                    setIsModalOpen(false);
+                    setSelectedEntry(null);
+                }}
+                onDelete={handleDelete}
+            />
         </>
     );
 } 

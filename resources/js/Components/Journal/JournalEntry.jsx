@@ -3,6 +3,7 @@ import '../../../css/journal.css';
 import AudioRecorder from './AudioRecorder';
 import { Expand } from "@theme-toggles/react";
 import "@theme-toggles/react/css/Expand.css";
+import { router } from '@inertiajs/react';
 
 const moods = [
     { emoji: '😊', label: 'Alegre', value: 'happy' },
@@ -16,23 +17,23 @@ const JournalEntry = () => {
     const [selectedMood, setSelectedMood] = useState(null);
     const [content, setContent] = useState('');
     const [audioBlob, setAudioBlob] = useState(null);
+    const [audioDuration, setAudioDuration] = useState(null);
     const [isDarkMode, setIsDarkMode] = useState(false);
 
     useEffect(() => {
-        // Verificar si hay una preferencia guardada
         const savedTheme = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         
-        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-            setIsDarkMode(true);
-            document.documentElement.setAttribute('data-theme', 'dark');
-        }
+        const shouldBeDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+        setIsDarkMode(shouldBeDark);
+        document.documentElement.setAttribute('data-theme', shouldBeDark ? 'dark' : 'light');
     }, []);
 
     const toggleTheme = () => {
-        setIsDarkMode(!isDarkMode);
-        document.documentElement.setAttribute('data-theme', isDarkMode ? 'light' : 'dark');
-        localStorage.setItem('theme', isDarkMode ? 'light' : 'dark');
+        const newTheme = !isDarkMode;
+        setIsDarkMode(newTheme);
+        document.documentElement.setAttribute('data-theme', newTheme ? 'dark' : 'light');
+        localStorage.setItem('theme', newTheme ? 'dark' : 'light');
     };
 
     const handleMoodSelect = (mood) => {
@@ -43,48 +44,57 @@ const JournalEntry = () => {
         setContent(event.target.value);
     };
 
-    const handleRecordingComplete = (blob) => {
-        setAudioBlob(blob);
+    const handleRecordingComplete = (blob, duration) => {
+        if (blob) {
+            // Convertir el blob a un archivo MP3
+            const audioFile = new File([blob], 'audio-recording.mp3', { 
+                type: 'audio/mpeg'
+            });
+            setAudioBlob(audioFile);
+            setAudioDuration(Math.round(duration));
+        } else {
+            setAudioBlob(null);
+            setAudioDuration(null);
+        }
     };
 
     const handleSave = async () => {
+        if (!selectedMood) {
+            console.error('Por favor selecciona un estado de ánimo');
+            return;
+        }
+
         try {
             const formData = new FormData();
-            formData.append('mood', selectedMood?.value || '');
-            formData.append('content', content);
-            formData.append('metadata', JSON.stringify({
-                timestamp: new Date().toISOString()
-            }));
+            formData.append('mood', selectedMood.value);
+            formData.append('content', content || '');
+            formData.append('duration', audioDuration || 0);
 
             if (audioBlob) {
-                formData.append('audio', audioBlob, 'recording.mp3');
-                formData.append('duration', 0);
+                formData.append('audio', audioBlob);
             }
 
-            const response = await fetch('/api/journal-entries', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            await router.post(route('journal-entries.store'), formData, {
+                forceFormData: true,
+                onSuccess: () => {
+                    window.location.href = route('journal-entries.index');
+                },
+                onError: (errors) => {
+                    console.error('Error al guardar la entrada:', errors);
                 }
             });
-
-            if (response.ok) {
-                setSelectedMood(null);
-                setContent('');
-                setAudioBlob(null);
-                window.location.href = route('journal-entries.index');
-            }
         } catch (error) {
-            console.error('Error al guardar la entrada:', error);
+            console.error('Error al procesar la entrada:', error);
         }
     };
 
     return (
         <div className="journal-container">
-            <button
+            <div
                 onClick={toggleTheme}
                 className="theme-toggle"
+                role="button"
+                tabIndex={0}
                 aria-label="Cambiar tema"
             >
                 <Expand 
@@ -92,7 +102,7 @@ const JournalEntry = () => {
                     duration={750}
                     className="theme-toggle-icon"
                 />
-            </button>
+            </div>
             <div className="journal-paper">
                 <h1 className="journal-title">¿Cómo te sientes hoy?</h1>
 
@@ -129,7 +139,14 @@ const JournalEntry = () => {
                     <h2 className="journal-subtitle">
                         O graba un mensaje de voz
                     </h2>
-                    <AudioRecorder onRecordingComplete={handleRecordingComplete} />
+                    <AudioRecorder 
+                        onRecordingComplete={handleRecordingComplete} 
+                    />
+                    {audioBlob && audioDuration && (
+                        <div className="audio-duration">
+                            Duración: {Math.round(audioDuration)}s
+                        </div>
+                    )}
                 </div>
 
                 <div className="mt-6 flex justify-end">

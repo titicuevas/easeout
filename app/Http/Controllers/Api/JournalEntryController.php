@@ -28,11 +28,13 @@ class JournalEntryController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'content' => 'required|string',
+            'content' => 'nullable|string',
             'mood' => 'nullable|string',
-            'metadata' => 'nullable|array',
-            'tags' => 'nullable|array',
-            'tags.*' => 'exists:tags,id'
+            'metadata' => 'required|array',
+            'metadata.timestamp' => 'required|string',
+            'metadata.hasAudio' => 'required|boolean',
+            'audio' => 'nullable|file|mimes:mp3,wav,m4a',
+            'duration' => 'nullable|integer'
         ]);
 
         $entry = auth()->user()->journalEntries()->create([
@@ -41,11 +43,13 @@ class JournalEntryController extends Controller
             'metadata' => $validated['metadata']
         ]);
 
-        if (isset($validated['tags'])) {
-            $entry->tags()->sync($validated['tags']);
+        if ($request->hasFile('audio')) {
+            $path = $request->file('audio')->store('audio-recordings', 'public');
+            $validated['metadata']['audio_url'] = asset('storage/' . $path);
+            $entry->update(['metadata' => $validated['metadata']]);
         }
 
-        return response()->json($entry->load('tags'), Response::HTTP_CREATED);
+        return response()->json($entry, Response::HTTP_CREATED);
     }
 
     /**
