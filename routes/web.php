@@ -39,15 +39,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Rutas para entradas del diario
+    Route::get('/journal-entries', [JournalEntryController::class, 'index'])->name('journal-entries.index');
     Route::get('/journal-entries/create', [JournalEntryController::class, 'create'])->name('journal-entries.create');
-    Route::apiResource('journal-entries', ApiJournalEntryController::class);
-
-    // Rutas para grabaciones de audio
-    Route::resource('audio-recordings', AudioRecordingController::class);
-    Route::get('audio-recordings/{audioRecording}/download', [AudioRecordingController::class, 'download']);
-
-    // Rutas para etiquetas
-    Route::resource('tags', TagController::class);
+    
+    // Rutas API
+    Route::prefix('api')->group(function () {
+        Route::apiResource('journal-entries', ApiJournalEntryController::class);
+        Route::resource('audio-recordings', AudioRecordingController::class);
+        Route::get('audio-recordings/{audioRecording}/download', [AudioRecordingController::class, 'download']);
+        Route::resource('tags', TagController::class);
+    });
 });
 
 require __DIR__.'/auth.php';

@@ -37,6 +37,7 @@ body {
     background-color: var(--paper-color);
     border-radius: 16px;
     box-shadow: var(--box-shadow);
+    overflow: visible;
 }
 
 .journal-paper {
@@ -240,17 +241,23 @@ body {
     transition: all 0.3s ease;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     padding: 0;
+    z-index: 100;
 }
 
 .theme-toggle:hover {
-    background-color: var(--paper-color);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    transform: scale(1.1);
+    background-color: var(--primary-color);
+}
+
+.theme-toggle:hover .theme-toggle-icon {
+    color: white;
 }
 
 .theme-toggle-icon {
     width: 18px !important;
     height: 18px !important;
     color: var(--text-primary);
+    transition: color 0.3s ease;
 }
 
 /* Sobrescribir estilos del componente Expand */
@@ -291,4 +298,91 @@ body {
 
 .mt-6 {
     margin-top: 1rem;
+}
+
+/* Estilos para el historial de entradas */
+.entries-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.entry-card {
+    background-color: var(--textarea-bg);
+    border-radius: 12px;
+    padding: 1.25rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    color: var(--text-primary);
+}
+
+.entry-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--paper-color);
+}
+
+.entry-date {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.entry-content {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    white-space: pre-wrap;
+}
+
+.entry-audio {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--paper-color);
+}
+
+.entry-audio audio {
+    width: 100%;
+    height: 36px;
+    border-radius: 8px;
+    background-color: var(--paper-color);
+}
+
+.mood-indicator {
+    font-size: 1.25rem;
+}
+
+/* Botón de nueva entrada */
+.new-entry-button {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: var(--primary-color);
+    color: white;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+.new-entry-button:hover {
+    transform: translateY(-2px);
+    background-color: var(--primary-hover);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 } 

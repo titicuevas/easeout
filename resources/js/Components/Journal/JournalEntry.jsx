@@ -61,7 +61,7 @@ const JournalEntry = () => {
                 formData.append('duration', 0);
             }
 
-            const response = await fetch('/journal-entries', {
+            const response = await fetch('/api/journal-entries', {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -73,6 +73,7 @@ const JournalEntry = () => {
                 setSelectedMood(null);
                 setContent('');
                 setAudioBlob(null);
+                window.location.href = route('journal-entries.index');
             }
         } catch (error) {
             console.error('Error al guardar la entrada:', error);
