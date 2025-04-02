@@ -52,22 +52,20 @@ export default function Index({ entries }) {
         <>
             <Head title="Mi Diario" />
 
+            <div className="theme-toggle-wrapper">
+                <Expand 
+                    toggled={isDarkMode}
+                    toggle={toggleTheme}
+                    duration={750}
+                    className="theme-toggle-icon"
+                />
+            </div>
+
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center mb-6">
                         <div className="flex items-center gap-4">
                             <h1 className="text-2xl font-semibold text-primary">Mi Diario</h1>
-                            <button
-                                onClick={toggleTheme}
-                                className="theme-toggle"
-                                aria-label="Cambiar tema"
-                            >
-                                <Expand 
-                                    toggled={isDarkMode}
-                                    duration={750}
-                                    className="theme-toggle-icon"
-                                />
-                            </button>
                         </div>
                         <button
                             onClick={handleCreateNew}

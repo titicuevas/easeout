@@ -227,104 +227,200 @@ body {
 /* Estilos para el grabador de audio */
 .audio-recorder {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     gap: 1rem;
     margin: 1rem 0;
 }
 
-.record-button,
-.stop-button,
-.cancel-button {
+.record-button {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--primary-color);
+    color: var(--paper-color);
     border: none;
+    border-radius: 2rem;
+    font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-size: 0.9rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.record-button {
-    background-color: var(--primary-color);
-    color: white;
+.record-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.stop-button {
-    background-color: var(--error-color);
-    color: white;
-}
-
-.cancel-button {
-    background-color: var(--secondary-color);
-    color: white;
+.record-button svg {
+    font-size: 1.2rem;
 }
 
 .recording-controls {
     display: flex;
     align-items: center;
     gap: 1rem;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--paper-color);
+    border-radius: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.audio-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    background-color: var(--paper-color);
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.audio-duration {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.stop-button, .cancel-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 1.5rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.stop-button {
+    background-color: var(--primary-color);
+    color: var(--paper-color);
+}
+
+.cancel-button {
+    background-color: var(--secondary-color);
+    color: var(--paper-color);
+}
+
+.stop-button:hover, .cancel-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.audio-preview {
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 400px;
+    padding: 1rem;
+    background-color: var(--paper-color);
+    border-radius: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.audio-preview audio {
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.audio-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.delete-confirmation {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background-color: var(--paper-color);
+    border-radius: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.delete-confirmation span {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    margin-right: 0.5rem;
+}
+
+.delete-confirmation button {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.9rem;
+    border-radius: 1rem;
+}
+
+.delete-confirmation button.confirm {
+    background-color: var(--error-color);
+    color: white;
+}
+
+.delete-confirmation button.cancel {
+    background-color: var(--primary-color);
+    color: white;
 }
 
 .recording-time {
     font-size: 1.2rem;
-    font-weight: bold;
-    color: var(--error-color);
-    min-width: 3rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    min-width: 4rem;
+    text-align: center;
+    font-family: monospace;
 }
 
-.audio-duration {
-    text-align: center;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
+.recording-time.pulse {
+    animation: pulse 1.5s infinite;
+    padding: 0.5rem 1rem;
+    background-color: var(--error-color);
+    color: white;
+    border-radius: 1rem;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 /* Botón de tema */
-.theme-toggle {
-    position: absolute;
+.theme-toggle-wrapper {
+    position: fixed;
     top: 1rem;
     right: 1rem;
-    background: none;
-    border: none;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    padding: 0;
-    z-index: 100;
-}
-
-.theme-toggle:hover {
-    background-color: var(--calendar-day-hover);
-}
-
-.theme-toggle:hover .theme-toggle-icon {
-    color: white;
+    z-index: 50;
 }
 
 .theme-toggle-icon {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 2rem;
+    height: 2rem;
     color: var(--text-primary);
-    transition: color 0.3s ease;
+    background-color: var(--paper-color);
+    border-radius: 50%;
+    padding: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--calendar-border);
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-/* Sobrescribir estilos del componente Expand */
-.theme-toggle .theme-toggle-icon button {
-    all: unset;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.theme-toggle-icon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: var(--calendar-day-hover);
 }
 
 /* Utilidades */
@@ -736,4 +832,83 @@ body {
 
 .entry-time {
     color: var(--text-secondary);
+}
+
+.error-message {
+    background-color: var(--error-color);
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+    text-align: center;
+    font-size: 0.9rem;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.audio-preview {
+    background-color: var(--paper-color);
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.audio-preview audio {
+    width: 100%;
+    margin: 1rem 0;
+    border-radius: 0.5rem;
+}
+
+.audio-preview audio::-webkit-media-controls-panel {
+    background-color: var(--paper-color);
+}
+
+.audio-preview audio::-webkit-media-controls-current-time-display,
+.audio-preview audio::-webkit-media-controls-time-remaining-display {
+    color: var(--text-primary);
+}
+
+.delete-confirmation {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background-color: var(--paper-color);
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.delete-confirmation span {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.delete-confirmation button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.delete-confirmation button.confirm {
+    background-color: var(--error-color);
+    color: white;
+}
+
+.delete-confirmation button.cancel {
+    background-color: var(--primary-color);
+    color: white;
 } 

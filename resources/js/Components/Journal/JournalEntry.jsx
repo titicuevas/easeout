@@ -19,6 +19,8 @@ const JournalEntry = () => {
     const [audioBlob, setAudioBlob] = useState(null);
     const [audioDuration, setAudioDuration] = useState(null);
     const [isDarkMode, setIsDarkMode] = useState(false);
+    const [error, setError] = useState(null);
+    const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
         const savedTheme = localStorage.getItem('theme');
@@ -38,20 +40,19 @@ const JournalEntry = () => {
 
     const handleMoodSelect = (mood) => {
         setSelectedMood(mood);
+        setError(null);
     };
 
     const handleContentChange = (event) => {
         setContent(event.target.value);
+        setError(null);
     };
 
     const handleRecordingComplete = (blob, duration) => {
         if (blob) {
-            // Convertir el blob a un archivo MP3
-            const audioFile = new File([blob], 'audio-recording.mp3', { 
-                type: 'audio/mpeg'
-            });
-            setAudioBlob(audioFile);
-            setAudioDuration(Math.round(duration));
+            setAudioBlob(blob);
+            setAudioDuration(duration);
+            setError(null);
         } else {
             setAudioBlob(null);
             setAudioDuration(null);
@@ -59,19 +60,36 @@ const JournalEntry = () => {
     };
 
     const handleSave = async () => {
-        if (!selectedMood) {
-            console.error('Por favor selecciona un estado de ánimo');
+        if (!selectedMood && !content && !audioBlob) {
+            setError('Por favor, selecciona un estado de ánimo o añade contenido');
             return;
         }
 
+        setIsSaving(true);
+        setError(null);
+
         try {
             const formData = new FormData();
-            formData.append('mood', selectedMood.value);
-            formData.append('content', content || '');
-            formData.append('duration', audioDuration || 0);
+            
+            if (selectedMood) {
+                formData.append('mood', selectedMood.value);
+            }
+            
+            if (content) {
+                formData.append('content', content);
+            }
+
+            // Metadata como objeto JSON
+            const metadata = {
+                timestamp: new Date().toISOString(),
+                hasAudio: !!audioBlob,
+                duration: audioBlob ? Math.round(audioDuration) : 0
+            };
+
+            formData.append('metadata', JSON.stringify(metadata));
 
             if (audioBlob) {
-                formData.append('audio', audioBlob);
+                formData.append('audio', audioBlob, 'audio-recording.mp3');
             }
 
             await router.post(route('journal-entries.store'), formData, {
@@ -80,11 +98,15 @@ const JournalEntry = () => {
                     window.location.href = route('journal-entries.index');
                 },
                 onError: (errors) => {
-                    console.error('Error al guardar la entrada:', errors);
+                    console.error('Errores de validación:', errors);
+                    setError(Object.values(errors)[0] || 'Error al guardar la entrada');
                 }
             });
         } catch (error) {
             console.error('Error al procesar la entrada:', error);
+            setError('Error al procesar la entrada. Por favor, inténtalo de nuevo.');
+        } finally {
+            setIsSaving(false);
         }
     };
 
@@ -105,6 +127,12 @@ const JournalEntry = () => {
             </div>
             <div className="journal-paper">
                 <h1 className="journal-title">¿Cómo te sientes hoy?</h1>
+
+                {error && (
+                    <div className="error-message">
+                        {error}
+                    </div>
+                )}
 
                 <div className="my-6">
                     <div className="flex justify-center flex-wrap gap-2">
@@ -142,20 +170,15 @@ const JournalEntry = () => {
                     <AudioRecorder 
                         onRecordingComplete={handleRecordingComplete} 
                     />
-                    {audioBlob && audioDuration && (
-                        <div className="audio-duration">
-                            Duración: {Math.round(audioDuration)}s
-                        </div>
-                    )}
                 </div>
 
                 <div className="mt-6 flex justify-end">
                     <button
                         className="save-button"
                         onClick={handleSave}
-                        disabled={!selectedMood && !content && !audioBlob}
+                        disabled={isSaving || (!selectedMood && !content && !audioBlob)}
                     >
-                        Guardar entrada
+                        {isSaving ? 'Guardando...' : 'Guardar entrada'}
                     </button>
                 </div>
             </div>
