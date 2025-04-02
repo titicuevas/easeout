@@ -25,9 +25,9 @@
     --primary-hover: var(--sage-600);
     --box-shadow: 0 4px 20px rgba(0,0,0,0.05);
     --textarea-bg: #F8FAFC;
-    --calendar-bg: #FFFFFF;
+    --calendar-bg: var(--paper-color);
     --calendar-border: var(--sage-200);
-    --calendar-day-bg: #FFFFFF;
+    --calendar-day-bg: var(--paper-color);
     --calendar-day-hover: var(--sage-100);
     --calendar-day-empty: var(--sage-100);
     --calendar-day-has-entries: var(--sage-200);
@@ -37,6 +37,9 @@
     --modal-bg: #FFFFFF;
     --modal-border: var(--sage-200);
     --entry-divider: var(--sage-200);
+    --border-color: rgba(0, 0, 0, 0.1);
+    --border-color-dark: rgba(255, 255, 255, 0.1);
+    --bg-hover: rgba(var(--primary-rgb), 0.1);
 }
 
 [data-theme="dark"] {
@@ -49,13 +52,13 @@
     --primary-hover: var(--sage-300);
     --box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     --textarea-bg: #363636;
-    --calendar-bg: #2D3748;
-    --calendar-border: #4A5568;
-    --calendar-day-bg: #374151;
-    --calendar-day-hover: #4A5568;
-    --calendar-day-empty: #2D3748;
-    --calendar-day-has-entries: #3B4B59;
-    --calendar-day-has-entries-hover: #4A5568;
+    --calendar-bg: var(--paper-color);
+    --calendar-border: var(--sage-600);
+    --calendar-day-bg: var(--sage-700);
+    --calendar-day-hover: var(--sage-600);
+    --calendar-day-empty: var(--sage-700);
+    --calendar-day-has-entries: var(--sage-600);
+    --calendar-day-has-entries-hover: var(--sage-500);
     --calendar-text: var(--sage-100);
     --calendar-weekday: var(--sage-300);
     --modal-bg: #2D3748;
@@ -72,26 +75,57 @@ body {
 
 /* Estilos para el contenedor del diario */
 .journal-container {
-    padding: 1.5rem;
-    max-width: 800px;
-    margin: 0 auto;
-    position: relative;
-    background-color: var(--paper-color);
-    border-radius: 16px;
-    box-shadow: var(--box-shadow);
-    overflow: visible;
+    min-height: 100vh;
+    padding: 2rem;
+    background-color: var(--bg-paper);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
 }
 
 .journal-paper {
+    background-color: var(--bg-paper);
+    border-radius: 1.5rem;
+    padding: 2rem;
     width: 100%;
-    transition: background-color 0.3s ease;
+    max-width: 800px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    animation: fadeIn 0.5s ease-out;
 }
 
-/* Estilos para los botones de estado de ánimo */
+.journal-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+/* Sección de estados de ánimo */
+.mood-section {
+    margin-bottom: 2rem;
+}
+
+.mood-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+    justify-items: center;
+}
+
+/* Estilos base para los botones de estado de ánimo */
 .mood-button {
     margin: 0.25rem;
     padding: 0.75rem;
-    font-size: 1.5rem;
+    font-size: 1rem;
     min-width: 90px;
     height: 85px;
     border-radius: 12px;
@@ -100,27 +134,344 @@ body {
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
-    border-width: 2px;
-    border-style: solid;
-    background: transparent;
+    border: 2px solid;
     cursor: pointer;
-}
-
-.mood-button:hover {
-    transform: translateY(-5px);
 }
 
 .mood-button .emoji {
     font-size: 2rem;
-    margin-bottom: 0.25rem;
-    filter: grayscale(0);
-    transition: transform 0.3s ease, filter 0.3s ease;
+    margin-bottom: 0.5rem;
 }
 
 .mood-button .label {
     font-size: 0.85rem;
     font-weight: 500;
     color: var(--text-primary);
+}
+
+/* Estilos específicos para cada estado de ánimo */
+.mood-happy {
+    border-color: #FFD93D;
+    background-color: rgba(255, 217, 61, 0.1);
+}
+
+.mood-happy:hover {
+    background-color: rgba(255, 217, 61, 0.3);
+}
+
+.mood-happy.selected {
+    background-color: #FFD93D;
+}
+
+.mood-neutral {
+    border-color: #98B4AA;
+    background-color: rgba(152, 180, 170, 0.1);
+}
+
+.mood-neutral:hover {
+    background-color: rgba(152, 180, 170, 0.3);
+}
+
+.mood-neutral.selected {
+    background-color: #98B4AA;
+}
+
+.mood-sad {
+    border-color: #95B1DB;
+    background-color: rgba(149, 177, 219, 0.1);
+}
+
+.mood-sad:hover {
+    background-color: rgba(149, 177, 219, 0.3);
+}
+
+.mood-sad.selected {
+    background-color: #95B1DB;
+}
+
+.mood-angry {
+    border-color: #FF6B6B;
+    background-color: rgba(255, 107, 107, 0.1);
+}
+
+.mood-angry:hover {
+    background-color: rgba(255, 107, 107, 0.3);
+}
+
+.mood-angry.selected {
+    background-color: #FF6B6B;
+}
+
+.mood-frustrated {
+    border-color: #B088F9;
+    background-color: rgba(176, 136, 249, 0.1);
+}
+
+.mood-frustrated:hover {
+    background-color: rgba(176, 136, 249, 0.3);
+}
+
+.mood-frustrated.selected {
+    background-color: #B088F9;
+}
+
+/* Efectos al seleccionar y hover */
+.mood-button:hover {
+    transform: translateY(-5px);
+}
+
+.mood-button.selected {
+    transform: scale(0.95);
+}
+
+.mood-button.selected .label {
+    color: #2D3748;
+}
+
+/* Modo oscuro */
+[data-theme="dark"] .mood-button {
+    border-width: 2px;
+}
+
+[data-theme="dark"] .mood-button .label {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .mood-button.selected .label {
+    color: #2D3748;
+}
+
+/* Grid de estados de ánimo */
+.mood-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+    justify-items: center;
+}
+
+@media (max-width: 640px) {
+    .mood-button {
+        min-width: 80px;
+        height: 75px;
+        padding: 0.5rem;
+    }
+
+    .mood-button .emoji {
+        font-size: 1.75rem;
+    }
+
+    .mood-button .label {
+        font-size: 0.75rem;
+    }
+}
+
+/* Sección de contenido */
+.content-section {
+    margin-bottom: 2rem;
+}
+
+.textarea-wrapper {
+    position: relative;
+    border-radius: 1rem;
+    background-color: var(--bg-paper);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.content-textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 1rem;
+    background-color: var(--bg-paper);
+    color: var(--text-primary);
+    font-size: 1rem;
+    line-height: 1.5;
+    resize: vertical;
+    transition: all 0.3s ease;
+}
+
+.content-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+}
+
+/* Sección de audio */
+.audio-section {
+    margin-bottom: 2rem;
+}
+
+.audio-preview {
+    background-color: var(--bg-paper);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.audio-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.audio-player {
+    width: 100%;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+}
+
+.audio-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.delete-audio-button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: var(--error-color);
+    color: var(--paper-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.delete-audio-button:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+.delete-confirmation {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.confirmation-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.confirm-delete {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: var(--error-color);
+    color: var(--paper-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancel-delete {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: var(--primary-color);
+    color: var(--paper-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.confirm-delete:hover,
+.cancel-delete:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+/* Sección de acciones */
+.actions-section {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+.save-button {
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 2rem;
+    background-color: var(--primary-color);
+    color: var(--paper-color);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.save-button:not(:disabled):hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.save-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Indicador de guardado */
+.saving-indicator {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.saving-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: var(--paper-color);
+    border-radius: 50%;
+    animation: bounce 0.6s infinite;
+}
+
+.saving-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.saving-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+/* Modo oscuro */
+[data-theme="dark"] .journal-paper {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .content-textarea {
+    border-color: var(--border-color-dark);
+}
+
+[data-theme="dark"] .audio-preview {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Mensajes de error */
+.error-message {
+    background-color: rgba(var(--error-rgb), 0.1);
+    color: var(--error-color);
+    padding: 1rem;
+    border-radius: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
 }
 
 /* Estilos para el campo de texto */
@@ -203,27 +554,6 @@ body {
     font-size: 1rem;
 }
 
-/* Estilos específicos para cada estado de ánimo */
-.mood-happy { border-color: #FFD93D; }
-.mood-happy.selected { background-color: #FFD93D; color: white; }
-.mood-happy:hover { background-color: rgba(255, 217, 61, 0.1); }
-
-.mood-neutral { border-color: #98B4AA; }
-.mood-neutral.selected { background-color: #98B4AA; color: white; }
-.mood-neutral:hover { background-color: rgba(152, 180, 170, 0.1); }
-
-.mood-sad { border-color: #95B1DB; }
-.mood-sad.selected { background-color: #95B1DB; color: white; }
-.mood-sad:hover { background-color: rgba(149, 177, 219, 0.1); }
-
-.mood-angry { border-color: #FF6B6B; }
-.mood-angry.selected { background-color: #FF6B6B; color: white; }
-.mood-angry:hover { background-color: rgba(255, 107, 107, 0.1); }
-
-.mood-frustrated { border-color: #B088F9; }
-.mood-frustrated.selected { background-color: #B088F9; color: white; }
-.mood-frustrated:hover { background-color: rgba(176, 136, 249, 0.1); }
-
 /* Estilos para el grabador de audio */
 .audio-recorder {
     display: flex;
@@ -262,7 +592,7 @@ body {
     align-items: center;
     gap: 1rem;
     padding: 0.75rem 1.5rem;
-    background-color: var(--paper-color);
+    background-color: var(--bg-paper);
     border-radius: 2rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -282,6 +612,19 @@ body {
     font-size: 1rem;
     font-weight: 500;
     color: var(--text-primary);
+}
+
+.recording-time {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    background-color: var(--bg-paper);
+}
+
+.recording-time.pulse {
+    animation: pulse 1.5s infinite;
 }
 
 .stop-button, .cancel-button {
@@ -304,6 +647,33 @@ body {
 .cancel-button {
     background-color: var(--secondary-color);
     color: var(--paper-color);
+}
+
+/* Estilos para modo oscuro */
+[data-theme="dark"] .recording-controls {
+    background-color: var(--bg-modal);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .recording-time {
+    background-color: var(--bg-modal);
+    color: var(--text-paper);
+}
+
+[data-theme="dark"] .stop-button {
+    background-color: var(--primary-color);
+    color: var(--text-paper);
+}
+
+[data-theme="dark"] .cancel-button {
+    background-color: var(--secondary-color);
+    color: var(--text-paper);
+}
+
+[data-theme="dark"] .stop-button:hover,
+[data-theme="dark"] .cancel-button:hover {
+    filter: brightness(1.2);
+    transform: translateY(-2px);
 }
 
 .stop-button:hover, .cancel-button:hover {
@@ -364,35 +734,15 @@ body {
     color: white;
 }
 
-.recording-time {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    min-width: 4rem;
-    text-align: center;
-    font-family: monospace;
-}
-
-.recording-time.pulse {
-    animation: pulse 1.5s infinite;
-    padding: 0.5rem 1rem;
-    background-color: var(--error-color);
-    color: white;
-    border-radius: 1rem;
-}
-
 @keyframes pulse {
     0% {
         opacity: 1;
-        transform: scale(1);
     }
     50% {
-        opacity: 0.8;
-        transform: scale(1.05);
+        opacity: 0.5;
     }
     100% {
         opacity: 1;
-        transform: scale(1);
     }
 }
 
@@ -499,15 +849,33 @@ body {
 
 .entry-audio {
     margin-top: 1rem;
-    padding-top: 0.75rem;
-    border-top: 1px solid var(--paper-color);
+    padding: 0.5rem;
+    background-color: var(--paper-color);
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .entry-audio audio {
     width: 100%;
-    height: 36px;
-    border-radius: 8px;
+    margin-top: 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.entry-audio audio::-webkit-media-controls-panel {
     background-color: var(--paper-color);
+}
+
+.entry-audio audio::-webkit-media-controls-current-time-display,
+.entry-audio audio::-webkit-media-controls-time-remaining-display {
+    color: var(--text-primary);
+}
+
+.audio-duration {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+    text-align: right;
 }
 
 .mood-indicator {
@@ -541,96 +909,85 @@ body {
 }
 
 .calendar-container {
-    background: var(--calendar-bg);
-    border-radius: 16px;
-    box-shadow: var(--box-shadow);
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: var(--calendar-bg);
+    border-radius: 1rem;
     padding: 1.5rem;
-    margin: 1rem 0;
-    border: 1px solid var(--calendar-border);
-    transition: background-color 0.3s, border-color 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 .calendar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
-}
-
-.calendar-nav-button {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    padding: 0.75rem;
-    color: var(--primary-color);
-    border-radius: 50%;
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-}
-
-.calendar-nav-button:hover {
-    color: var(--primary-hover);
-    background-color: var(--calendar-day-hover);
+    margin-bottom: 1.5rem;
+    padding: 0 0.5rem;
 }
 
 .calendar-header h2 {
     font-size: 1.5rem;
     font-weight: 600;
-    text-transform: capitalize;
     color: var(--text-primary);
+    text-transform: capitalize;
+}
+
+.calendar-nav-button {
+    background-color: var(--bg-paper);
+    color: var(--text-primary);
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.calendar-nav-button:hover {
+    background-color: var(--primary-color);
+    color: var(--paper-color);
+    transform: translateY(-2px);
 }
 
 .calendar-weekdays {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.calendar-weekdays div {
     text-align: center;
-    font-weight: 600;
     color: var(--calendar-weekday);
-    padding: 0.5rem;
-    font-size: 0.9rem;
+    font-weight: 600;
 }
 
 .calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 0.5rem;
+    min-height: 400px;
 }
 
 .calendar-day {
     aspect-ratio: 1;
+    padding: 0.5rem;
+    background-color: var(--calendar-day-bg);
     border: 1px solid var(--calendar-border);
-    border-radius: 12px;
-    padding: 0.75rem;
-    cursor: pointer;
-    transition: all 0.2s;
+    border-radius: 0.5rem;
     position: relative;
-    background: var(--calendar-day-bg);
+    transition: all 0.2s ease;
 }
 
-.calendar-day:hover {
+.calendar-day:not(.empty):hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     background-color: var(--calendar-day-hover);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .calendar-day.empty {
     background-color: var(--calendar-day-empty);
-    cursor: default;
+    border: none;
 }
 
 .calendar-day.has-entries {
+    cursor: pointer;
     background-color: var(--calendar-day-has-entries);
-    border-color: var(--primary-color);
 }
 
 .calendar-day.has-entries:hover {
@@ -638,217 +995,124 @@ body {
 }
 
 .day-number {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 0.5rem;
-    display: block;
+    font-size: 0.875rem;
+    color: var(--calendar-text);
+    position: absolute;
+    top: 0.25rem;
+    left: 0.25rem;
 }
 
 .entries-preview {
+    position: absolute;
+    bottom: 0.25rem;
+    left: 0.25rem;
+    right: 0.25rem;
     display: flex;
     flex-wrap: wrap;
     gap: 0.25rem;
-    margin-top: 0.5rem;
+    justify-content: center;
 }
 
 .entry-dot {
-    width: 8px;
-    height: 8px;
+    width: 0.5rem;
+    height: 0.5rem;
     border-radius: 50%;
-    display: inline-block;
 }
 
-/* Estilos para los estados de ánimo en el calendario */
-.calendar-day .mood-happy { background-color: var(--mood-happy); }
-.calendar-day .mood-neutral { background-color: var(--mood-neutral); }
-.calendar-day .mood-sad { background-color: var(--mood-sad); }
-.calendar-day .mood-angry { background-color: var(--mood-angry); }
-.calendar-day .mood-frustrated { background-color: var(--mood-frustrated); }
-
-/* Leyenda del calendario */
-.calendar-legend {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #e5e7eb;
-}
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    color: #6b7280;
-}
-
-.legend-item .entry-dot {
-    width: 10px;
-    height: 10px;
-}
-
-/* Estilos para el modal */
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 50;
-    backdrop-filter: blur(4px);
-}
-
-.modal-content {
-    background: var(--modal-bg);
-    border-radius: 16px;
-    padding: 1.5rem;
-    max-width: 500px;
-    width: 90%;
-    max-height: 80vh;
-    margin: 1rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    border: 1px solid var(--modal-border);
-    position: relative;
-}
-
-.entries-list {
-    max-height: calc(80vh - 100px);
-    overflow-y: auto;
-    padding-right: 0.5rem;
-}
-
-.entries-list::-webkit-scrollbar {
-    width: 6px;
-}
-
-.entries-list::-webkit-scrollbar-track {
-    background: var(--calendar-day-empty);
-    border-radius: 3px;
-}
-
-.entries-list::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
-    border-radius: 3px;
-}
-
-.entry-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
-}
-
-.entry-info {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.delete-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2rem;
-    padding: 0.25rem;
-    border-radius: 4px;
-    transition: all 0.2s;
-    opacity: 0.6;
-}
-
-.delete-button:hover {
-    opacity: 1;
-    background-color: var(--calendar-day-hover);
-}
-
-/* Filtros de estado de ánimo */
-.calendar-filters {
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--calendar-border);
-}
-
-.mood-filters {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
+.entry-dot.mood-happy { background-color: var(--mood-happy); }
+.entry-dot.mood-neutral { background-color: var(--mood-neutral); }
+.entry-dot.mood-sad { background-color: var(--mood-sad); }
+.entry-dot.mood-angry { background-color: var(--mood-angry); }
+.entry-dot.mood-frustrated { background-color: var(--mood-frustrated); }
 
 .mood-filter {
-    background: var(--calendar-day-bg);
+    background-color: var(--calendar-day-bg);
     border: 1px solid var(--calendar-border);
-    border-radius: 20px;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    color: var(--text-primary);
+    color: var(--calendar-text);
+    transition: all 0.2s ease;
 }
 
 .mood-filter:hover {
-    background: var(--calendar-day-hover);
+    background-color: var(--calendar-day-hover);
 }
 
 .mood-filter.active {
-    background: var(--primary-color);
+    background-color: var(--primary-color);
     color: var(--paper-color);
     border-color: var(--primary-color);
 }
 
-/* Ajustes para el calendario */
-.calendar-container {
-    background: var(--calendar-bg);
-    border-radius: 16px;
-    box-shadow: var(--box-shadow);
-    padding: 1.5rem;
-    margin: 1rem 0;
-    border: 1px solid var(--calendar-border);
+@media (min-width: 641px) and (max-width: 1024px) {
+    .calendar-day {
+        padding: 0.375rem;
+    }
+
+    .entries-preview {
+        gap: 0.1875rem;
+    }
 }
 
-.calendar-day {
-    min-height: 80px;
+/* Estilos para los filtros de estado de ánimo */
+.calendar-filters {
+    margin-bottom: 1.5rem;
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+    background-color: var(--bg-paper);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.entries-preview {
+.mood-filters {
     display: flex;
+    gap: 0.5rem;
+    justify-content: center;
     flex-wrap: wrap;
-    gap: 0.25rem;
-    margin-top: 0.25rem;
 }
 
-.entry-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    display: inline-block;
-}
-
-.modal-title {
+.mood-filter {
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    border: 2px solid var(--border-color);
+    background-color: var(--bg-paper);
     color: var(--text-primary);
-}
-
-.entry-time {
-    color: var(--text-secondary);
-}
-
-.error-message {
-    background-color: var(--error-color);
-    color: white;
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-    margin: 1rem 0;
-    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
     font-size: 0.9rem;
-    animation: fadeIn 0.3s ease;
 }
 
+.mood-filter:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mood-filter.active {
+    background-color: var(--primary-color);
+    color: var(--paper-color);
+    border-color: var(--primary-color);
+}
+
+/* Estilos para el modo oscuro */
+[data-theme="dark"] .calendar-container {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .calendar-day {
+    border-color: var(--border-color-dark);
+}
+
+[data-theme="dark"] .calendar-day.has-entries {
+    background-color: var(--bg-modal);
+    border-color: var(--primary-color);
+}
+
+[data-theme="dark"] .mood-filter {
+    border-color: var(--border-color-dark);
+}
+
+/* Animaciones */
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(-10px);
+        transform: translateY(10px);
     }
     to {
         opacity: 1;
@@ -856,59 +1120,148 @@ body {
     }
 }
 
-.audio-preview {
-    background-color: var(--paper-color);
-    border-radius: 1rem;
+.calendar-day {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Estilos para el reproductor de audio */
+.entry-audio {
+    margin-top: 1rem;
     padding: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
-}
-
-.audio-preview audio {
-    width: 100%;
-    margin: 1rem 0;
-    border-radius: 0.5rem;
-}
-
-.audio-preview audio::-webkit-media-controls-panel {
-    background-color: var(--paper-color);
-}
-
-.audio-preview audio::-webkit-media-controls-current-time-display,
-.audio-preview audio::-webkit-media-controls-time-remaining-display {
-    color: var(--text-primary);
-}
-
-.delete-confirmation {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem;
-    background-color: var(--paper-color);
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.delete-confirmation span {
-    color: var(--text-primary);
-    font-weight: 500;
-}
-
-.delete-confirmation button {
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    font-size: 0.9rem;
+    background-color: var(--bg-paper);
+    border-radius: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
 }
 
-.delete-confirmation button.confirm {
-    background-color: var(--error-color);
-    color: white;
+.entry-audio:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.delete-confirmation button.cancel {
-    background-color: var(--primary-color);
-    color: white;
+.entry-audio audio {
+    width: 100%;
+    height: 36px;
+    border-radius: 0.5rem;
+}
+
+.audio-duration {
+    display: block;
+    text-align: right;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+}
+
+/* Estilos para el modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+    background-color: var(--bg-paper);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    color: var(--text-primary);
+    transform: rotate(90deg);
+}
+
+.entry-item {
+    padding: 1rem;
+    border-radius: 0.75rem;
+    background-color: var(--bg-paper);
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.entry-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.entry-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.entry-time {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.entry-mood {
+    font-size: 1.2rem;
+}
+
+.entry-content {
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+}
+
+.delete-button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+}
+
+.delete-button:hover {
+    color: var(--error-color);
+    background-color: rgba(var(--error-rgb), 0.1);
 } 

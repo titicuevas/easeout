@@ -30,38 +30,50 @@ class JournalEntryController extends Controller
         $request->validate([
             'mood' => 'required|string',
             'content' => 'nullable|string',
-            'duration' => 'nullable|numeric',
-            'audio' => 'nullable|file|mimes:mp3,wav,m4a,mpeg'
+            'metadata' => 'required|json',
+            'audio' => 'nullable|file|mimes:mp3,wav,m4a,mpeg,ogg,webm|max:20480' // 20MB max
         ]);
 
         try {
-            $entry = new JournalEntry();
-            $entry->user_id = auth()->id();
-            $entry->mood = $request->mood;
-            $entry->content = $request->content;
-            $entry->metadata = [
-                'timestamp' => now()->toISOString(),
-                'hasAudio' => $request->hasFile('audio'),
-                'duration' => $request->input('duration', 0)
-            ];
+            // Decodificar los metadatos JSON
+            $metadata = json_decode($request->metadata, true);
+            
+            if (!is_array($metadata)) {
+                throw new \Exception('Los metadatos deben ser un objeto JSON válido');
+            }
 
+            // Preparar los metadatos
             if ($request->hasFile('audio')) {
                 $file = $request->file('audio');
                 $extension = $file->getClientOriginalExtension();
-                $fileName = 'audio_' . auth()->id() . '_' . time() . '.' . $extension;
-                $path = $file->storeAs('audio-recordings', $fileName, 'public');
+                $fileName = 'audio_' . uniqid() . '_' . auth()->id() . '_' . time() . '.' . $extension;
                 
+                // Asegurarse de que el directorio existe
+                Storage::disk('public')->makeDirectory('audio-recordings');
+                
+                // Intentar guardar el archivo
+                $path = $file->storeAs('audio-recordings', $fileName, 'public');
                 if ($path) {
-                    $entry->metadata['audioUrl'] = Storage::url($path);
-                    $entry->metadata['audioFileName'] = $fileName;
+                    $metadata['audioUrl'] = asset('storage/' . $path);
+                    $metadata['audioFileName'] = $fileName;
+                    $metadata['hasAudio'] = true;
+                } else {
+                    throw new \Exception('Error al guardar el archivo de audio');
                 }
             }
 
-            $entry->save();
+            // Crear la entrada con todos los datos
+            $entry = JournalEntry::create([
+                'user_id' => auth()->id(),
+                'mood' => $request->mood,
+                'content' => $request->content,
+                'metadata' => $metadata
+            ]);
 
             return redirect()->route('journal-entries.index')
                 ->with('success', 'Entrada guardada correctamente');
         } catch (\Exception $e) {
+            \Log::error('Error al guardar la entrada: ' . $e->getMessage());
             return back()->withErrors(['error' => 'Error al guardar la entrada: ' . $e->getMessage()]);
         }
     }

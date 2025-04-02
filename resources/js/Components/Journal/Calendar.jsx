@@ -3,13 +3,16 @@ import React, { useState } from 'react';
 export default function Calendar({ entries, onEntryClick }) {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [moodFilter, setMoodFilter] = useState(null);
+    const [playingAudio, setPlayingAudio] = useState(null);
 
     const getDaysInMonth = (date) => {
         return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
     };
 
     const getFirstDayOfMonth = (date) => {
-        return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+        // Convertir domingo (0) a 7 para que la semana empiece en lunes (1)
+        const day = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+        return day === 0 ? 6 : day - 1;
     };
 
     const getEntriesForDate = (date) => {
@@ -45,6 +48,12 @@ export default function Calendar({ entries, onEntryClick }) {
             case 'frustrated': return 'Frustrado';
             default: return 'Desconocido';
         }
+    };
+
+    const formatDuration = (seconds) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
 
     const renderCalendar = () => {
@@ -88,6 +97,54 @@ export default function Calendar({ entries, onEntryClick }) {
         return days;
     };
 
+    const renderEntryDetails = (entry) => {
+        return (
+            <div className="entry-details">
+                <div className="entry-time">
+                    {new Date(entry.created_at).toLocaleTimeString('es-ES', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    })}
+                </div>
+                <div className="entry-mood" title={getMoodLabel(entry.mood)}>
+                    {getMoodEmoji(entry.mood)}
+                </div>
+                {entry.content && (
+                    <div className="entry-content">
+                        {entry.content}
+                    </div>
+                )}
+                {entry.metadata?.hasAudio && (
+                    <div className="entry-audio">
+                        <audio
+                            controls
+                            src={entry.metadata.audioUrl}
+                            onPlay={() => {
+                                // Pausar cualquier otro audio que esté reproduciéndose
+                                if (playingAudio && playingAudio !== entry.id) {
+                                    const previousAudio = document.querySelector(`audio[data-entry-id="${playingAudio}"]`);
+                                    if (previousAudio) previousAudio.pause();
+                                }
+                                setPlayingAudio(entry.id);
+                            }}
+                            onEnded={() => setPlayingAudio(null)}
+                            onPause={() => setPlayingAudio(null)}
+                            className="w-full"
+                            data-entry-id={entry.id}
+                        >
+                            Tu navegador no soporta el elemento de audio.
+                        </audio>
+                        {entry.metadata.duration > 0 && (
+                            <span className="audio-duration">
+                                {formatDuration(entry.metadata.duration)}
+                            </span>
+                        )}
+                    </div>
+                )}
+            </div>
+        );
+    };
+
     const changeMonth = (increment) => {
         setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + increment));
     };
@@ -95,11 +152,11 @@ export default function Calendar({ entries, onEntryClick }) {
     const moods = ['happy', 'neutral', 'sad', 'angry', 'frustrated'];
 
     return (
-        <div className="calendar-container">
-            <div className="calendar-filters">
-                <div className="mood-filters">
+        <div className="calendar-container p-4 sm:p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+            <div className="calendar-filters mb-6">
+                <div className="mood-filters flex flex-wrap gap-2 justify-center">
                     <button 
-                        className={`mood-filter ${!moodFilter ? 'active' : ''}`}
+                        className={`mood-filter px-4 py-2 rounded-full text-sm sm:text-base ${!moodFilter ? 'active' : ''}`}
                         onClick={() => setMoodFilter(null)}
                     >
                         Todos
@@ -107,7 +164,7 @@ export default function Calendar({ entries, onEntryClick }) {
                     {moods.map(mood => (
                         <button
                             key={mood}
-                            className={`mood-filter ${moodFilter === mood ? 'active' : ''}`}
+                            className={`mood-filter px-4 py-2 rounded-full text-sm sm:text-base ${moodFilter === mood ? 'active' : ''}`}
                             onClick={() => setMoodFilter(mood)}
                             title={getMoodLabel(mood)}
                         >
@@ -117,38 +174,37 @@ export default function Calendar({ entries, onEntryClick }) {
                 </div>
             </div>
 
-            <div className="calendar-header">
+            <div className="calendar-header flex items-center justify-between mb-6">
                 <button 
                     onClick={() => changeMonth(-1)}
-                    className="calendar-nav-button"
+                    className="calendar-nav-button p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
                     title="Mes anterior"
                 >
                     ←
                 </button>
-                <h2>
-                    {currentDate.toLocaleString('es-ES', { month: 'long', year: 'numeric' })}
+                <h2 className="text-lg sm:text-xl md:text-2xl font-semibold">
+                    {currentDate.toLocaleString('es-ES', { month: 'long', year: 'numeric' }).replace(' de ', ' ')}
                 </h2>
                 <button 
                     onClick={() => changeMonth(1)}
-                    className="calendar-nav-button"
+                    className="calendar-nav-button p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
                     title="Mes siguiente"
                 >
                     →
                 </button>
             </div>
-            <div className="calendar-weekdays">
-                <div>Dom</div>
+            <div className="calendar-weekdays grid grid-cols-7 gap-1 mb-2 text-sm sm:text-base font-medium">
                 <div>Lun</div>
                 <div>Mar</div>
                 <div>Mié</div>
                 <div>Jue</div>
                 <div>Vie</div>
                 <div>Sáb</div>
+                <div>Dom</div>
             </div>
-            <div className="calendar-grid">
+            <div className="calendar-grid grid grid-cols-7 gap-1">
                 {renderCalendar()}
             </div>
-            
         </div>
     );
 } 
