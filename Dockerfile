@@ -1,4 +1,4 @@
-FROM php:8.2-fpm
+FROM php:8.3-fpm
 
 # Instalar dependencias del sistema
 RUN apt-get update && apt-get install -y \
@@ -27,6 +27,9 @@ WORKDIR /var/www
 # Copiar archivos de la aplicación
 COPY . /var/www
 
+# Configurar PHP
+RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini
+
 # Instalar dependencias
 RUN composer install --no-dev --optimize-autoloader
 RUN npm install
@@ -39,4 +42,4 @@ RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 EXPOSE 8000
 
 # Comando para iniciar la aplicación
-CMD php artisan serve --host=0.0.0.0 --port=$PORT 
+CMD php artisan serve --host=0.0.0.0 
