@@ -1,3 +1,9 @@
+# EaseOut
+
+<p align="center">
+    <img src="public/images/logo.png" alt="EaseOut Logo" width="200">
+</p>
+
 # 🎧 EaseOut – Your Private Emotional Journal
 
 **EaseOut** is a calm and private web application designed to help you release emotional stress through voice and text entries. Whether you had a tough day at work, are dealing with frustration, or just need to get something off your chest, EaseOut is your personal, non-social space to express and let go.
