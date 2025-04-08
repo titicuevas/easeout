@@ -6,69 +6,78 @@ echo "🚀 Iniciando la aplicación..."
 # Configurar el puerto para Railways
 export PORT=${PORT:-8080}
 
-# Crear un servidor PHP temporal para el healthcheck
-cat > /tmp/health-server.php <<EOF
-<?php
-\$socket = stream_socket_server("tcp://0.0.0.0:${PORT}", \$errno, \$errstr);
-if (!\$socket) {
-    echo "\$errstr (\$errno)\n";
-    exit(1);
-}
-while (true) {
-    \$client = stream_socket_accept(\$socket);
-    if (\$client) {
-        \$response = "HTTP/1.1 200 OK\r\n";
-        \$response .= "Content-Type: text/plain\r\n";
-        \$response .= "Connection: close\r\n";
-        \$response .= "\r\n";
-        \$response .= "OK";
-        fwrite(\$client, \$response);
-        fclose(\$client);
+# Verificar variables de entorno críticas
+echo "📝 Verificando variables de entorno..."
+if [ -z "$APP_KEY" ]; then
+    echo "⚠️ APP_KEY no está configurada, generando una nueva..."
+    php artisan key:generate --force
+fi
+
+if [ -z "$DB_HOST" ] || [ -z "$DB_USERNAME" ] || [ -z "$DB_PASSWORD" ]; then
+    echo "❌ Error: Variables de base de datos no configuradas"
+    exit 1
+fi
+
+# Crear directorios necesarios
+echo "📁 Preparando directorios..."
+mkdir -p /var/www/storage/logs \
+         /var/www/storage/framework/sessions \
+         /var/www/storage/framework/views \
+         /var/www/storage/framework/cache \
+         /var/www/bootstrap/cache
+
+# Establecer permisos
+chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+
+# Limpiar caché
+echo "🧹 Limpiando caché..."
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
+php artisan route:clear
+
+# Intentar conectar a la base de datos
+echo "🔄 Verificando conexión a la base de datos..."
+php -r "
+\$tries = 30;
+while (\$tries > 0) {
+    try {
+        new PDO(
+            'mysql:host={\$_ENV['DB_HOST']};port={\$_ENV['DB_PORT']};dbname={\$_ENV['DB_DATABASE']}',
+            '{\$_ENV['DB_USERNAME']}',
+            '{\$_ENV['DB_PASSWORD']}'
+        );
+        echo 'Conexión exitosa a la base de datos\n';
+        break;
+    } catch (Exception \$e) {
+        echo 'Intentando conectar a la base de datos... ' . \$tries . ' intentos restantes\n';
+        \$tries--;
+        if (\$tries === 0) {
+            echo 'Error de conexión: ' . \$e->getMessage() . '\n';
+            exit(1);
+        }
+        sleep(1);
     }
-}
-EOF
+}"
 
-# Iniciar el servidor temporal en segundo plano
-php /tmp/health-server.php &
-HEALTH_SERVER_PID=$!
+# Ejecutar migraciones
+echo "🔄 Ejecutando migraciones..."
+php artisan migrate --force || echo "⚠️ Error en migraciones, pero continuando..."
 
-# Preparar la aplicación en segundo plano
-(
-    sleep 2  # Dar tiempo al servidor temporal para iniciar
+# Optimizar
+echo "⚙️ Optimizando la aplicación..."
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
 
-    # Crear directorios necesarios
-    mkdir -p /var/www/storage/logs \
-            /var/www/storage/framework/{sessions,views,cache} \
-            /var/www/bootstrap/cache
+# Verificar que PHP puede escribir en storage
+echo "📝 Verificando permisos de escritura..."
+if ! touch /var/www/storage/logs/laravel.log; then
+    echo "❌ Error: No se puede escribir en el directorio de logs"
+    exit 1
+fi
 
-    chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
-    chmod -R 775 /var/www/storage /var/www/bootstrap/cache
-
-    # Configuración básica
-    if [ ! -f .env ]; then
-        cp .env.example .env || echo "APP_KEY=" > .env
-    fi
-
-    # Generar clave si es necesario
-    php artisan key:generate --force --quiet || true
-
-    # Optimizar la aplicación
-    php artisan config:cache --quiet
-    php artisan route:cache --quiet
-    php artisan view:cache --quiet
-
-    # Ejecutar migraciones sin que fallen si hay error
-    php artisan migrate --force --quiet || true
-
-    # Matar el servidor temporal
-    kill $HEALTH_SERVER_PID || true
-
-    # Limpiar archivo temporal
-    rm -f /tmp/health-server.php
-
-    # Iniciar el servidor PHP principal
-    php artisan serve --host=0.0.0.0 --port=$PORT
-) &
-
-# Esperar a que el proceso en segundo plano termine
-wait 
+# Iniciar el servidor PHP
+echo "🚀 Iniciando servidor PHP en puerto $PORT..."
+exec php artisan serve --host=0.0.0.0 --port=$PORT 
