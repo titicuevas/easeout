@@ -78,6 +78,61 @@ if ! touch /var/www/storage/logs/laravel.log; then
     exit 1
 fi
 
-# Iniciar el servidor PHP
-echo "🚀 Iniciando servidor PHP en puerto $PORT..."
-exec php artisan serve --host=0.0.0.0 --port=$PORT 
+# Configurar PHP-FPM
+echo "📝 Configurando PHP-FPM..."
+cat > /usr/local/etc/php-fpm.d/www.conf <<EOF
+[www]
+user = www-data
+group = www-data
+listen = 127.0.0.1:9000
+pm = dynamic
+pm.max_children = 5
+pm.start_servers = 2
+pm.min_spare_servers = 1
+pm.max_spare_servers = 3
+EOF
+
+# Configurar Nginx
+echo "📝 Configurando Nginx..."
+cat > /etc/nginx/conf.d/default.conf <<EOF
+server {
+    listen $PORT default_server;
+    server_name _;
+    root /var/www/public;
+    index index.php;
+
+    location / {
+        try_files \$uri \$uri/ /index.php?\$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    # Endpoint simple para healthcheck
+    location = /health {
+        access_log off;
+        add_header Content-Type text/plain;
+        return 200 'OK';
+    }
+}
+EOF
+
+# Iniciar PHP-FPM
+echo "🚀 Iniciando PHP-FPM..."
+php-fpm -D
+
+# Esperar a que PHP-FPM esté listo
+sleep 2
+
+# Ejecutar migraciones en segundo plano
+(
+    echo "🔄 Ejecutando migraciones..."
+    php artisan migrate --force || echo "⚠️ Error en migraciones, pero continuando..."
+) &
+
+# Iniciar Nginx
+echo "🚀 Iniciando Nginx..."
+exec nginx -g "daemon off;" 
