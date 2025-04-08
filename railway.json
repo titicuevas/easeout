@@ -1,21 +1,12 @@
 {
     "$schema": "https://railway.app/railway.schema.json",
     "build": {
-        "builder": "DOCKERFILE",
-        "dockerfilePath": "Dockerfile"
+        "builder": "DOCKERFILE"
     },
     "deploy": {
-        "startCommand": "php artisan serve --host=0.0.0.0 --port=${PORT:-8000}",
         "restartPolicyType": "ON_FAILURE",
-        "restartPolicyMaxRetries": 10
-    },
-    "services": {
-        "mysql": {
-            "image": "mysql:8",
-            "environment": {
-                "MYSQL_DATABASE": "easeout",
-                "MYSQL_ROOT_PASSWORD": "secret"
-            }
-        }
+        "restartPolicyMaxRetries": 10,
+        "healthcheckPath": "/",
+        "healthcheckTimeout": 100
     }
 } 
