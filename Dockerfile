@@ -11,16 +11,22 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     nodejs \
-    npm
+    npm \
+    && rm -rf /var/lib/apt/lists/*
 
 # Instalar extensiones PHP
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+
+# Configurar PHP
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+COPY php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
 
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Configurar Nginx
-COPY nginx.conf /etc/nginx/sites-available/default
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+RUN rm /etc/nginx/sites-enabled/default || true
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
@@ -35,8 +41,8 @@ RUN composer install --no-dev --optimize-autoloader
 RUN npm install && npm run build
 
 # Configurar permisos
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
-RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
+    && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
 # Script de inicio
 COPY start.sh /usr/local/bin/start.sh
