@@ -3,7 +3,14 @@ set -e
 
 echo "🚀 Iniciando la aplicación..."
 
+# Verificar directorios y permisos primero
+echo "📁 Verificando directorios y permisos..."
+mkdir -p /var/www/storage/logs /var/www/storage/framework/sessions /var/www/storage/framework/views /var/www/storage/framework/cache
+chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+
 # Esperar si es necesario a que la base de datos esté lista
+echo "⏳ Esperando a que la base de datos esté disponible..."
 sleep 5
 
 echo "📦 Configurando la aplicación..."
@@ -31,20 +38,31 @@ php artisan migrate --force
 
 echo "🌐 Iniciando servicios..."
 
-# Asegurarse de que los directorios necesarios existen
-mkdir -p /var/www/storage/logs
-chown -R www-data:www-data /var/www/storage
+# Iniciar PHP-FPM con más logging
+php-fpm -D --nodaemonize --fpm-config /usr/local/etc/php-fpm.d/www.conf &
+PHP_FPM_PID=$!
 
-# Iniciar PHP-FPM
-php-fpm -D
+# Esperar a que PHP-FPM esté listo
+echo "⏳ Esperando a que PHP-FPM esté listo..."
+sleep 2
 
 # Verificar que PHP-FPM se inició correctamente
-if ! ps aux | grep php-fpm | grep -v grep > /dev/null; then
+if ! ps -p $PHP_FPM_PID > /dev/null; then
     echo "❌ Error: PHP-FPM no se pudo iniciar"
     exit 1
 fi
 
+# Verificar que el socket/puerto está escuchando
+if ! netstat -ln | grep ':9000' > /dev/null; then
+    echo "❌ Error: PHP-FPM no está escuchando en el puerto 9000"
+    exit 1
+fi
+
 echo "✅ PHP-FPM iniciado correctamente"
+
+# Verificar configuración de Nginx
+echo "🔍 Verificando configuración de Nginx..."
+nginx -t
 
 # Iniciar Nginx
 echo "🚀 Iniciando Nginx..."
