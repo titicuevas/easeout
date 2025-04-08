@@ -15,12 +15,14 @@ mkdir -p /var/www/storage/logs \
 
 chmod -R 777 /var/www/storage /var/www/bootstrap/cache
 
+# Copiar el archivo de entorno
+cp .env.railways .env
+
 # Crear un router.php simple para el servidor integrado
 cat > router.php <<EOF
 <?php
-if (php_sapi_name() !== 'cli-server') {
-    die('Este script solo debe ejecutarse con el servidor web integrado de PHP');
-}
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 // Endpoint de healthcheck
 if (\$_SERVER['REQUEST_URI'] === '/health') {
@@ -30,9 +32,30 @@ if (\$_SERVER['REQUEST_URI'] === '/health') {
 }
 
 // Servir archivos estáticos directamente
-if (file_exists(__DIR__ . '/public' . \$_SERVER['REQUEST_URI'])) {
+\$uri = urldecode(parse_url(\$_SERVER['REQUEST_URI'], PHP_URL_PATH));
+
+if (\$uri !== '/' && file_exists(__DIR__ . '/public' . \$uri)) {
+    \$ext = pathinfo(\$uri, PATHINFO_EXTENSION);
+    switch (\$ext) {
+        case 'css':
+            header('Content-Type: text/css');
+            break;
+        case 'js':
+            header('Content-Type: application/javascript');
+            break;
+        case 'png':
+            header('Content-Type: image/png');
+            break;
+        case 'jpg':
+        case 'jpeg':
+            header('Content-Type: image/jpeg');
+            break;
+    }
     return false;
 }
+
+// Establecer el directorio de trabajo
+chdir(__DIR__ . '/public');
 
 // Redirigir todo lo demás a index.php
 require __DIR__ . '/public/index.php';
@@ -41,20 +64,19 @@ EOF
 # Generar clave si es necesario
 php artisan key:generate --force --quiet || true
 
-# Limpiar y optimizar en segundo plano
-(
-    php artisan config:clear
-    php artisan cache:clear
-    php artisan view:clear
-    php artisan route:clear
-    
-    php artisan config:cache
-    php artisan route:cache
-    php artisan view:cache
-    
-    # Intentar migraciones
-    php artisan migrate --force --quiet || true
-) &
+# Limpiar caché
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
+php artisan route:clear
+
+# Optimizar
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# Ejecutar migraciones
+php artisan migrate --force --quiet || true
 
 # Iniciar el servidor PHP con el router personalizado
-exec php -S "0.0.0.0:$PORT" router.php 
+cd public && exec php -S "0.0.0.0:$PORT" ../router.php 
