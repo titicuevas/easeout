@@ -2,7 +2,7 @@
     "$schema": "https://railway.app/railway.schema.json",
     "build": {
         "builder": "NIXPACKS",
-        "buildCommand": "composer install --no-dev && php artisan key:generate && php artisan config:cache && php artisan route:cache && php artisan view:cache && npm install && npm run build"
+        "buildCommand": "php -v && composer install --no-dev && npm install && npm run build && php artisan config:clear && php artisan cache:clear && php artisan view:clear && php artisan route:clear && php artisan config:cache && php artisan route:cache && php artisan view:cache"
     },
     "deploy": {
         "startCommand": "php artisan serve --host=0.0.0.0 --port=$PORT",
