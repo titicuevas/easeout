@@ -12,10 +12,11 @@ RUN apt-get update && apt-get install -y \
     unzip \
     nodejs \
     npm \
+    libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Instalar extensiones PHP
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+RUN docker-php-ext-install pdo_pgsql mbstring exif pcntl bcmath gd
 
 # Configurar PHP
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
@@ -48,6 +49,8 @@ RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
 COPY start.sh /usr/local/bin/start.sh
 RUN chmod +x /usr/local/bin/start.sh
 
-EXPOSE 80
+# Exponer el puerto que Railway espera
+ENV PORT=8080
+EXPOSE 8080
 
 CMD ["/usr/local/bin/start.sh"] 

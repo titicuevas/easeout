@@ -78,5 +78,5 @@ php artisan view:cache
 # Ejecutar migraciones
 php artisan migrate --force --quiet || true
 
-# Iniciar el servidor PHP con el router personalizado
+# Iniciar el servidor PHP
 cd public && exec php -S "0.0.0.0:$PORT" ../router.php 
