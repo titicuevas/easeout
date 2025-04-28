@@ -1,0 +1,1229 @@
+/* Variables para el tema */
+:root {
+    /* Colores base relajantes */
+    --sage-100: #F1F5F2;
+    --sage-200: #E3EBE4;
+    --sage-300: #C5D1C7;
+    --sage-400: #A7B7AA;
+    --sage-500: #7C9885;
+    --sage-600: #5A7267;
+    --sage-700: #445A4F;
+
+    /* Colores de estado de ánimo */
+    --mood-happy: #98C9A3;     /* Verde suave */
+    --mood-neutral: #B4B4B4;   /* Gris neutro */
+    --mood-sad: #92B6D5;       /* Azul suave */
+    --mood-angry: #E6A4A4;     /* Rojo suave */
+    --mood-frustrated: #E6C9A4; /* Naranja suave */
+
+    /* Variables del tema claro */
+    --background-color: var(--sage-100);
+    --paper-color: #FFFFFF;
+    --text-primary: var(--sage-700);
+    --text-secondary: var(--sage-600);
+    --primary-color: var(--sage-500);
+    --primary-hover: var(--sage-600);
+    --box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    --textarea-bg: #F8FAFC;
+    --calendar-bg: var(--paper-color);
+    --calendar-border: var(--sage-200);
+    --calendar-day-bg: var(--paper-color);
+    --calendar-day-hover: var(--sage-100);
+    --calendar-day-empty: var(--sage-100);
+    --calendar-day-has-entries: var(--sage-200);
+    --calendar-day-has-entries-hover: var(--sage-300);
+    --calendar-text: var(--sage-700);
+    --calendar-weekday: var(--sage-500);
+    --modal-bg: #FFFFFF;
+    --modal-border: var(--sage-200);
+    --entry-divider: var(--sage-200);
+    --border-color: rgba(0, 0, 0, 0.1);
+    --border-color-dark: rgba(255, 255, 255, 0.1);
+    --bg-hover: rgba(var(--primary-rgb), 0.1);
+}
+
+[data-theme="dark"] {
+    /* Variables del tema oscuro */
+    --background-color: #1F2937;
+    --paper-color: #2D3748;
+    --text-primary: var(--sage-100);
+    --text-secondary: var(--sage-200);
+    --primary-color: var(--sage-400);
+    --primary-hover: var(--sage-300);
+    --box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    --textarea-bg: #363636;
+    --calendar-bg: var(--paper-color);
+    --calendar-border: var(--sage-600);
+    --calendar-day-bg: var(--sage-700);
+    --calendar-day-hover: var(--sage-600);
+    --calendar-day-empty: var(--sage-700);
+    --calendar-day-has-entries: var(--sage-600);
+    --calendar-day-has-entries-hover: var(--sage-500);
+    --calendar-text: var(--sage-100);
+    --calendar-weekday: var(--sage-300);
+    --modal-bg: #2D3748;
+    --modal-border: #4A5568;
+    --entry-divider: #4A5568;
+}
+
+/* Estilos generales */
+body {
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Estilos para el contenedor del diario */
+.journal-container {
+    min-height: 100vh;
+    padding: 2rem;
+    background-color: var(--bg-paper);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.journal-paper {
+    background-color: var(--bg-paper);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    width: 100%;
+    max-width: 800px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.journal-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+/* Sección de estados de ánimo */
+.mood-section {
+    margin-bottom: 2rem;
+}
+
+.mood-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+    justify-items: center;
+}
+
+/* Estilos base para los botones de estado de ánimo */
+.mood-button {
+    margin: 0.25rem;
+    padding: 0.75rem;
+    font-size: 1rem;
+    min-width: 90px;
+    height: 85px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    border: 2px solid;
+    cursor: pointer;
+}
+
+.mood-button .emoji {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.mood-button .label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* Estilos específicos para cada estado de ánimo */
+.mood-happy {
+    border-color: #FFD93D;
+    background-color: rgba(255, 217, 61, 0.1);
+}
+
+.mood-happy:hover {
+    background-color: rgba(255, 217, 61, 0.3);
+}
+
+.mood-happy.selected {
+    background-color: #FFD93D;
+}
+
+.mood-neutral {
+    border-color: #98B4AA;
+    background-color: rgba(152, 180, 170, 0.1);
+}
+
+.mood-neutral:hover {
+    background-color: rgba(152, 180, 170, 0.3);
+}
+
+.mood-neutral.selected {
+    background-color: #98B4AA;
+}
+
+.mood-sad {
+    border-color: #95B1DB;
+    background-color: rgba(149, 177, 219, 0.1);
+}
+
+.mood-sad:hover {
+    background-color: rgba(149, 177, 219, 0.3);
+}
+
+.mood-sad.selected {
+    background-color: #95B1DB;
+}
+
+.mood-angry {
+    border-color: #FF6B6B;
+    background-color: rgba(255, 107, 107, 0.1);
+}
+
+.mood-angry:hover {
+    background-color: rgba(255, 107, 107, 0.3);
+}
+
+.mood-angry.selected {
+    background-color: #FF6B6B;
+}
+
+.mood-frustrated {
+    border-color: #B088F9;
+    background-color: rgba(176, 136, 249, 0.1);
+}
+
+.mood-frustrated:hover {
+    background-color: rgba(176, 136, 249, 0.3);
+}
+
+.mood-frustrated.selected {
+    background-color: #B088F9;
+}
+
+/* Efectos al seleccionar y hover */
+.mood-button:hover {
+    transform: translateY(-5px);
+}
+
+.mood-button.selected {
+    transform: scale(0.95);
+}
+
+.mood-button.selected .label {
+    color: #2D3748;
+}
+
+/* Modo oscuro */
+[data-theme="dark"] .mood-button {
+    border-width: 2px;
+}
+
+[data-theme="dark"] .mood-button .label {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .mood-button.selected .label {
+    color: #2D3748;
+}
+
+/* Grid de estados de ánimo */
+.mood-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+    justify-items: center;
+}
+
+@media (max-width: 640px) {
+    .mood-button {
+        min-width: 80px;
+        height: 75px;
+        padding: 0.5rem;
+    }
+
+    .mood-button .emoji {
+        font-size: 1.75rem;
+    }
+
+    .mood-button .label {
+        font-size: 0.75rem;
+    }
+}
+
+/* Sección de contenido */
+.content-section {
+    margin-bottom: 2rem;
+}
+
+.textarea-wrapper {
+    position: relative;
+    border-radius: 1rem;
+    background-color: var(--bg-paper);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.content-textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 1rem;
+    background-color: var(--bg-paper);
+    color: var(--text-primary);
+    font-size: 1rem;
+    line-height: 1.5;
+    resize: vertical;
+    transition: all 0.3s ease;
+}
+
+.content-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+}
+
+/* Sección de audio */
+.audio-section {
+    margin-bottom: 2rem;
+}
+
+.audio-preview {
+    background-color: var(--bg-paper);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.audio-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.audio-player {
+    width: 100%;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+}
+
+.audio-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.delete-audio-button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: var(--error-color);
+    color: var(--paper-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.delete-audio-button:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+.delete-confirmation {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.confirmation-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.confirm-delete {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: var(--error-color);
+    color: var(--paper-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancel-delete {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: var(--primary-color);
+    color: var(--paper-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.confirm-delete:hover,
+.cancel-delete:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+/* Sección de acciones */
+.actions-section {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+.save-button {
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 2rem;
+    background-color: var(--primary-color);
+    color: var(--paper-color);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.save-button:not(:disabled):hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.save-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Indicador de guardado */
+.saving-indicator {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.saving-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: var(--paper-color);
+    border-radius: 50%;
+    animation: bounce 0.6s infinite;
+}
+
+.saving-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.saving-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+/* Modo oscuro */
+[data-theme="dark"] .journal-paper {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .content-textarea {
+    border-color: var(--border-color-dark);
+}
+
+[data-theme="dark"] .audio-preview {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Mensajes de error */
+.error-message {
+    background-color: rgba(var(--error-rgb), 0.1);
+    color: var(--error-color);
+    padding: 1rem;
+    border-radius: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Estilos para el campo de texto */
+.journal-textarea {
+    width: 100%;
+    background-color: var(--textarea-bg);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    padding: 0.75rem;
+}
+
+.journal-textarea textarea {
+    min-height: 100px;
+    padding: 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    border: none;
+    background: transparent;
+    width: 100%;
+    resize: vertical;
+}
+
+.journal-textarea:hover,
+.journal-textarea:focus-within {
+    background-color: var(--paper-color);
+    box-shadow: var(--box-shadow);
+}
+
+.journal-textarea textarea::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.8;
+}
+
+.journal-textarea textarea:focus {
+    outline: none;
+}
+
+/* Estilos para el botón de guardar */
+.save-button {
+    padding: 12px 32px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    box-shadow: var(--box-shadow);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.save-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    background-color: var(--primary-hover);
+}
+
+.save-button:disabled {
+    background-color: #E2E8F0;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Estilos para los títulos */
+.journal-title {
+    font-family: "Segoe UI", "Roboto", "Arial", sans-serif;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.journal-subtitle {
+    font-family: "Segoe UI", "Roboto", "Arial", sans-serif;
+    font-weight: 400;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+/* Estilos para el grabador de audio */
+.audio-recorder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.record-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--primary-color);
+    color: var(--paper-color);
+    border: none;
+    border-radius: 2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.record-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.record-button svg {
+    font-size: 1.2rem;
+}
+
+.recording-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--bg-paper);
+    border-radius: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.audio-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    background-color: var(--paper-color);
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.audio-duration {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.recording-time {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    background-color: var(--bg-paper);
+}
+
+.recording-time.pulse {
+    animation: pulse 1.5s infinite;
+}
+
+.stop-button, .cancel-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 1.5rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.stop-button {
+    background-color: var(--primary-color);
+    color: var(--paper-color);
+}
+
+.cancel-button {
+    background-color: var(--secondary-color);
+    color: var(--paper-color);
+}
+
+/* Estilos para modo oscuro */
+[data-theme="dark"] .recording-controls {
+    background-color: var(--bg-modal);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .recording-time {
+    background-color: var(--bg-modal);
+    color: var(--text-paper);
+}
+
+[data-theme="dark"] .stop-button {
+    background-color: var(--primary-color);
+    color: var(--text-paper);
+}
+
+[data-theme="dark"] .cancel-button {
+    background-color: var(--secondary-color);
+    color: var(--text-paper);
+}
+
+[data-theme="dark"] .stop-button:hover,
+[data-theme="dark"] .cancel-button:hover {
+    filter: brightness(1.2);
+    transform: translateY(-2px);
+}
+
+.stop-button:hover, .cancel-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.audio-preview {
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 400px;
+    padding: 1rem;
+    background-color: var(--paper-color);
+    border-radius: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.audio-preview audio {
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.audio-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.delete-confirmation {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background-color: var(--paper-color);
+    border-radius: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.delete-confirmation span {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    margin-right: 0.5rem;
+}
+
+.delete-confirmation button {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.9rem;
+    border-radius: 1rem;
+}
+
+.delete-confirmation button.confirm {
+    background-color: var(--error-color);
+    color: white;
+}
+
+.delete-confirmation button.cancel {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Botón de tema */
+.theme-toggle-wrapper {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 50;
+}
+
+.theme-toggle-icon {
+    width: 2rem;
+    height: 2rem;
+    color: var(--text-primary);
+    background-color: var(--paper-color);
+    border-radius: 50%;
+    padding: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--calendar-border);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle-icon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: var(--calendar-day-hover);
+}
+
+/* Utilidades */
+.flex {
+    display: flex;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.justify-end {
+    justify-content: flex-end;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.gap-2 {
+    gap: 0.5rem;
+}
+
+.my-6 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.mt-6 {
+    margin-top: 1rem;
+}
+
+/* Estilos para el historial de entradas */
+.entries-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.entry-card {
+    background-color: var(--textarea-bg);
+    border-radius: 12px;
+    padding: 1.25rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    color: var(--text-primary);
+}
+
+.entry-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--paper-color);
+}
+
+.entry-date {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.entry-content {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    white-space: pre-wrap;
+}
+
+.entry-audio {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    background-color: var(--paper-color);
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.entry-audio audio {
+    width: 100%;
+    margin-top: 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.entry-audio audio::-webkit-media-controls-panel {
+    background-color: var(--paper-color);
+}
+
+.entry-audio audio::-webkit-media-controls-current-time-display,
+.entry-audio audio::-webkit-media-controls-time-remaining-display {
+    color: var(--text-primary);
+}
+
+.audio-duration {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+    text-align: right;
+}
+
+.mood-indicator {
+    font-size: 1.25rem;
+}
+
+/* Botón de nueva entrada */
+.new-entry-button {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: var(--primary-color);
+    color: white;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+.new-entry-button:hover {
+    transform: translateY(-2px);
+    background-color: var(--primary-hover);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos para el calendario */
+.calendar-container {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: var(--calendar-bg);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding: 0 0.5rem;
+}
+
+.calendar-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-transform: capitalize;
+}
+
+.calendar-nav-button {
+    background-color: var(--bg-paper);
+    color: var(--text-primary);
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.calendar-nav-button:hover {
+    background-color: var(--primary-color);
+    color: var(--paper-color);
+    transform: translateY(-2px);
+}
+
+.calendar-weekdays {
+    text-align: center;
+    color: var(--calendar-weekday);
+    font-weight: 600;
+}
+
+.calendar-grid {
+    min-height: 400px;
+}
+
+.calendar-day {
+    position: relative;
+    min-height: 80px;
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.calendar-day:hover {
+    background-color: var(--hover-bg);
+}
+
+.calendar-day.has-entries {
+    cursor: pointer;
+}
+
+.entries-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 4px;
+}
+
+.entry-emoji {
+    font-size: 1.2em;
+    line-height: 1;
+    transition: transform 0.2s ease;
+}
+
+.entry-emoji:hover {
+    transform: scale(1.2);
+}
+
+.day-number {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 0.9em;
+    color: var(--text-secondary);
+}
+
+/* Estilos para los estados de ánimo */
+.mood-happy { color: #FFD700; }
+.mood-neutral { color: #A0AEC0; }
+.mood-sad { color: #4299E1; }
+.mood-angry { color: #F56565; }
+.mood-frustrated { color: #9F7AEA; }
+
+/* Estilos para los filtros de estado de ánimo */
+.calendar-filters {
+    margin-bottom: 1.5rem;
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+    background-color: var(--bg-paper);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.mood-filters {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.mood-filter {
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    border: 2px solid var(--border-color);
+    background-color: var(--bg-paper);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.mood-filter:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mood-filter.active {
+    background-color: var(--primary-color);
+    color: var(--paper-color);
+    border-color: var(--primary-color);
+}
+
+/* Estilos para el modo oscuro */
+[data-theme="dark"] .calendar-container {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .calendar-day {
+    border-color: var(--border-color-dark);
+}
+
+[data-theme="dark"] .calendar-day.has-entries {
+    background-color: var(--bg-modal);
+    border-color: var(--primary-color);
+}
+
+[data-theme="dark"] .mood-filter {
+    border-color: var(--border-color-dark);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.calendar-day {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Estilos para el reproductor de audio */
+.entry-audio {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: var(--bg-paper);
+    border-radius: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.entry-audio:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.entry-audio audio {
+    width: 100%;
+    height: 36px;
+    border-radius: 0.5rem;
+}
+
+.audio-duration {
+    display: block;
+    text-align: right;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+}
+
+/* Estilos para el modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+    background-color: var(--bg-paper);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    color: var(--text-primary);
+    transform: rotate(90deg);
+}
+
+.entry-item {
+    padding: 1rem;
+    border-radius: 0.75rem;
+    background-color: var(--bg-paper);
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.entry-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.entry-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.entry-time {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.entry-mood {
+    font-size: 1.2rem;
+}
+
+.entry-content {
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+}
+
+.delete-button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+}
+
+.delete-button:hover {
+    color: var(--error-color);
+    background-color: rgba(var(--error-rgb), 0.1);
+} 

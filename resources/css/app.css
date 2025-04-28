@@ -1,0 +1,22 @@
+/* Importar estilos del diario */
+@import 'journal.css';
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos personalizados */
+.calendar-icon {
+    @apply text-gray-500 hover:text-gray-700;
+}
+
+/* Estilos para el audio */
+audio {
+    @apply w-full mt-2;
+}
+
+/* Estilos para SweetAlert2 */
+.swal2-popup {
+    @apply font-sans;
+}
