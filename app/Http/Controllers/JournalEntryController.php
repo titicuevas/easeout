@@ -61,31 +61,12 @@ class JournalEntryController extends Controller
 
             if ($request->hasFile('audio')) {
                 $file = $request->file('audio');
-                
-                if (!$file->isValid()) {
-                    throw new \Exception('El archivo de audio no es válido');
-                }
-
-                $fileName = 'audio_' . uniqid() . '_' . auth()->id() . '_' . time() . '.webm';
-                
-                // Usar el disco configurado por defecto (que debería ser s3 en producción)
-                $disk = Storage::disk(config('filesystems.default'));
-                $disk->makeDirectory('audio-recordings');
-                
-                // Guardar el archivo SIN parámetros extra de visibility ni ACL
+                $fileName = uniqid() . '_' . $file->getClientOriginalName();
                 $path = $file->storeAs('audio-recordings', $fileName, config('filesystems.default'));
                 
-                if (!$path) {
-                    throw new \Exception('Error al guardar el archivo de audio');
-                }
-
-                if (!$disk->exists($path)) {
-                    throw new \Exception('El archivo de audio no se guardó correctamente');
-                }
-
-                $metadata['audioFileName'] = $fileName;
-                $metadata['audioUrl'] = $disk->url($path);
                 $metadata['hasAudio'] = true;
+                $metadata['audioFileName'] = $fileName;
+                $metadata['audioUrl'] = Storage::disk(config('filesystems.default'))->url('audio-recordings/' . $fileName);
                 $metadata['audioMimeType'] = $file->getMimeType();
                 $metadata['audioSize'] = $file->getSize();
                 $metadata['duration'] = $metadata['duration'] ?? 0;

@@ -1,6 +1,12 @@
 import { Head, Link } from '@inertiajs/react';
 
 export default function Welcome({ auth }) {
+    // Si el usuario está autenticado, redirigir a la página de crear entrada
+    if (auth.user) {
+        window.location.href = route('journal-entries.create');
+        return null;
+    }
+
     return (
         <>
             <Head title="EaseOut - Tu Diario Personal" />
@@ -15,29 +21,18 @@ export default function Welcome({ auth }) {
                                     <span className="ml-3 text-xl font-semibold text-white">EaseOut</span>
                                 </div>
                                 <nav className="flex gap-4">
-                                    {auth.user ? (
-                                        <Link
-                                            href={route('journal-entries.create')}
-                                            className="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150"
-                                        >
-                                            Diario
-                                        </Link>
-                                    ) : (
-                                        <>
-                                            <Link
-                                                href={route('login')}
-                                                className="inline-flex items-center px-4 py-2 bg-gray-800 border border-gray-600 rounded-md font-semibold text-xs text-gray-200 uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150"
-                                            >
-                                                Iniciar Sesión
-                                            </Link>
-                                            <Link
-                                                href={route('register')}
-                                                className="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150"
-                                            >
-                                                Registrarse
-                                            </Link>
-                                        </>
-                                    )}
+                                    <Link
+                                        href={route('login')}
+                                        className="inline-flex items-center px-4 py-2 bg-gray-800 border border-gray-600 rounded-md font-semibold text-xs text-gray-200 uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150"
+                                    >
+                                        Iniciar Sesión
+                                    </Link>
+                                    <Link
+                                        href={route('register')}
+                                        className="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150"
+                                    >
+                                        Registrarse
+                                    </Link>
                                 </nav>
                             </div>
                         </div>
@@ -58,7 +53,7 @@ export default function Welcome({ auth }) {
                                     href={route('register')}
                                     className="rounded-md bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-3.5 text-sm font-semibold text-white shadow-lg hover:from-blue-500 hover:to-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-all duration-300 transform hover:scale-105"
                                 >
-                                    Comienzamos?
+                                    ¿Comenzamos?
                                 </Link>
                                 <Link
                                     href={route('login')}
