@@ -54,13 +54,15 @@ const JournalEntry = () => {
         e.preventDefault();
         if (isSaving) return;
 
+        setIsSaving(true);
+
         if (!selectedMood && !content && !audioBlob) {
             setError('Por favor, selecciona un estado de ánimo, escribe algo o graba un audio.');
+            setIsSaving(false);
             return;
         }
 
         try {
-            setIsSaving(true);
             setError(null);
             const formData = new FormData();
             
@@ -97,6 +99,7 @@ const JournalEntry = () => {
                         title: 'Error',
                         text: 'Hubo un error al guardar la entrada. Por favor, inténtalo de nuevo.',
                     });
+                    setIsSaving(false);
                 },
                 onSuccess: () => {
                     setContent('');
@@ -113,6 +116,7 @@ const JournalEntry = () => {
                         timer: 1500,
                         showConfirmButton: false
                     });
+                    setIsSaving(false);
                 },
             });
         } catch (error) {
@@ -123,7 +127,6 @@ const JournalEntry = () => {
                 title: 'Error',
                 text: 'Hubo un error al guardar la entrada. Por favor, inténtalo de nuevo.',
             });
-        } finally {
             setIsSaving(false);
         }
     };
