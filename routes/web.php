@@ -30,6 +30,11 @@ Route::get('/', function () {
 
 // Rutas autenticadas
 Route::middleware(['auth', 'verified'])->group(function () {
+    // Parche: ruta dashboard redirige a crear entrada
+    Route::get('/dashboard', function () {
+        return redirect()->route('journal-entries.create');
+    })->name('dashboard');
+
     // Rutas del diario
     Route::get('/journal-entries', [JournalEntryController::class, 'index'])->name('journal-entries.index');
     Route::get('/journal-entries/create', [JournalEntryController::class, 'create'])->name('journal-entries.create');
