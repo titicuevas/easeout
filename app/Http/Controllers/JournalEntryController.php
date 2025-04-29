@@ -72,6 +72,7 @@ class JournalEntryController extends Controller
                 $disk = Storage::disk(config('filesystems.default'));
                 $disk->makeDirectory('audio-recordings');
                 
+                // Guardar el archivo SIN parámetros extra de visibility ni ACL
                 $path = $file->storeAs('audio-recordings', $fileName, config('filesystems.default'));
                 
                 if (!$path) {
