@@ -88,6 +88,7 @@ const JournalEntry = () => {
 
             await router.post(route('journal-entries.store'), formData, {
                 forceFormData: true,
+                preserveScroll: true,
                 onError: (errors) => {
                     console.error('Error al guardar:', errors);
                     setError(Object.values(errors).join(', '));
@@ -184,7 +185,6 @@ const JournalEntry = () => {
                         <button
                             type="submit"
                             disabled={isSaving || (!selectedMood && !content && !audioBlob)}
-                            onClick={() => setIsSaving(true)}
                             className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white 
                                 ${isSaving || (!selectedMood && !content && !audioBlob)
                                     ? 'bg-gray-400 cursor-not-allowed'
