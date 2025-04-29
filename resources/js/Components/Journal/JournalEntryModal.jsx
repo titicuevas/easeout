@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 export default function JournalEntryModal({ entry, isOpen, onClose, onDelete }) {
     const [isDeletingId, setIsDeletingId] = useState(null);
+    const [playingAudio, setPlayingAudio] = useState(null);
 
     if (!isOpen || !entry) return null;
 
@@ -74,7 +75,7 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete }) 
                                 </div>
                                 <button
                                     onClick={() => handleDelete(entryItem.id)}
-                                    disabled={isDeletingId === entryItem.id}
+                                    disabled={isDeletingId !== null}
                                     className={`p-1.5 sm:p-2 rounded-full transition-colors ${
                                         isDeletingId === entryItem.id
                                             ? 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
@@ -97,11 +98,15 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete }) 
                                             controls
                                             className="w-full"
                                             src={entryItem.metadata.audioUrl}
+                                            data-entry-id={entryItem.id}
                                             onPlay={(e) => {
                                                 document.querySelectorAll('audio').forEach(audio => {
                                                     if (audio !== e.target) audio.pause();
                                                 });
+                                                setPlayingAudio(entryItem.id);
                                             }}
+                                            onEnded={() => setPlayingAudio(null)}
+                                            onPause={() => setPlayingAudio(null)}
                                         >
                                             Tu navegador no soporta el elemento de audio.
                                         </audio>
