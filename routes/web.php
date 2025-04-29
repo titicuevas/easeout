@@ -30,11 +30,6 @@ Route::get('/', function () {
 
 // Rutas autenticadas
 Route::middleware(['auth', 'verified'])->group(function () {
-    // Dashboard
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
-
     // Rutas del diario
     Route::get('/journal-entries', [JournalEntryController::class, 'index'])->name('journal-entries.index');
     Route::get('/journal-entries/create', [JournalEntryController::class, 'create'])->name('journal-entries.create');
