@@ -639,43 +639,6 @@ body {
     transition: all 0.3s ease;
 }
 
-.stop-button {
-    background-color: var(--primary-color);
-    color: var(--paper-color);
-}
-
-.cancel-button {
-    background-color: var(--secondary-color);
-    color: var(--paper-color);
-}
-
-/* Estilos para modo oscuro */
-[data-theme="dark"] .recording-controls {
-    background-color: var(--bg-modal);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-[data-theme="dark"] .recording-time {
-    background-color: var(--bg-modal);
-    color: var(--text-paper);
-}
-
-[data-theme="dark"] .stop-button {
-    background-color: var(--primary-color);
-    color: var(--text-paper);
-}
-
-[data-theme="dark"] .cancel-button {
-    background-color: var(--secondary-color);
-    color: var(--text-paper);
-}
-
-[data-theme="dark"] .stop-button:hover,
-[data-theme="dark"] .cancel-button:hover {
-    filter: brightness(1.2);
-    transform: translateY(-2px);
-}
-
 .stop-button:hover, .cancel-button:hover {
     transform: translateY(-2px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -1210,20 +1173,4 @@ body {
     color: var(--text-primary);
     line-height: 1.5;
     margin-bottom: 0.75rem;
-}
-
-.delete-button {
-    background: none;
-    border: none;
-    font-size: 1.2rem;
-    color: var(--text-secondary);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    padding: 0.25rem;
-    border-radius: 0.25rem;
-}
-
-.delete-button:hover {
-    color: var(--error-color);
-    background-color: rgba(var(--error-rgb), 0.1);
 } 
