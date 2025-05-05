@@ -115,17 +115,17 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete, is
                                             handleDelete(entryItem.id);
                                         }
                                     }}
-                                    disabled={isDeletingId !== null}
+                                    disabled={isDeletingId === entryItem.id}
                                     className={`p-1.5 sm:p-2 rounded-full transition-colors ${
-                                        isDeletingId !== null
+                                        isDeletingId === entryItem.id
                                             ? 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
                                             : 'hover:bg-red-50 dark:hover:bg-red-900/10 text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300'
                                     }`}
-                                    title={isDeletingId !== null ? "Borrando..." : "Borrar entrada"}
-                                    tabIndex={isDeletingId !== null ? -1 : 0}
-                                    aria-disabled={isDeletingId !== null}
+                                    title={isDeletingId === entryItem.id ? "Borrando..." : "Borrar entrada"}
+                                    tabIndex={isDeletingId === entryItem.id ? -1 : 0}
+                                    aria-disabled={isDeletingId === entryItem.id}
                                 >
-                                    {isDeletingId !== null ? '⏳' : '🗑️'}
+                                    {isDeletingId === entryItem.id ? '⏳' : '🗑️'}
                                 </button>
                             </div>
                             
