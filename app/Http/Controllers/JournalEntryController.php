@@ -150,6 +150,7 @@ class JournalEntryController extends Controller
         }
     }
 
+    
     public function show(JournalEntry $journalEntry)
     {
         if ($journalEntry->user_id !== auth()->id()) {

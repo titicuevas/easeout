@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-import { route } from 'laravel-routes';
+import { router } from '@inertiajs/react';
 
 export default function JournalEntryModal({ entry, isOpen, onClose, onDelete }) {
     const [isDeletingId, setIsDeletingId] = useState(null);
@@ -41,13 +41,23 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete }) 
             });
 
             if (result.isConfirmed) {
-                await axios.delete(route('journal-entries.destroy', id));
-                onDelete(id);
-                Swal.fire(
-                    '¡Borrado!',
-                    'La entrada ha sido eliminada.',
-                    'success'
-                );
+                router.delete(`/journal-entries/${id}`, {
+                    onSuccess: () => {
+                        onDelete(id);
+                        Swal.fire(
+                            '¡Borrado!',
+                            'La entrada ha sido eliminada.',
+                            'success'
+                        );
+                    },
+                    onError: () => {
+                        Swal.fire(
+                            'Error',
+                            'No se pudo borrar la entrada.',
+                            'error'
+                        );
+                    }
+                });
             }
         } catch (error) {
             console.error('Error al borrar:', error);
