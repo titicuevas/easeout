@@ -22,7 +22,8 @@ const JournalEntry = () => {
     const [error, setError] = useState(null);
     const [isSaving, setIsSaving] = useState(false);
 
-    const handleMoodSelect = (mood) => {
+    const handleMoodSelect = (mood, e) => {
+        if (e) e.preventDefault();
         setSelectedMood(mood);
         setError(null);
     };
@@ -66,7 +67,8 @@ const JournalEntry = () => {
             setError(null);
             const formData = new FormData();
             
-            if (selectedMood && ['happy', 'neutral', 'sad', 'angry', 'frustrated'].includes(selectedMood.value)) {
+            if (selectedMood) {
+                console.log('Mood enviado:', selectedMood);
                 formData.append('mood', selectedMood.value);
             }
             
@@ -149,7 +151,7 @@ const JournalEntry = () => {
                                 <button
                                     key={mood.value}
                                     className={`mood-button mood-${mood.value} ${selectedMood?.value === mood.value ? 'selected' : ''}`}
-                                    onClick={() => handleMoodSelect(mood)}
+                                    onClick={(e) => handleMoodSelect(mood, e)}
                                     title={mood.label}
                                     type="button"
                                 >
