@@ -26,6 +26,7 @@ class JournalEntryController extends Controller
                 }
                 return [
                     'id' => $entry->id,
+                    'mood' => $entry->mood,
                     'content' => $entry->content,
                     'metadata' => $metadata,
                     'created_at' => $entry->created_at,
@@ -168,6 +169,7 @@ class JournalEntryController extends Controller
 
         return response()->json([
             'id' => $journalEntry->id,
+            'mood' => $journalEntry->mood,
             'content' => $journalEntry->content,
             'metadata' => $metadata,
             'created_at' => $journalEntry->created_at,
