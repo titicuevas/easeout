@@ -289,7 +289,7 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                         <span>{isProcessing ? 'Procesando...' : 'Borrar y grabar nuevo'}</span>
                     </button>
                     {showDeleteConfirm && (
-                        <div className="mt-4 flex flex-col items-center gap-3">
+                        <div className="mt-4 flex flex-col items-center gap-3 w-full sm:w-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-4 rounded-lg shadow transition-colors">
                             <span className="text-gray-600 dark:text-gray-300 text-base md:text-lg">¿Borrar audio?</span>
                             <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                                 <button
