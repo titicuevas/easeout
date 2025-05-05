@@ -303,9 +303,9 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                                 </button>
                                 <button
                                     onClick={() => setShowDeleteConfirm(false)}
-                                    disabled={disabled || isProcessing}
+                                    disabled={disabled || isProcessing || isDeletingAudio}
                                     className={`w-full sm:w-auto px-6 py-2 md:py-3 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-white rounded-lg transition-colors ${
-                                        isProcessing ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-300 dark:hover:bg-gray-700'
+                                        (isProcessing || isDeletingAudio) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-300 dark:hover:bg-gray-700'
                                     }`}
                                 >
                                     No, mantener

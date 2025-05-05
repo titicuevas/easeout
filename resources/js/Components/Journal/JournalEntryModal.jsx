@@ -109,7 +109,7 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete, is
                                 <button
                                     type="button"
                                     onClick={() => {
-                                        if (isDeletingId === null) handleDelete(entryItem.id);
+                                        if (isDeletingId === null) return handleDelete(entryItem.id);
                                     }}
                                     disabled={isDeletingId !== null}
                                     className={`p-1.5 sm:p-2 rounded-full transition-colors ${
@@ -119,6 +119,7 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete, is
                                     }`}
                                     title={isDeletingId !== null ? "Borrando..." : "Borrar entrada"}
                                     tabIndex={isDeletingId !== null ? -1 : 0}
+                                    aria-disabled={isDeletingId !== null}
                                 >
                                     {isDeletingId !== null ? '⏳' : '🗑️'}
                                 </button>
