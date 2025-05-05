@@ -116,6 +116,9 @@ export default function Index({ entries }) {
         setSelectedEntry(null);
     };
 
+    // Solo mostrar el modal si la entrada seleccionada sigue existiendo en entries
+    const showModal = isModalOpen && selectedEntry && selectedEntry.length > 0 && selectedEntry.every(e => entries.some(en => en.id === e.id));
+
     return (
         <>
             <Head title="Mi Diario" />
@@ -160,7 +163,7 @@ export default function Index({ entries }) {
 
             <JournalEntryModal
                 entry={selectedEntry}
-                isOpen={isModalOpen}
+                isOpen={showModal}
                 onClose={handleModalClose}
                 onDelete={handleDelete}
                 isDeletingId={isDeletingId}
