@@ -3,8 +3,7 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 import { router } from '@inertiajs/react';
 
-export default function JournalEntryModal({ entry, isOpen, onClose, onDelete }) {
-    const [isDeletingId, setIsDeletingId] = useState(null);
+export default function JournalEntryModal({ entry, isOpen, onClose, onDelete, isDeletingId }) {
     const [playingAudio, setPlayingAudio] = useState(null);
 
     if (!isOpen || !entry) return null;
@@ -76,6 +75,7 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete }) 
             <div 
                 className="w-full max-w-2xl max-h-[95vh] bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden"
                 onClick={e => e.stopPropagation()}
+                tabIndex={-1}
             >
                 <div className="flex items-center justify-between p-3 sm:p-4 md:p-6 border-b border-gray-200 dark:border-gray-700">
                     <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 dark:text-white line-clamp-1">
@@ -113,13 +113,13 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete }) 
                                     onClick={() => handleDelete(entryItem.id)}
                                     disabled={isDeletingId !== null}
                                     className={`p-1.5 sm:p-2 rounded-full transition-colors ${
-                                        isDeletingId === entryItem.id
+                                        isDeletingId !== null
                                             ? 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
                                             : 'hover:bg-red-50 dark:hover:bg-red-900/10 text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300'
                                     }`}
-                                    title={isDeletingId === entryItem.id ? "Borrando..." : "Borrar entrada"}
+                                    title={isDeletingId !== null ? "Borrando..." : "Borrar entrada"}
                                 >
-                                    {isDeletingId === entryItem.id ? '⏳' : '🗑️'}
+                                    {isDeletingId !== null ? '⏳' : '🗑️'}
                                 </button>
                             </div>
                             

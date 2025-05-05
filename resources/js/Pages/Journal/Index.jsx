@@ -14,6 +14,7 @@ export default function Index({ entries }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isDeletingId, setIsDeletingId] = useState(null);
 
     entries = Array.isArray(entries) ? entries : [];
 
@@ -54,8 +55,8 @@ export default function Index({ entries }) {
     };
 
     const handleDelete = async (entryId) => {
-        if (isDeleting || isLoading) return;
-
+        if (isDeleting || isLoading || isDeletingId !== null) return;
+        setIsDeletingId(entryId);
         const result = await Swal.fire({
             title: '¿Estás seguro?',
             text: "No podrás revertir esta acción",
@@ -73,6 +74,9 @@ export default function Index({ entries }) {
                         onSuccess: () => {
                             setIsModalOpen(false);
                             setSelectedEntry(null);
+                            setIsDeletingId(null);
+                            setIsDeleting(false);
+                            router.reload({ only: ['entries'] });
                             Swal.fire({
                                 icon: 'success',
                                 title: '¡Borrado!',
@@ -82,6 +86,8 @@ export default function Index({ entries }) {
                             });
                         },
                         onError: () => {
+                            setIsDeletingId(null);
+                            setIsDeleting(false);
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
@@ -93,11 +99,11 @@ export default function Index({ entries }) {
                         preserveScroll: true
                     });
                 } catch (error) {
+                    setIsDeletingId(null);
+                    setIsDeleting(false);
                     Swal.showValidationMessage(
                         'Error al eliminar la entrada'
                     );
-                } finally {
-                    setIsDeleting(false);
                 }
             },
             allowOutsideClick: () => !Swal.isLoading()
@@ -157,6 +163,7 @@ export default function Index({ entries }) {
                 isOpen={isModalOpen}
                 onClose={handleModalClose}
                 onDelete={handleDelete}
+                isDeletingId={isDeletingId}
             />
         </>
     );
