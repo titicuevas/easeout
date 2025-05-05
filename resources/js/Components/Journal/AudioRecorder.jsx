@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { FaMicrophone, FaStop, FaTrash, FaPlay, FaPause } from 'react-icons/fa';
 
-const AudioRecorder = ({ onRecordingComplete }) => {
+const AudioRecorder = ({ onRecordingComplete, disabled }) => {
     const [isRecording, setIsRecording] = useState(false);
     const [recordingDuration, setRecordingDuration] = useState(0);
     const [audioUrl, setAudioUrl] = useState(null);
@@ -291,7 +291,7 @@ const AudioRecorder = ({ onRecordingComplete }) => {
                             <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                                 <button
                                     onClick={deleteRecording}
-                                    disabled={isProcessing}
+                                    disabled={disabled || isProcessing}
                                     className={`w-full sm:w-auto px-6 py-2 md:py-3 bg-red-500 dark:bg-red-600 text-white rounded-lg transition-colors ${
                                         isProcessing ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-600 dark:hover:bg-red-700'
                                     }`}

@@ -180,7 +180,8 @@ const JournalEntry = () => {
                             O graba un mensaje de voz
                         </h2>
                         <AudioRecorder 
-                            onRecordingComplete={handleRecordingComplete} 
+                            onRecordingComplete={handleRecordingComplete}
+                            disabled={isSaving}
                         />
                     </div>
 

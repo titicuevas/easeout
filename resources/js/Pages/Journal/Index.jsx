@@ -15,6 +15,8 @@ export default function Index({ entries }) {
     const [isDeleting, setIsDeleting] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
+    entries = Array.isArray(entries) ? entries : [];
+
     useEffect(() => {
         const savedTheme = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
