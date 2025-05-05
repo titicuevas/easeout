@@ -21,10 +21,17 @@ export default function Index({ entries }) {
     useEffect(() => {
         const savedTheme = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        
         const shouldBeDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
         setIsDarkMode(shouldBeDark);
         document.documentElement.setAttribute('data-theme', shouldBeDark ? 'dark' : 'light');
+        // Escuchar cambios en el almacenamiento local para sincronizar el tema
+        const onStorage = () => {
+            const newTheme = localStorage.getItem('theme');
+            setIsDarkMode(newTheme === 'dark');
+            document.documentElement.setAttribute('data-theme', newTheme === 'dark' ? 'dark' : 'light');
+        };
+        window.addEventListener('storage', onStorage);
+        return () => window.removeEventListener('storage', onStorage);
     }, []);
 
     const toggleTheme = () => {
