@@ -12,22 +12,29 @@ class JournalEntryController extends Controller
 {
     public function index()
     {
-        $entries = auth()->user()->journalEntries()
-            ->latest()
+        $entries = JournalEntry::where('user_id', auth()->id())
+            ->orderBy('created_at', 'desc')
             ->get()
             ->map(function ($entry) {
                 $metadata = $entry->metadata;
-                if (isset($metadata['audioFileName'])) {
-                    $metadata['audioUrl'] = Storage::disk(config('filesystems.default'))->url('audio-recordings/' . $metadata['audioFileName']);
-                    $entry->metadata = $metadata;
+                if (isset($metadata['audioUrl'])) {
+                    // Generar URL firmada temporal (válida por 1 hora)
+                    $metadata['audioUrl'] = Storage::disk('s3')->temporaryUrl(
+                        $metadata['audioUrl'],
+                        now()->addHour()
+                    );
                 }
-                return $entry;
+                return [
+                    'id' => $entry->id,
+                    'content' => $entry->content,
+                    'metadata' => $metadata,
+                    'created_at' => $entry->created_at,
+                    'updated_at' => $entry->updated_at,
+                ];
             });
 
         return Inertia::render('Journal/Index', [
-            'entries' => [
-                'data' => $entries
-            ]
+            'entries' => $entries
         ]);
     }
 
@@ -141,5 +148,29 @@ class JournalEntryController extends Controller
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'Error al eliminar la entrada: ' . $e->getMessage()]);
         }
+    }
+
+    public function show(JournalEntry $journalEntry)
+    {
+        if ($journalEntry->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $metadata = $journalEntry->metadata;
+        if (isset($metadata['audioUrl'])) {
+            // Generar URL firmada temporal (válida por 1 hora)
+            $metadata['audioUrl'] = Storage::disk('s3')->temporaryUrl(
+                $metadata['audioUrl'],
+                now()->addHour()
+            );
+        }
+
+        return response()->json([
+            'id' => $journalEntry->id,
+            'content' => $journalEntry->content,
+            'metadata' => $metadata,
+            'created_at' => $journalEntry->created_at,
+            'updated_at' => $journalEntry->updated_at,
+        ]);
     }
 } 

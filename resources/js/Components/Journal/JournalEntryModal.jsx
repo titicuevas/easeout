@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import Swal from 'sweetalert2';
+import axios from 'axios';
+import { route } from 'laravel-routes';
 
 export default function JournalEntryModal({ entry, isOpen, onClose, onDelete }) {
     const [isDeletingId, setIsDeletingId] = useState(null);
@@ -23,13 +26,36 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete }) 
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
 
-    const handleDelete = async (entryId) => {
-        if (isDeletingId) return; // Prevenir múltiples clics
-        setIsDeletingId(entryId);
+    const handleDelete = async (id) => {
         try {
-            await onDelete(entryId);
+            setIsDeletingId(id); // Deshabilitar inmediatamente al hacer clic
+            const result = await Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Esta acción no se puede deshacer",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, borrar',
+                cancelButtonText: 'Cancelar'
+            });
+
+            if (result.isConfirmed) {
+                await axios.delete(route('journal-entries.destroy', id));
+                onDelete(id);
+                Swal.fire(
+                    '¡Borrado!',
+                    'La entrada ha sido eliminada.',
+                    'success'
+                );
+            }
         } catch (error) {
             console.error('Error al borrar:', error);
+            Swal.fire(
+                'Error',
+                'No se pudo borrar la entrada.',
+                'error'
+            );
         } finally {
             setIsDeletingId(null);
         }
@@ -107,6 +133,14 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete }) 
                                             }}
                                             onEnded={() => setPlayingAudio(null)}
                                             onPause={() => setPlayingAudio(null)}
+                                            onError={(e) => {
+                                                console.error('Error al reproducir audio:', e);
+                                                Swal.fire({
+                                                    title: 'Error',
+                                                    text: 'No se pudo reproducir el audio. Por favor, intenta recargar la página.',
+                                                    icon: 'error'
+                                                });
+                                            }}
                                         >
                                             Tu navegador no soporta el elemento de audio.
                                         </audio>
