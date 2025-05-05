@@ -16,7 +16,7 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete }) 
             case 'sad': return '😢';
             case 'angry': return '😠';
             case 'frustrated': return '😫';
-            default: return '❓';
+            default: return '';
         }
     };
 
@@ -106,7 +106,7 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete }) 
                                         })}
                                     </span>
                                     <span className="text-xl sm:text-2xl" title={entryItem.mood}>
-                                        {getMoodEmoji(entryItem.mood)}
+                                        {getMoodEmoji(entryItem.mood) || '❓'}
                                     </span>
                                 </div>
                                 <button
