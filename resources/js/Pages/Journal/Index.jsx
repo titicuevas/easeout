@@ -63,6 +63,7 @@ export default function Index({ entries }) {
     const handleDelete = async (entryId) => {
         if (isDeleting || isLoading || isDeletingId !== null) return;
         setIsDeletingId(entryId);
+        let confirmed = false;
         const result = await Swal.fire({
             title: '¿Estás seguro?',
             text: "No podrás revertir esta acción",
@@ -75,6 +76,7 @@ export default function Index({ entries }) {
             showLoaderOnConfirm: true,
             preConfirm: async () => {
                 setIsDeleting(true);
+                confirmed = true;
                 try {
                     await router.delete(route('journal-entries.destroy', entryId), {
                         onSuccess: () => {
@@ -114,7 +116,7 @@ export default function Index({ entries }) {
             },
             allowOutsideClick: () => !Swal.isLoading()
         });
-        if (!result.isConfirmed) {
+        if (!confirmed) {
             setIsDeletingId(null);
             setIsDeleting(false);
         }

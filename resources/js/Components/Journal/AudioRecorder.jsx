@@ -304,8 +304,13 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                                 <button
                                     onClick={() => setShowDeleteConfirm(false)}
                                     disabled={disabled || isProcessing || isDeletingAudio}
-                                    className={`w-full sm:w-auto px-6 py-2 md:py-3 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-white rounded-lg transition-colors ${
-                                        (isProcessing || isDeletingAudio) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-400 dark:hover:bg-gray-700'
+                                    style={{
+                                        backgroundColor: 'inherit',
+                                        color: 'inherit',
+                                        border: '1px solid #ccc',
+                                    }}
+                                    className={`w-full sm:w-auto px-6 py-2 md:py-3 rounded-lg transition-colors ${
+                                        (isProcessing || isDeletingAudio) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200 dark:hover:bg-gray-700'
                                     }`}
                                 >
                                     No, mantener
