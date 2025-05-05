@@ -27,7 +27,6 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete, is
 
     const handleDelete = async (id) => {
         try {
-            setIsDeletingId(id); // Deshabilitar inmediatamente al hacer clic
             const result = await Swal.fire({
                 title: '¿Estás seguro?',
                 text: "Esta acción no se puede deshacer",
@@ -65,8 +64,6 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete, is
                 'No se pudo borrar la entrada.',
                 'error'
             );
-        } finally {
-            setIsDeletingId(null);
         }
     };
 
