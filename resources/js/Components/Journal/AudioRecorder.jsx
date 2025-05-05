@@ -276,9 +276,9 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                     />
                     <button
                         onClick={() => setShowDeleteConfirm(true)}
-                        disabled={isProcessing}
+                        disabled={disabled || isProcessing}
                         className={`w-full flex items-center justify-center gap-2 px-4 py-2 md:py-3 text-red-500 dark:text-red-400 transition-colors ${
-                            isProcessing ? 'opacity-50 cursor-not-allowed' : 'hover:text-red-600 dark:hover:text-red-300'
+                            (disabled || isProcessing) ? 'opacity-50 cursor-not-allowed' : 'hover:text-red-600 dark:hover:text-red-300'
                         }`}
                         title={isProcessing ? 'Procesando...' : 'Borrar grabación'}
                     >

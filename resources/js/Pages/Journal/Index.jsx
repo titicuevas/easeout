@@ -114,10 +114,11 @@ export default function Index({ entries }) {
         if (isDeleting || isLoading) return;
         setIsModalOpen(false);
         setSelectedEntry(null);
+        setIsDeletingId(null);
     };
 
-    // Solo mostrar el modal si la entrada seleccionada sigue existiendo en entries
-    const showModal = isModalOpen && selectedEntry && selectedEntry.length > 0 && selectedEntry.every(e => entries.some(en => en.id === e.id));
+    // Solo mostrar el modal si la entrada seleccionada sigue existiendo en entries y no se está borrando
+    const showModal = isModalOpen && selectedEntry && selectedEntry.length > 0 && selectedEntry.every(e => entries.some(en => en.id === e.id)) && isDeletingId === null;
 
     return (
         <>
