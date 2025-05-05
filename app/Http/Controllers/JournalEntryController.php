@@ -73,7 +73,7 @@ class JournalEntryController extends Controller
                 
                 $metadata['hasAudio'] = true;
                 $metadata['audioFileName'] = $fileName;
-                $metadata['audioUrl'] = Storage::disk(config('filesystems.default'))->url('audio-recordings/' . $fileName);
+                $metadata['audioUrl'] = 'audio-recordings/' . $fileName;
                 $metadata['audioMimeType'] = $file->getMimeType();
                 $metadata['audioSize'] = $file->getSize();
                 $metadata['duration'] = $metadata['duration'] ?? 0;
@@ -90,7 +90,7 @@ class JournalEntryController extends Controller
             // Crear la entrada
             $entry = new JournalEntry();
             $entry->user_id = auth()->id();
-            $entry->mood = $request->input('mood');
+            $entry->mood = in_array($request->input('mood'), ['happy', 'neutral', 'sad', 'angry', 'frustrated']) ? $request->input('mood') : null;
             $entry->content = $request->input('content');
             $entry->metadata = $metadata;
             $entry->save();
