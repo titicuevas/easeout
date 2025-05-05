@@ -107,8 +107,10 @@ export default function Index({ entries }) {
             },
             allowOutsideClick: () => !Swal.isLoading()
         });
-        setIsDeletingId(null);
-        setIsDeleting(false);
+        if (!result.isConfirmed) {
+            setIsDeletingId(null);
+            setIsDeleting(false);
+        }
     };
 
     const handleModalClose = () => {
