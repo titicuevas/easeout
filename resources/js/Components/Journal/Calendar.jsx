@@ -17,7 +17,7 @@ export default function Calendar({ entries, onEntryClick }) {
     };
 
     const getEntriesForDate = (date) => {
-        let filteredEntries = entries.data.filter(entry => {
+        let filteredEntries = entries.filter(entry => {
             const entryDate = new Date(entry.created_at);
             return entryDate.toDateString() === date.toDateString();
         });
