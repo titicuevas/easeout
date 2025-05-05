@@ -108,8 +108,12 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete, is
                                 </div>
                                 <button
                                     type="button"
-                                    onClick={() => {
-                                        if (isDeletingId === null) return handleDelete(entryItem.id);
+                                    onClick={e => {
+                                        if (isDeletingId === null) {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            handleDelete(entryItem.id);
+                                        }
                                     }}
                                     disabled={isDeletingId !== null}
                                     className={`p-1.5 sm:p-2 rounded-full transition-colors ${
