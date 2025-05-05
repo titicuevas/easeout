@@ -66,7 +66,7 @@ const JournalEntry = () => {
             setError(null);
             const formData = new FormData();
             
-            if (selectedMood) {
+            if (selectedMood && ['happy', 'neutral', 'sad', 'angry', 'frustrated'].includes(selectedMood.value)) {
                 formData.append('mood', selectedMood.value);
             }
             
