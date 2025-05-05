@@ -107,7 +107,10 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete, is
                                     </span>
                                 </div>
                                 <button
-                                    onClick={() => handleDelete(entryItem.id)}
+                                    type="button"
+                                    onClick={() => {
+                                        if (isDeletingId === null) handleDelete(entryItem.id);
+                                    }}
                                     disabled={isDeletingId !== null}
                                     className={`p-1.5 sm:p-2 rounded-full transition-colors ${
                                         isDeletingId !== null
@@ -115,6 +118,7 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete, is
                                             : 'hover:bg-red-50 dark:hover:bg-red-900/10 text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300'
                                     }`}
                                     title={isDeletingId !== null ? "Borrando..." : "Borrar entrada"}
+                                    tabIndex={isDeletingId !== null ? -1 : 0}
                                 >
                                     {isDeletingId !== null ? '⏳' : '🗑️'}
                                 </button>
