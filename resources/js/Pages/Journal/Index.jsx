@@ -35,8 +35,7 @@ export default function Index({ entries }) {
     };
 
     const handleEntryClick = async (entry) => {
-        if (isLoading || isDeleting) return;
-        
+        if (isLoading || isDeleting || isDeletingId !== null) return;
         setIsLoading(true);
         try {
             setSelectedEntry(entry);
@@ -108,6 +107,8 @@ export default function Index({ entries }) {
             },
             allowOutsideClick: () => !Swal.isLoading()
         });
+        setIsDeletingId(null);
+        setIsDeleting(false);
     };
 
     const handleModalClose = () => {
