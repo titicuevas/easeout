@@ -266,7 +266,7 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                     </div>
                 </div>
             ) : (
-                <div className="w-full max-w-md mx-auto bg-gray-50 dark:bg-gray-800 rounded-lg p-4 md:p-6 shadow-sm transition-colors">
+                <div className="w-full max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg p-4 md:p-6 shadow-sm transition-colors">
                     <div className="text-gray-600 dark:text-gray-300 text-center text-base md:text-lg mb-3">
                         Duración: {formatTime(recordingDuration)}
                     </div>
@@ -304,13 +304,10 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                                 <button
                                     onClick={() => setShowDeleteConfirm(false)}
                                     disabled={disabled || isProcessing || isDeletingAudio}
-                                    style={{
-                                        backgroundColor: 'inherit',
-                                        color: 'inherit',
-                                        border: '1px solid #ccc',
-                                    }}
-                                    className={`w-full sm:w-auto px-6 py-2 md:py-3 rounded-lg transition-colors ${
-                                        (isProcessing || isDeletingAudio) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200 dark:hover:bg-gray-700'
+                                    className={`w-full sm:w-auto px-6 py-2 md:py-3 rounded-lg transition-colors border ${
+                                        (isProcessing || isDeletingAudio)
+                                            ? 'opacity-50 cursor-not-allowed'
+                                            : 'bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 border-gray-300 dark:border-gray-600'
                                     }`}
                                 >
                                     No, mantener
