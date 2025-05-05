@@ -9,6 +9,7 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [error, setError] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
+    const [isDeletingAudio, setIsDeletingAudio] = useState(false);
     const mediaRecorder = useRef(null);
     const audioPlayer = useRef(null);
     const chunks = useRef([]);
@@ -141,6 +142,7 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
 
     const deleteRecording = async () => {
         try {
+            setIsDeletingAudio(true);
             setIsProcessing(true);
             if (audioUrl) {
                 URL.revokeObjectURL(audioUrl);
@@ -155,6 +157,7 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
             setError('Error al eliminar la grabación. Por favor, inténtalo de nuevo.');
         } finally {
             setIsProcessing(false);
+            setIsDeletingAudio(false);
         }
     };
 
@@ -291,12 +294,12 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                             <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                                 <button
                                     onClick={deleteRecording}
-                                    disabled={disabled || isProcessing}
+                                    disabled={disabled || isProcessing || isDeletingAudio}
                                     className={`w-full sm:w-auto px-6 py-2 md:py-3 bg-red-500 dark:bg-red-600 text-white rounded-lg transition-colors ${
-                                        isProcessing ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-600 dark:hover:bg-red-700'
+                                        (isProcessing || isDeletingAudio) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-600 dark:hover:bg-red-700'
                                     }`}
                                 >
-                                    {isProcessing ? 'Borrando...' : 'Sí, borrar'}
+                                    {(isProcessing || isDeletingAudio) ? 'Borrando...' : 'Sí, borrar'}
                                 </button>
                                 <button
                                     onClick={() => setShowDeleteConfirm(false)}
