@@ -164,9 +164,9 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                     await Swal.fire('¡Borrado!', 'El audio ha sido eliminado.', 'success');
                 }
                 setIsProcessing(false);
-                setIsDeletingAudio(false);
+                setIsDeletingAudio(false); // Solo aquí, después de todo el proceso
             } else {
-                setIsDeletingAudio(false);
+                setIsDeletingAudio(false); // Si cancela, también aquí
             }
         } catch (error) {
             console.error('Error al eliminar la grabación:', error);

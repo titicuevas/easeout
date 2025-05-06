@@ -108,9 +108,7 @@ const JournalEntry = () => {
                     setSelectedMood(null);
                     setAudioBlob(null);
                     setAudioDuration(0);
-                    router.visit(route('journal-entries.index'), {
-                        preserveScroll: true
-                    });
+                    router.reload({ only: ['entries'], preserveScroll: true, preserveState: true });
                     Swal.fire({
                         icon: 'success',
                         title: '¡Guardado!',
