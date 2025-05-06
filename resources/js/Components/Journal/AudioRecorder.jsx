@@ -142,8 +142,6 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
 
     const deleteRecording = async () => {
         try {
-            setIsDeletingAudio(true);
-            setIsProcessing(true);
             const result = await Swal.fire({
                 title: '¿Borrar audio?',
                 text: '¿Estás seguro de que quieres borrar este audio? Esta acción no se puede deshacer.',
@@ -155,6 +153,8 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                 cancelButtonText: 'Cancelar'
             });
             if (result.isConfirmed) {
+                setIsDeletingAudio(true);
+                setIsProcessing(true);
                 if (audioUrl) {
                     URL.revokeObjectURL(audioUrl);
                     setAudioUrl(null);
@@ -163,13 +163,14 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                     onRecordingComplete(null, 0);
                     await Swal.fire('¡Borrado!', 'El audio ha sido eliminado.', 'success');
                 }
+                setIsDeletingAudio(false);
+                setIsProcessing(false);
             }
         } catch (error) {
             console.error('Error al eliminar la grabación:', error);
             setError('Error al eliminar la grabación. Por favor, inténtalo de nuevo.');
-        } finally {
-            setIsProcessing(false);
             setIsDeletingAudio(false);
+            setIsProcessing(false);
         }
     };
 
@@ -294,14 +295,14 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                     />
                     <button
                         onClick={deleteRecording}
-                        disabled={disabled || isProcessing}
+                        disabled={disabled || isProcessing || isDeletingAudio}
                         className={`w-full flex items-center justify-center gap-2 px-4 py-2 md:py-3 text-red-500 dark:text-red-400 transition-colors ${
-                            (disabled || isProcessing) ? 'opacity-50 cursor-not-allowed' : 'hover:text-red-600 dark:hover:text-red-300'
+                            (disabled || isProcessing || isDeletingAudio) ? 'opacity-50 cursor-not-allowed' : 'hover:text-red-600 dark:hover:text-red-300'
                         }`}
-                        title={isProcessing ? 'Procesando...' : 'Borrar grabación'}
+                        title={isProcessing || isDeletingAudio ? 'Procesando...' : 'Borrar grabación'}
                     >
                         <FaTrash className="text-base md:text-lg" />
-                        <span>{isProcessing ? 'Procesando...' : 'Borrar y grabar nuevo'}</span>
+                        <span>{isProcessing || isDeletingAudio ? 'Borrando...' : 'Borrar y grabar nuevo'}</span>
                     </button>
                 </div>
             )}
