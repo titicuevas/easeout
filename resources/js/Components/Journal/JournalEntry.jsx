@@ -5,13 +5,25 @@ import { Expand } from "@theme-toggles/react";
 import "@theme-toggles/react/css/Expand.css";
 import { router } from '@inertiajs/react';
 import Swal from 'sweetalert2';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 
 const moods = [
     { emoji: '😊', label: 'Alegre', value: 'happy' },
     { emoji: '😐', label: 'Normal', value: 'neutral' },
     { emoji: '😢', label: 'Triste', value: 'sad' },
     { emoji: '😠', label: 'Enfadado', value: 'angry' },
-    { emoji: '😫', label: 'Rallado', value: 'frustrated' }
+    { emoji: '😫', label: 'Rallado', value: 'frustrated' },
+    { emoji: '❤️', label: 'Enamorado', value: 'in_love' },
+    { emoji: '💔', label: 'Desamor', value: 'heartbroken' },
+    { emoji: '🙏', label: 'Agradecido', value: 'grateful' },
+    { emoji: '🚀', label: 'Motivado', value: 'motivated' },
+    { emoji: '😴', label: 'Cansado', value: 'tired' },
+    { emoji: '😰', label: 'Ansioso', value: 'anxious' },
+    { emoji: '🌱', label: 'Esperanzado', value: 'hopeful' },
+    { emoji: '🦁', label: 'Orgulloso', value: 'proud' },
+    { emoji: '😲', label: 'Sorprendido', value: 'surprised' },
+    { emoji: '💡', label: 'Inspirado', value: 'inspired' },
 ];
 
 const JournalEntry = () => {
@@ -56,10 +68,12 @@ const JournalEntry = () => {
         if (isSaving) return;
 
         setIsSaving(true);
+        NProgress.start();
 
         if (!selectedMood && !content && !audioBlob) {
             setError('Por favor, selecciona un estado de ánimo, escribe algo o graba un audio.');
             setIsSaving(false);
+            NProgress.done();
             return;
         }
 
@@ -102,6 +116,7 @@ const JournalEntry = () => {
                         text: 'Hubo un error al guardar la entrada. Por favor, inténtalo de nuevo.',
                     });
                     setIsSaving(false);
+                    NProgress.done();
                 },
                 onSuccess: () => {
                     setContent('');
@@ -117,6 +132,7 @@ const JournalEntry = () => {
                         showConfirmButton: false
                     });
                     setIsSaving(false);
+                    NProgress.done();
                 },
             });
         } catch (error) {
@@ -128,6 +144,7 @@ const JournalEntry = () => {
                 text: 'Hubo un error al guardar la entrada. Por favor, inténtalo de nuevo.',
             });
             setIsSaving(false);
+            NProgress.done();
         }
     };
 

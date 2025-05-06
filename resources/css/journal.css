@@ -215,6 +215,116 @@ body {
     background-color: #B088F9;
 }
 
+.mood-in_love {
+    border-color: #FF69B4;
+    background-color: rgba(255, 105, 180, 0.1);
+}
+.mood-in_love:hover {
+    background-color: rgba(255, 105, 180, 0.3);
+}
+.mood-in_love.selected {
+    background-color: #FF69B4;
+}
+
+.mood-heartbroken {
+    border-color: #C2185B;
+    background-color: rgba(194, 24, 91, 0.1);
+}
+.mood-heartbroken:hover {
+    background-color: rgba(194, 24, 91, 0.3);
+}
+.mood-heartbroken.selected {
+    background-color: #C2185B;
+}
+
+.mood-grateful {
+    border-color: #FFD700;
+    background-color: rgba(255, 215, 0, 0.1);
+}
+.mood-grateful:hover {
+    background-color: rgba(255, 215, 0, 0.3);
+}
+.mood-grateful.selected {
+    background-color: #FFD700;
+}
+
+.mood-motivated {
+    border-color: #00BFAE;
+    background-color: rgba(0, 191, 174, 0.1);
+}
+.mood-motivated:hover {
+    background-color: rgba(0, 191, 174, 0.3);
+}
+.mood-motivated.selected {
+    background-color: #00BFAE;
+}
+
+.mood-tired {
+    border-color: #A0AEC0;
+    background-color: rgba(160, 174, 192, 0.1);
+}
+.mood-tired:hover {
+    background-color: rgba(160, 174, 192, 0.3);
+}
+.mood-tired.selected {
+    background-color: #A0AEC0;
+}
+
+.mood-anxious {
+    border-color: #FF9800;
+    background-color: rgba(255, 152, 0, 0.1);
+}
+.mood-anxious:hover {
+    background-color: rgba(255, 152, 0, 0.3);
+}
+.mood-anxious.selected {
+    background-color: #FF9800;
+}
+
+.mood-hopeful {
+    border-color: #4CAF50;
+    background-color: rgba(76, 175, 80, 0.1);
+}
+.mood-hopeful:hover {
+    background-color: rgba(76, 175, 80, 0.3);
+}
+.mood-hopeful.selected {
+    background-color: #4CAF50;
+}
+
+.mood-proud {
+    border-color: #F4B400;
+    background-color: rgba(244, 180, 0, 0.1);
+}
+.mood-proud:hover {
+    background-color: rgba(244, 180, 0, 0.3);
+}
+.mood-proud.selected {
+    background-color: #F4B400;
+}
+
+.mood-surprised {
+    border-color: #7E57C2;
+    background-color: rgba(126, 87, 194, 0.1);
+}
+.mood-surprised:hover {
+    background-color: rgba(126, 87, 194, 0.3);
+}
+.mood-surprised.selected {
+    background-color: #7E57C2;
+}
+
+.mood-inspired {
+    border-color: #00C853;
+    background-color: rgba(0, 200, 83, 0.1);
+}
+.mood-inspired:hover {
+    background-color: rgba(0, 200, 83, 0.3);
+}
+.mood-inspired.selected {
+    background-color: #00C853;
+}
+
 /* Efectos al seleccionar y hover */
 .mood-button:hover {
     transform: translateY(-5px);
