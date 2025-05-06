@@ -141,6 +141,7 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
     };
 
     const deleteRecording = async () => {
+        setIsDeletingAudio(true);
         try {
             const result = await Swal.fire({
                 title: '¿Borrar audio?',
@@ -153,7 +154,6 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                 cancelButtonText: 'Cancelar'
             });
             if (result.isConfirmed) {
-                setIsDeletingAudio(true);
                 setIsProcessing(true);
                 if (audioUrl) {
                     URL.revokeObjectURL(audioUrl);
@@ -163,8 +163,10 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                     onRecordingComplete(null, 0);
                     await Swal.fire('¡Borrado!', 'El audio ha sido eliminado.', 'success');
                 }
-                setIsDeletingAudio(false);
                 setIsProcessing(false);
+                setIsDeletingAudio(false);
+            } else {
+                setIsDeletingAudio(false);
             }
         } catch (error) {
             console.error('Error al eliminar la grabación:', error);
