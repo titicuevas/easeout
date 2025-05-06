@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { FaMicrophone, FaStop, FaTrash, FaPlay, FaPause } from 'react-icons/fa';
 import Swal from 'sweetalert2';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 const AudioRecorder = ({ onRecordingComplete, disabled }) => {
     const [isRecording, setIsRecording] = useState(false);
@@ -303,7 +304,7 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                         }`}
                         title={isProcessing || isDeletingAudio ? 'Procesando...' : 'Borrar grabación'}
                     >
-                        <FaTrash className="text-base md:text-lg" />
+                        {isDeletingAudio ? <ClipLoader size={18} color="#e53e3e" /> : <FaTrash className="text-base md:text-lg" />}
                         <span>{isProcessing || isDeletingAudio ? 'Borrando...' : 'Borrar y grabar nuevo'}</span>
                     </button>
                 </div>

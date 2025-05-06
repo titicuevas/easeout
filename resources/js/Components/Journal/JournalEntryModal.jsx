@@ -3,6 +3,7 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 import { router } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 export default function JournalEntryModal({ entry, isOpen, onClose, onDelete, isDeletingId }) {
     const [playingAudio, setPlayingAudio] = useState(null);
@@ -151,7 +152,7 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete, is
                                             tabIndex={isDeletingId === entryItem.id ? -1 : 0}
                                             aria-disabled={isDeletingId === entryItem.id}
                                         >
-                                            {isDeletingId === entryItem.id ? '⏳' : '🗑️'}
+                                            {isDeletingId === entryItem.id ? <ClipLoader size={18} color="#e53e3e" /> : '🗑️'}
                                         </button>
                                     </div>
 

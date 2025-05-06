@@ -36,17 +36,37 @@ export default function Calendar({ entries, onEntryClick }) {
             case 'sad': return '😢';
             case 'angry': return '😠';
             case 'frustrated': return '😫';
+            case 'in_love': return '❤️';
+            case 'heartbroken': return '💔';
+            case 'grateful': return '🙏';
+            case 'motivated': return '🚀';
+            case 'tired': return '😴';
+            case 'anxious': return '😰';
+            case 'hopeful': return '🌱';
+            case 'proud': return '🦁';
+            case 'surprised': return '😲';
+            case 'inspired': return '💡';
             default: return '❓';
         }
     };
 
     const getMoodLabel = (mood) => {
         switch (mood) {
-            case 'happy': return 'Feliz';
-            case 'neutral': return 'Neutral';
+            case 'happy': return 'Alegre';
+            case 'neutral': return 'Normal';
             case 'sad': return 'Triste';
-            case 'angry': return 'Enojado';
-            case 'frustrated': return 'Frustrado';
+            case 'angry': return 'Enfadado';
+            case 'frustrated': return 'Rallado';
+            case 'in_love': return 'Enamorado';
+            case 'heartbroken': return 'Desamor';
+            case 'grateful': return 'Agradecido';
+            case 'motivated': return 'Motivado';
+            case 'tired': return 'Cansado';
+            case 'anxious': return 'Ansioso';
+            case 'hopeful': return 'Esperanzado';
+            case 'proud': return 'Orgulloso';
+            case 'surprised': return 'Sorprendido';
+            case 'inspired': return 'Inspirado';
             default: return 'Desconocido';
         }
     };
