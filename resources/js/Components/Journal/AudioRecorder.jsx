@@ -7,7 +7,6 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
     const [recordingDuration, setRecordingDuration] = useState(0);
     const [audioUrl, setAudioUrl] = useState(null);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [error, setError] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [isDeletingAudio, setIsDeletingAudio] = useState(false);
@@ -160,13 +159,10 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                     URL.revokeObjectURL(audioUrl);
                     setAudioUrl(null);
                     setIsPlaying(false);
-                    setShowDeleteConfirm(false);
                     setRecordingDuration(0);
                     onRecordingComplete(null, 0);
                     await Swal.fire('¡Borrado!', 'El audio ha sido eliminado.', 'success');
                 }
-            } else {
-                setShowDeleteConfirm(false);
             }
         } catch (error) {
             console.error('Error al eliminar la grabación:', error);
@@ -261,12 +257,13 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                         <button
                             onClick={stopRecording}
                             disabled={isProcessing}
-                            className={`stop-button px-4 py-2 md:px-6 md:py-3 flex items-center gap-2 bg-primary text-white rounded-lg transition-colors ${
+                            className={`stop-button px-4 py-2 md:px-6 md:py-3 flex items-center gap-2 rounded-lg transition-colors ${
                                 isProcessing ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary-dark'
                             }`}
+                            style={{ backgroundColor: 'var(--primary-color)', color: 'var(--paper-color)' }}
                             title={isProcessing ? 'Procesando...' : 'Detener grabación'}
                         >
-                            <FaStop className="text-base md:text-lg" />
+                            <FaStop className="text-base md:text-lg" style={{ color: 'var(--paper-color)' }} />
                             <span>{isProcessing ? 'Procesando...' : 'Detener'}</span>
                         </button>
                         <button
@@ -283,7 +280,8 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                     </div>
                 </div>
             ) : (
-                <div className="w-full max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg p-4 md:p-6 shadow-sm transition-colors">
+                <div className="w-full max-w-md mx-auto rounded-lg p-4 md:p-6 shadow-sm transition-colors"
+                    style={{ backgroundColor: 'var(--paper-color)' }}>
                     <div className="text-gray-600 dark:text-gray-300 text-center text-base md:text-lg mb-3">
                         Duración: {formatTime(recordingDuration)}
                     </div>
@@ -295,7 +293,7 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                         className="w-full mb-4"
                     />
                     <button
-                        onClick={() => setShowDeleteConfirm(true)}
+                        onClick={deleteRecording}
                         disabled={disabled || isProcessing}
                         className={`w-full flex items-center justify-center gap-2 px-4 py-2 md:py-3 text-red-500 dark:text-red-400 transition-colors ${
                             (disabled || isProcessing) ? 'opacity-50 cursor-not-allowed' : 'hover:text-red-600 dark:hover:text-red-300'
@@ -305,33 +303,6 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                         <FaTrash className="text-base md:text-lg" />
                         <span>{isProcessing ? 'Procesando...' : 'Borrar y grabar nuevo'}</span>
                     </button>
-                    {showDeleteConfirm && (
-                        <div className="mt-4 flex flex-col items-center gap-3 w-full sm:w-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-4 rounded-lg shadow transition-colors">
-                            <span className="text-gray-600 dark:text-gray-300 text-base md:text-lg">¿Borrar audio?</span>
-                            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                                <button
-                                    onClick={deleteRecording}
-                                    disabled={disabled || isProcessing || isDeletingAudio}
-                                    className={`w-full sm:w-auto px-6 py-2 md:py-3 bg-red-500 dark:bg-red-600 text-white rounded-lg transition-colors ${
-                                        (isProcessing || isDeletingAudio) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-600 dark:hover:bg-red-700'
-                                    }`}
-                                >
-                                    {(isProcessing || isDeletingAudio) ? 'Borrando...' : 'Sí, borrar'}
-                                </button>
-                                <button
-                                    onClick={() => setShowDeleteConfirm(false)}
-                                    disabled={disabled || isProcessing || isDeletingAudio}
-                                    className={`w-full sm:w-auto px-6 py-2 md:py-3 rounded-lg transition-colors border font-semibold ${
-                                        (isProcessing || isDeletingAudio)
-                                            ? 'opacity-50 cursor-not-allowed'
-                                            : 'bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 border-blue-200 dark:border-gray-600'
-                                    }`}
-                                >
-                                    No, mantener
-                                </button>
-                            </div>
-                        </div>
-                    )}
                 </div>
             )}
         </div>

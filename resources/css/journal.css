@@ -303,7 +303,7 @@ body {
 }
 
 .audio-preview {
-    background-color: var(--bg-paper);
+    background-color: var(--paper-color);
     border-radius: 1rem;
     padding: 1.5rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -1173,4 +1173,39 @@ body {
     color: var(--text-primary);
     line-height: 1.5;
     margin-bottom: 0.75rem;
+}
+
+.stop-button {
+    background-color: var(--primary-color);
+    color: var(--paper-color);
+    border: none;
+    border-radius: 2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stop-button:hover {
+    background-color: var(--primary-hover);
+    color: var(--paper-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .stop-button {
+    background-color: var(--primary-color);
+    color: var(--paper-color);
+}
+
+.audio-preview {
+    background-color: var(--paper-color);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    animation: fadeIn 0.3s ease-out;
+}
+
+[data-theme="dark"] .audio-preview {
+    background-color: #23272f;
 } 
