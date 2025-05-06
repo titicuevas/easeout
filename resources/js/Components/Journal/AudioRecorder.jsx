@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { FaMicrophone, FaStop, FaTrash, FaPlay, FaPause } from 'react-icons/fa';
+import Swal from 'sweetalert2';
 
 const AudioRecorder = ({ onRecordingComplete, disabled }) => {
     const [isRecording, setIsRecording] = useState(false);
@@ -144,13 +145,28 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
         try {
             setIsDeletingAudio(true);
             setIsProcessing(true);
-            if (audioUrl) {
-                URL.revokeObjectURL(audioUrl);
-                setAudioUrl(null);
-                setIsPlaying(false);
+            const result = await Swal.fire({
+                title: '¿Borrar audio?',
+                text: '¿Estás seguro de que quieres borrar este audio? Esta acción no se puede deshacer.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, borrar',
+                cancelButtonText: 'Cancelar'
+            });
+            if (result.isConfirmed) {
+                if (audioUrl) {
+                    URL.revokeObjectURL(audioUrl);
+                    setAudioUrl(null);
+                    setIsPlaying(false);
+                    setShowDeleteConfirm(false);
+                    setRecordingDuration(0);
+                    onRecordingComplete(null, 0);
+                    await Swal.fire('¡Borrado!', 'El audio ha sido eliminado.', 'success');
+                }
+            } else {
                 setShowDeleteConfirm(false);
-                setRecordingDuration(0);
-                onRecordingComplete(null, 0);
             }
         } catch (error) {
             console.error('Error al eliminar la grabación:', error);
@@ -225,12 +241,13 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                 <button
                     onClick={startRecording}
                     disabled={isProcessing}
-                    className={`record-button w-full sm:w-auto px-4 py-3 md:px-6 flex items-center justify-center gap-2 bg-primary text-white rounded-lg transition-colors ${
+                    className={`record-button w-full sm:w-auto px-4 py-3 md:px-6 flex items-center justify-center gap-2 rounded-lg transition-colors ${
                         isProcessing ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary-dark'
                     }`}
+                    style={{ backgroundColor: 'var(--primary-color)', color: 'var(--paper-color)' }}
                     title={isProcessing ? 'Procesando...' : 'Iniciar grabación'}
                 >
-                    <FaMicrophone className="text-lg md:text-xl" />
+                    <FaMicrophone className="text-lg md:text-xl" style={{ color: 'var(--paper-color)' }} />
                     <span className="text-base md:text-lg">
                         {isProcessing ? 'Procesando...' : 'Grabar audio'}
                     </span>
