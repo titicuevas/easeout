@@ -69,7 +69,7 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete, is
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/50">
-            <div 
+            <div
                 className="w-full max-w-2xl max-h-[95vh] bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden"
                 onClick={e => e.stopPropagation()}
                 tabIndex={-1}
@@ -112,15 +112,14 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete, is
                                         if (isDeletingId === null) {
                                             e.preventDefault();
                                             e.stopPropagation();
-                                            handleDelete(entryItem.id);
+                                            onDelete(entryItem.id); // Aquí se debe actualizar isDeletingId
                                         }
                                     }}
                                     disabled={isDeletingId === entryItem.id}
-                                    className={`p-1.5 sm:p-2 rounded-full transition-colors ${
-                                        isDeletingId === entryItem.id
+                                    className={`p-1.5 sm:p-2 rounded-full transition-colors ${isDeletingId === entryItem.id
                                             ? 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
                                             : 'hover:bg-red-50 dark:hover:bg-red-900/10 text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300'
-                                    }`}
+                                        }`}
                                     title={isDeletingId === entryItem.id ? "Borrando..." : "Borrar entrada"}
                                     tabIndex={isDeletingId === entryItem.id ? -1 : 0}
                                     aria-disabled={isDeletingId === entryItem.id}
@@ -128,11 +127,11 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete, is
                                     {isDeletingId === entryItem.id ? '⏳' : '🗑️'}
                                 </button>
                             </div>
-                            
+
                             <div className="text-sm sm:text-base text-gray-700 dark:text-gray-200 mb-4 whitespace-pre-wrap">
                                 {entryItem.content}
                             </div>
-                            
+
                             {entryItem.metadata?.hasAudio && (
                                 <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 sm:p-4">
                                     <div className="flex flex-col gap-2">
