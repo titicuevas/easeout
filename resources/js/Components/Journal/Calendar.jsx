@@ -86,7 +86,7 @@ export default function Calendar({ entries, onEntryClick }) {
                             {entriesForDay.map((entry, index) => (
                                 <span 
                                     key={index}
-                                    className={`entry-emoji mood-${entry.mood} ${disabled ? 'opacity-50' : ''}`}
+                                    className={`entry-emoji mood-${entry.mood} ${disabled ? 'opacity-50' : ''} calendar-emoji-enhanced`}
                                     title={`${getMoodLabel(entry.mood)} - ${new Date(entry.created_at).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`}
                                 >
                                     {getMoodEmoji(entry.mood)}
@@ -153,7 +153,11 @@ export default function Calendar({ entries, onEntryClick }) {
         setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + increment));
     };
 
-    const moods = ['happy', 'neutral', 'sad', 'angry', 'frustrated'];
+    const moods = [
+        'happy', 'neutral', 'sad', 'angry', 'frustrated',
+        'in_love', 'heartbroken', 'grateful', 'motivated', 'tired',
+        'anxious', 'hopeful', 'proud', 'surprised', 'inspired'
+    ];
 
     return (
         <div className="calendar-container p-4 sm:p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
