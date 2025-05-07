@@ -284,4 +284,9 @@ body[data-theme="dark"], [data-theme="dark"] body {
 }
 [data-theme="dark"] .journal-content {
     background: none !important;
+}
+
+[data-theme="dark"] .calendar-filters {
+    background-color: #23272f !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 } 

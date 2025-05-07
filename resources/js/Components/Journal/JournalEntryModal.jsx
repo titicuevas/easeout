@@ -7,7 +7,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
-export default function JournalEntryModal({ entry, isOpen, onClose, onDelete, isDeletingId }) {
+export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, isDeletingId }) {
     const [playingAudio, setPlayingAudio] = useState(null);
 
     // Animaciones para el overlay y el modal
@@ -22,7 +22,7 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete, is
         exit: { opacity: 0, scale: 0.95, y: 40 }
     };
 
-    if (!isOpen || !entry) return null;
+    if (!isOpen || !entries || entries.length === 0) return null;
 
     const getMoodEmoji = (mood) => {
         switch (mood) {
@@ -98,7 +98,7 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete, is
             <div className="modal-content" onClick={e => e.stopPropagation()}>
                 <div className="modal-header">
                     <h2 className="modal-title">
-                        {format(new Date(entry.date), 'EEEE d MMMM yyyy', { locale: es })}
+                        {entries[0] && entries[0].created_at ? format(new Date(entries[0].created_at), 'EEEE d MMMM yyyy', { locale: es }) : 'Sin fecha'}
                     </h2>
                     <button
                         onClick={onClose}
@@ -110,7 +110,7 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete, is
                 </div>
 
                 <div className="entries-list">
-                    {entry.entries.map((entryItem) => (
+                    {entries.map((entryItem) => (
                         <div key={entryItem.id} className="entry-item">
                             <div className="entry-header">
                                 <div className="entry-info">
