@@ -170,7 +170,7 @@ const JournalEntry = () => {
                     {/* Mood Selection */}
                     <div className="journal-card">
                         <h2 className="journal-card-title">¿Cómo te sientes hoy?</h2>
-                        <div className="mood-grid" style={{gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))'}}>
+                        <div className="mood-grid" style={{gridTemplateColumns: 'repeat(4, 1fr)'}}>
                             {moods.map((mood) => (
                                 <button
                                     key={mood.value}
@@ -214,7 +214,7 @@ const JournalEntry = () => {
                     )}
 
                     {/* Save Button */}
-                    <div className="flex justify-end">
+                    <div className="flex justify-center">
                         <button
                             type="submit"
                             disabled={isSaving || (!selectedMood && !content && !audioBlob)}

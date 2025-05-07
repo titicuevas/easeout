@@ -53,6 +53,7 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                     const url = URL.createObjectURL(audioFile);
                     setAudioUrl(url);
                     onRecordingComplete(audioFile, recordingDuration);
+                    setError(null);
                 } catch (error) {
                     console.error('Error al procesar el audio:', error);
                     setError('Error al procesar el audio. Por favor, inténtalo de nuevo.');
@@ -109,6 +110,7 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                         const url = URL.createObjectURL(audioFile);
                         setAudioUrl(url);
                         onRecordingComplete(audioFile, recordingDuration);
+                        setError(null);
                         resolve();
                     } catch (error) {
                         console.error('Error al procesar el audio:', error);
@@ -254,7 +256,7 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                 </button>
             ) : isRecording ? (
                 <div className="flex flex-col sm:flex-row items-center gap-4">
-                    <div className="recording-time pulse text-lg md:text-xl" style={{ color: 'var(--text-primary)' }}>
+                    <div className="recording-time pulse text-lg md:text-xl" style={{ color: '#7c3aed', fontWeight: 700 }}>
                         {formatTime(recordingDuration)}
                     </div>
                     <div className="flex gap-2">

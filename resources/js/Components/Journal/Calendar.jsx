@@ -32,27 +32,29 @@ export default function Calendar({ entries, onEntryClick }) {
         return filteredEntries;
     };
 
+    const moodMap = {
+        happy: '😊',
+        neutral: '😐',
+        sad: '😢',
+        angry: '😠',
+        frustrated: '😫',
+        in_love: '❤️',
+        heartbroken: '💔',
+        grateful: '🙏',
+        motivated: '🚀',
+        tired: '😴',
+        anxious: '��',
+        hopeful: '🌱',
+        proud: '🦁',
+        surprised: '😲',
+        inspired: '💡',
+    };
+
     const getMoodEmoji = (mood) => {
-        switch (mood) {
-            case 'happy': return '😊';
-            case 'neutral': return '😐';
-            case 'sad': return '😢';
-            case 'angry': return '😠';
-            case 'frustrated': return '😫';
-            case 'in_love': return '❤️';
-            case 'heartbroken': return '💔';
-            case 'grateful': return '🙏';
-            case 'motivated': return '🚀';
-            case 'tired': return '😴';
-            case 'anxious': return '😰';
-            case 'hopeful': return '🌱';
-            case 'proud': return '🦁';
-            case 'surprised': return '😲';
-            case 'inspired': return '💡';
-            default:
-                // Fallback: mostrar el valor crudo si es string
-                return typeof mood === 'string' ? mood : '❓';
-        }
+        if (!mood) return '❓';
+        // Normalizar guiones y minúsculas
+        const key = mood.replace(/-/g, '_').toLowerCase();
+        return moodMap[key] || mood || '❓';
     };
 
     const getMoodLabel = (mood) => {
@@ -103,14 +105,14 @@ export default function Calendar({ entries, onEntryClick }) {
                 <div
                     key={day}
                     className={`calendar-day ${hasEntries ? 'has-entries' : ''}`}
-                    onClick={() => hasEntries && !disabled && onEntryClick(entriesForDay)}
+                    onClick={() => !disabled && onEntryClick(entriesForDay)}
                     style={{ cursor: hasEntries && !disabled ? 'pointer' : 'default' }}
                 >
                     <span className="day-number">{day}</span>
                     {hasEntries && (
-                        <div className="entries-preview">
-                            {entriesForDay.map((entry, index) => (
-                                <span 
+                        <div className="entries-preview" style={{ display: 'flex', flexWrap: 'wrap', gap: 2, maxHeight: 28, overflow: 'hidden', alignItems: 'center' }}>
+                            {entriesForDay.slice(0, 4).map((entry, index) => (
+                                <span
                                     key={index}
                                     className={`entry-emoji mood-${entry.mood} ${disabled ? 'opacity-50' : ''} calendar-emoji-enhanced`}
                                     title={`${getMoodLabel(entry.mood)}${!isNaN(new Date(entry.created_at)) && entry.created_at ? ' - ' + (new Date(entry.created_at).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })) : ''}`}
@@ -118,6 +120,9 @@ export default function Calendar({ entries, onEntryClick }) {
                                     {getMoodEmoji(entry.mood)}
                                 </span>
                             ))}
+                            {entriesForDay.length > 4 && (
+                                <span className="entry-emoji" title={`+${entriesForDay.length - 4} más`}>+{entriesForDay.length - 4}</span>
+                            )}
                         </div>
                     )}
                 </div>
