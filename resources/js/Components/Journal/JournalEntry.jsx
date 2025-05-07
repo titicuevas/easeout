@@ -163,6 +163,41 @@ const JournalEntry = () => {
         }
     };
 
+    const handleDelete = async (entryId) => {
+        try {
+            await router.delete(route('journal-entries.destroy', entryId), {
+                onSuccess: () => {
+                    setModalOpen(false);
+                    setSelectedDayEntries([]);
+                    router.reload({ only: ['entries'] });
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Borrado!',
+                        text: 'La entrada ha sido eliminada.',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                },
+                onError: () => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'No se pudo eliminar la entrada.',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                },
+                preserveScroll: true
+            });
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo eliminar la entrada.',
+            });
+        }
+    };
+
     return (
         <div className="journal-container flex justify-center items-start min-h-screen">
             <div className="journal-content w-full max-w-xl">
@@ -241,6 +276,13 @@ const JournalEntry = () => {
                     </div>
                 </form>
             </div>
+            <JournalEntryModal
+                entries={selectedDayEntries}
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+                onDelete={handleDelete}
+                isDeletingId={null}
+            />
         </div>
     );
 };

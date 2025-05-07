@@ -125,8 +125,8 @@ export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, 
                                 <button
                                     className="delete-entry"
                                     onClick={() => handleDeleteClick(entryItem.id)}
-                                    disabled={isDeletingId === entryItem.id}
-                                    style={{ background: '#e53e3e', color: '#fff', borderRadius: 8, padding: '0.5rem 1rem', border: 'none', cursor: 'pointer' }}
+                                    disabled={isDeletingId !== null}
+                                    style={{ background: '#e53e3e', color: '#fff', borderRadius: 8, padding: '0.5rem 1rem', border: 'none', cursor: isDeletingId !== null ? 'not-allowed' : 'pointer' }}
                                 >
                                     {isDeletingId === entryItem.id ? (
                                         <ClipLoader size={18} color="#fff" />
@@ -161,6 +161,26 @@ export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, 
                     ))}
                 </div>
             </div>
+
+            {isDeletingId !== null && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100vw',
+                    height: '100vh',
+                    background: 'rgba(0,0,0,0.25)',
+                    zIndex: 2000,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <div style={{ background: '#23272f', color: '#fff', padding: 32, borderRadius: 16, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <ClipLoader size={32} color="#fff" />
+                        <span style={{ marginTop: 16 }}>Borrando entrada...</span>
+                    </div>
+                </div>
+            )}
         </div>
     );
 } 
