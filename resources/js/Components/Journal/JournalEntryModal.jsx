@@ -119,7 +119,7 @@ export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, 
 
     return (
         <div className="modal-overlay" onClick={onClose} data-theme={isDark ? 'dark' : undefined}>
-            <div className="modal-content" onClick={e => e.stopPropagation()} data-theme={isDark ? 'dark' : undefined}>
+            <div className="modal-content" onClick={e => e.stopPropagation()} data-theme={isDark ? 'dark' : undefined} style={{ background: isDark ? '#23272f' : undefined, color: isDark ? '#f3f4f6' : undefined }}>
                 <div className="modal-header">
                     <h2 className="modal-title">
                         {entries[0] && entries[0].created_at ? format(new Date(entries[0].created_at), 'EEEE d MMMM yyyy', { locale: es }) : 'Sin fecha'}
@@ -128,6 +128,7 @@ export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, 
                         onClick={onClose}
                         className="modal-close"
                         title="Cerrar"
+                        style={{ color: isDark ? '#fff' : undefined }}
                     >
                         ×
                     </button>
@@ -135,16 +136,16 @@ export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, 
 
                 <div className="entries-list">
                     {entries.map((entryItem) => (
-                        <div key={entryItem.id} className="entry-item">
+                        <div key={entryItem.id} className="entry-item" style={{ background: isDark ? '#23272f' : undefined, color: isDark ? '#f3f4f6' : undefined }}>
                             <div className="entry-header">
                                 <div className="entry-info">
-                                    <span className="entry-time">
+                                    <span className="entry-time" style={{ color: isDark ? '#b0b3b8' : undefined }}>
                                         {entryItem.created_at && !isNaN(new Date(entryItem.created_at))
                                             ? new Date(entryItem.created_at).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
                                             : 'Hora desconocida'}
                                     </span>
-                                    <span className="entry-mood" title={getMoodLabel(entryItem.mood)}>
-                                        {getMoodEmoji(entryItem.mood) || '❓'} {getMoodLabel(entryItem.mood)}
+                                    <span className="entry-mood" title={getMoodLabel(entryItem.mood)} style={{ fontSize: '1.5rem', marginLeft: 8 }}>
+                                        {getMoodEmoji(entryItem.mood) || '❓'} <span style={{ fontSize: '1rem', marginLeft: 4 }}>{getMoodLabel(entryItem.mood)}</span>
                                     </span>
                                 </div>
                                 <button
@@ -162,7 +163,7 @@ export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, 
                             </div>
 
                             {entryItem.content && (
-                                <p className="entry-content">{entryItem.content}</p>
+                                <p className="entry-content" style={{ color: isDark ? '#f3f4f6' : undefined }}>{entryItem.content}</p>
                             )}
 
                             {entryItem.metadata && entryItem.metadata.hasAudio && entryItem.metadata.audioUrl && (
@@ -172,7 +173,7 @@ export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, 
                                         controls
                                         className="audio-player"
                                     />
-                                    <span className="audio-duration">
+                                    <span className="audio-duration" style={{ color: isDark ? '#b0b3b8' : undefined }}>
                                         Duración: {formatDuration(entryItem.metadata.duration)}
                                     </span>
                                 </div>
