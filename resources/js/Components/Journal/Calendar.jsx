@@ -110,7 +110,7 @@ export default function Calendar({ entries, onEntryClick }) {
                                 <span 
                                     key={index}
                                     className={`entry-emoji mood-${entry.mood} ${disabled ? 'opacity-50' : ''} calendar-emoji-enhanced`}
-                                    title={`${getMoodLabel(entry.mood)} - ${new Date(entry.created_at).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`}
+                                    title={`${getMoodLabel(entry.mood)}${!isNaN(new Date(entry.created_at)) && entry.created_at ? ' - ' + (new Date(entry.created_at).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })) : ''}`}
                                 >
                                     {getMoodEmoji(entry.mood)}
                                 </span>
@@ -128,10 +128,9 @@ export default function Calendar({ entries, onEntryClick }) {
         return (
             <div className="entry-details">
                 <div className="entry-time">
-                    {new Date(entry.created_at).toLocaleTimeString('es-ES', {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    })}
+                    {entry.created_at && !isNaN(new Date(entry.created_at)) ?
+                        new Date(entry.created_at).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }) :
+                        'Hora desconocida'}
                 </div>
                 <div className="entry-mood" title={getMoodLabel(entry.mood)}>
                     {getMoodEmoji(entry.mood)}

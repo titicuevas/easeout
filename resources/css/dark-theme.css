@@ -126,4 +126,126 @@
         var(--background-color) 50%,
         var(--paper-color) 75%
     );
+}
+
+/* Mood colors in dark mode */
+[data-theme="dark"] .mood-happy {
+    border-color: #FFD93D;
+    background-color: rgba(255, 217, 61, 0.15);
+}
+[data-theme="dark"] .mood-happy.selected {
+    background-color: #FFD93D;
+    color: #222;
+}
+[data-theme="dark"] .mood-neutral {
+    border-color: #98B4AA;
+    background-color: rgba(152, 180, 170, 0.15);
+}
+[data-theme="dark"] .mood-neutral.selected {
+    background-color: #98B4AA;
+    color: #222;
+}
+[data-theme="dark"] .mood-sad {
+    border-color: #95B1DB;
+    background-color: rgba(149, 177, 219, 0.15);
+}
+[data-theme="dark"] .mood-sad.selected {
+    background-color: #95B1DB;
+    color: #222;
+}
+[data-theme="dark"] .mood-angry {
+    border-color: #FF6B6B;
+    background-color: rgba(255, 107, 107, 0.15);
+}
+[data-theme="dark"] .mood-angry.selected {
+    background-color: #FF6B6B;
+    color: #222;
+}
+[data-theme="dark"] .mood-frustrated {
+    border-color: #B088F9;
+    background-color: rgba(176, 136, 249, 0.15);
+}
+[data-theme="dark"] .mood-frustrated.selected {
+    background-color: #B088F9;
+    color: #222;
+}
+[data-theme="dark"] .mood-in_love {
+    border-color: #FF69B4;
+    background-color: rgba(255, 105, 180, 0.15);
+}
+[data-theme="dark"] .mood-in_love.selected {
+    background-color: #FF69B4;
+    color: #222;
+}
+[data-theme="dark"] .mood-heartbroken {
+    border-color: #C2185B;
+    background-color: rgba(194, 24, 91, 0.15);
+}
+[data-theme="dark"] .mood-heartbroken.selected {
+    background-color: #C2185B;
+    color: #fff;
+}
+[data-theme="dark"] .mood-grateful {
+    border-color: #FFD700;
+    background-color: rgba(255, 215, 0, 0.15);
+}
+[data-theme="dark"] .mood-grateful.selected {
+    background-color: #FFD700;
+    color: #222;
+}
+[data-theme="dark"] .mood-motivated {
+    border-color: #00BFAE;
+    background-color: rgba(0, 191, 174, 0.15);
+}
+[data-theme="dark"] .mood-motivated.selected {
+    background-color: #00BFAE;
+    color: #fff;
+}
+[data-theme="dark"] .mood-tired {
+    border-color: #A0AEC0;
+    background-color: rgba(160, 174, 192, 0.15);
+}
+[data-theme="dark"] .mood-tired.selected {
+    background-color: #A0AEC0;
+    color: #222;
+}
+[data-theme="dark"] .mood-anxious {
+    border-color: #FF9800;
+    background-color: rgba(255, 152, 0, 0.15);
+}
+[data-theme="dark"] .mood-anxious.selected {
+    background-color: #FF9800;
+    color: #222;
+}
+[data-theme="dark"] .mood-hopeful {
+    border-color: #4CAF50;
+    background-color: rgba(76, 175, 80, 0.15);
+}
+[data-theme="dark"] .mood-hopeful.selected {
+    background-color: #4CAF50;
+    color: #fff;
+}
+[data-theme="dark"] .mood-proud {
+    border-color: #F4B400;
+    background-color: rgba(244, 180, 0, 0.15);
+}
+[data-theme="dark"] .mood-proud.selected {
+    background-color: #F4B400;
+    color: #222;
+}
+[data-theme="dark"] .mood-surprised {
+    border-color: #7E57C2;
+    background-color: rgba(126, 87, 194, 0.15);
+}
+[data-theme="dark"] .mood-surprised.selected {
+    background-color: #7E57C2;
+    color: #fff;
+}
+[data-theme="dark"] .mood-inspired {
+    border-color: #00C853;
+    background-color: rgba(0, 200, 83, 0.15);
+}
+[data-theme="dark"] .mood-inspired.selected {
+    background-color: #00C853;
+    color: #fff;
 } 

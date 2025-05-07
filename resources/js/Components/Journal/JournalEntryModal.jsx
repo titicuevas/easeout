@@ -115,7 +115,9 @@ export default function JournalEntryModal({ entry, isOpen, onClose, onDelete, is
                             <div className="entry-header">
                                 <div className="entry-info">
                                     <span className="entry-time">
-                                        {format(new Date(entryItem.created_at), 'HH:mm')}
+                                        {entryItem.created_at && !isNaN(new Date(entryItem.created_at)) ?
+                                            format(new Date(entryItem.created_at), 'HH:mm') :
+                                            'Hora desconocida'}
                                     </span>
                                     <span className="entry-mood">
                                         {getMoodEmoji(entryItem.mood)}
