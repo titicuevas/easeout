@@ -103,7 +103,7 @@ export default function Calendar({ entries, onEntryClick }) {
                 <div
                     key={day}
                     className={`calendar-day ${hasEntries ? 'has-entries' : ''}`}
-                    onClick={() => hasEntries && !disabled && onEntryClick(entriesForDay[0])}
+                    onClick={() => hasEntries && !disabled && onEntryClick(entriesForDay)}
                     style={{ cursor: hasEntries && !disabled ? 'pointer' : 'default' }}
                 >
                     <span className="day-number">{day}</span>

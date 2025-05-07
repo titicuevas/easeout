@@ -232,7 +232,7 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
     return (
         <div className="audio-recorder">
             {error && (
-                <div className="error-message bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg mb-4">
+                <div className="journal-error bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300">
                     {error}
                 </div>
             )}
@@ -254,9 +254,7 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                 </button>
             ) : isRecording ? (
                 <div className="flex flex-col sm:flex-row items-center gap-4">
-                    <div className="recording-time pulse text-lg md:text-xl text-primary mb-2 sm:mb-0">
-                        {formatTime(recordingDuration)}
-                    </div>
+                    <div className={`audio-timer${error ? ' text-red-500' : ''}${isDarkMode ? ' text-gray-200' : ' text-gray-700'}`}>{formatTime(recordingDuration)}</div>
                     <div className="flex gap-2">
                         <button
                             onClick={stopRecording}

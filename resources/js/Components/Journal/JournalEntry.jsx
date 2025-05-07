@@ -170,7 +170,7 @@ const JournalEntry = () => {
                     {/* Mood Selection */}
                     <div className="journal-card">
                         <h2 className="journal-card-title">¿Cómo te sientes hoy?</h2>
-                        <div className="mood-grid">
+                        <div className="mood-grid" style={{gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))'}}>
                             {moods.map((mood) => (
                                 <button
                                     key={mood.value}
@@ -219,9 +219,10 @@ const JournalEntry = () => {
                             type="submit"
                             disabled={isSaving || (!selectedMood && !content && !audioBlob)}
                             className={`journal-button journal-button-primary ${
-                                isSaving || (!selectedMood && !content && !audioBlob) ? 'journal-loading' : ''
+                                isSaving ? 'journal-loading' : ''
                             }`}
                             title={isSaving ? 'Guardando...' : 'Guardar entrada'}
+                            style={{ minWidth: 110 }}
                         >
                             {isSaving ? (
                                 <>
