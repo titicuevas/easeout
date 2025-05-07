@@ -17,10 +17,10 @@ export default function Welcome({ auth }) {
                                 <nav className="flex gap-4">
                                     {auth.user ? (
                                         <>
-                                            <Link
+                                        <Link
                                                 href={route('journal-entries.create')}
-                                                className="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150"
-                                            >
+                                            className="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150"
+                                        >
                                                 Ir a mi diario
                                             </Link>
                                             <Link
@@ -30,7 +30,7 @@ export default function Welcome({ auth }) {
                                                 className="inline-flex items-center px-4 py-2 bg-gray-800 border border-gray-600 rounded-md font-semibold text-xs text-gray-200 uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150"
                                             >
                                                 Cerrar sesión
-                                            </Link>
+                                        </Link>
                                         </>
                                     ) : (
                                         <>
@@ -73,18 +73,18 @@ export default function Welcome({ auth }) {
                                     </Link>
                                 ) : (
                                     <>
-                                        <Link
-                                            href={route('register')}
-                                            className="rounded-md bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-3.5 text-sm font-semibold text-white shadow-lg hover:from-blue-500 hover:to-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-all duration-300 transform hover:scale-105"
-                                        >
+                                <Link
+                                    href={route('register')}
+                                    className="rounded-md bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-3.5 text-sm font-semibold text-white shadow-lg hover:from-blue-500 hover:to-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-all duration-300 transform hover:scale-105"
+                                >
                                             ¿Comenzamos?
-                                        </Link>
-                                        <Link
-                                            href={route('login')}
-                                            className="text-sm font-semibold leading-6 text-gray-300 hover:text-white transition-colors duration-300"
-                                        >
-                                            Ya tengo una cuenta <span aria-hidden="true">→</span>
-                                        </Link>
+                                </Link>
+                                <Link
+                                    href={route('login')}
+                                    className="text-sm font-semibold leading-6 text-gray-300 hover:text-white transition-colors duration-300"
+                                >
+                                    Ya tengo una cuenta <span aria-hidden="true">→</span>
+                                </Link>
                                     </>
                                 )}
                             </div>

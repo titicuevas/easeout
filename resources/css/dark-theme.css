@@ -248,4 +248,40 @@
 [data-theme="dark"] .mood-inspired.selected {
     background-color: #00C853;
     color: #fff;
+}
+
+body[data-theme="dark"], [data-theme="dark"] body {
+    background-color: #181a20 !important;
+    color: #f3f4f6 !important;
+}
+[data-theme="dark"] .journal-container {
+    background-color: #181a20 !important;
+}
+[data-theme="dark"] .journal-title {
+    color: #fff !important;
+}
+[data-theme="dark"] .journal-subtitle {
+    color: #b0b3b8 !important;
+}
+[data-theme="dark"] .journal-button-primary {
+    background-color: #6366f1 !important;
+    color: #fff !important;
+    border: none;
+}
+[data-theme="dark"] .journal-button-primary:hover:not(:disabled) {
+    background-color: #818cf8 !important;
+}
+[data-theme="dark"] .journal-button:disabled {
+    background-color: #6b7280 !important;
+    color: #d1d5db !important;
+}
+[data-theme="dark"] .journal-card {
+    background-color: #23272f !important;
+    color: #f3f4f6 !important;
+}
+[data-theme="dark"] .journal-form {
+    background: none !important;
+}
+[data-theme="dark"] .journal-content {
+    background: none !important;
 } 
