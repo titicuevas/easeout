@@ -75,46 +75,20 @@ export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, 
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
 
-    const handleDelete = async (id) => {
-        try {
-            const result = await Swal.fire({
-                title: '¿Estás seguro?',
-                text: "Esta acción no se puede deshacer",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Sí, borrar',
-                cancelButtonText: 'Cancelar'
-            });
-
-            if (result.isConfirmed) {
-                router.delete(`/journal-entries/${id}`, {
-                    onSuccess: () => {
-                        onDelete(id);
-                        Swal.fire(
-                            '¡Borrado!',
-                            'La entrada ha sido eliminada.',
-                            'success'
-                        );
-                    },
-                    onError: () => {
-                        Swal.fire(
-                            'Error',
-                            'No se pudo borrar la entrada.',
-                            'error'
-                        );
-                    }
-                });
-            }
-        } catch (error) {
-            console.error('Error al borrar:', error);
-            Swal.fire(
-                'Error',
-                'No se pudo borrar la entrada.',
-                'error'
-            );
-        }
+    const handleDeleteClick = async (id) => {
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'No podrás revertir esta acción',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, borrar',
+            cancelButtonText: 'Cancelar',
+            showLoaderOnConfirm: true,
+            preConfirm: () => onDelete(id),
+            allowOutsideClick: () => !Swal.isLoading()
+        });
     };
 
     return (
@@ -150,12 +124,12 @@ export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, 
                                 </div>
                                 <button
                                     className="delete-entry"
-                                    onClick={() => onDelete(entryItem.id)}
+                                    onClick={() => handleDeleteClick(entryItem.id)}
                                     disabled={isDeletingId === entryItem.id}
-                                    style={{ background: '#6366f1', color: '#fff', borderRadius: 8, padding: '0.5rem 1rem', border: 'none', cursor: 'pointer' }}
+                                    style={{ background: '#e53e3e', color: '#fff', borderRadius: 8, padding: '0.5rem 1rem', border: 'none', cursor: 'pointer' }}
                                 >
                                     {isDeletingId === entryItem.id ? (
-                                        <ClipLoader size={18} color="#e53e3e" />
+                                        <ClipLoader size={18} color="#fff" />
                                     ) : (
                                         '🗑️'
                                     )}
@@ -167,13 +141,14 @@ export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, 
                             )}
 
                             {entryItem.metadata && (entryItem.metadata.audioUrl || entryItem.metadata.audio_url) && (
-                                <div className="entry-audio">
+                                <div className="entry-audio" style={{ background: isDark ? '#181a20' : '#f8fafc', borderRadius: 12, padding: 16, margin: '12px 0', boxShadow: isDark ? '0 2px 8px #0004' : '0 2px 8px #0001' }}>
                                     <audio
                                         src={entryItem.metadata.audioUrl || entryItem.metadata.audio_url}
                                         controls
                                         className="audio-player"
+                                        style={{ width: '100%', borderRadius: 8, background: isDark ? '#23272f' : '#fff' }}
                                     />
-                                    <span className="audio-duration" style={{ color: isDark ? '#b0b3b8' : undefined }}>
+                                    <span className="audio-duration" style={{ color: isDark ? '#b0b3b8' : '#4b5563', float: 'right', fontSize: 14 }}>
                                         Duración: {formatDuration(entryItem.metadata.duration || entryItem.metadata.audio_duration || 0)}
                                     </span>
                                 </div>

@@ -117,13 +117,13 @@ export default function Calendar({ entries, onEntryClick }) {
                                     key={index}
                                     className={`entry-emoji mood-${entry.mood} ${disabled ? 'opacity-50' : ''} calendar-emoji-enhanced`}
                                     title={`${getMoodLabel(entry.mood)}${!isNaN(new Date(entry.created_at)) && entry.created_at ? ' - ' + (new Date(entry.created_at).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })) : ''}`}
-                                    style={{ fontSize: '1.1em', margin: '0 1px' }}
+                                    style={{ fontSize: '1.1em', margin: '0 1px', minWidth: 18, minHeight: 18, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                 >
                                     {getMoodEmoji(entry.mood)}
                                 </span>
                             ))}
                             {entriesForDay.length > 4 && (
-                                <span className="entry-emoji" title={`+${entriesForDay.length - 4} más`} style={{ fontSize: '1em', marginLeft: 2, color: '#6366f1' }}>+{entriesForDay.length - 4}</span>
+                                <span className="entry-emoji" title={`+${entriesForDay.length - 4} más`} style={{ fontSize: '1em', marginLeft: 2, color: '#6366f1', minWidth: 18, minHeight: 18, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+{entriesForDay.length - 4}</span>
                             )}
                         </div>
                     )}
