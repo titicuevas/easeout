@@ -4,6 +4,8 @@
     <img src="public/images/logo.png" alt="Logo de EaseOut" width="200">
 </p>
 
+## 🌐 [Accede a EaseOut](https://easeout-production.up.railway.app/)
+
 # 🎧 EaseOut – Tu Diario Emocional Privado
 
 **EaseOut** es una aplicación web minimalista y privada diseñada para ayudarte a liberar el estrés emocional mediante entradas de voz y texto. Ya sea que hayas tenido un mal día, estés lidiando con frustración o simplemente necesites desahogarte, **EaseOut** es tu espacio íntimo, lejos de redes sociales y juicios.
