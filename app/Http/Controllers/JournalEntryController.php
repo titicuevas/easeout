@@ -54,6 +54,11 @@ class JournalEntryController extends Controller
             'audio_mime' => $request->hasFile('audio') ? $request->file('audio')->getMimeType() : null
         ]);
 
+        // Normalizar y loguear el valor de mood antes de validar
+        $mood = str_replace('-', '_', strtolower($request->input('mood')));
+        \Log::info('Valor recibido para mood:', ['original' => $request->input('mood'), 'normalizado' => $mood]);
+        $request->merge(['mood' => $mood]);
+
         try {
             $request->validate([
                 'mood' => 'required_without_all:content,audio|string|in:happy,neutral,sad,angry,frustrated,in_love,heartbroken,grateful,motivated,tired,anxious,hopeful,proud,surprised,inspired',
