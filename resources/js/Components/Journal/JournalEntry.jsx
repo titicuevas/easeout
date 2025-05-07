@@ -264,14 +264,7 @@ const JournalEntry = () => {
                             title={isSaving ? 'Guardando...' : 'Guardar entrada'}
                             style={{ minWidth: 110 }}
                         >
-                            {isSaving ? (
-                                <>
-                                    <ClipLoader size={20} color="#fff" className="mr-2" />
-                                    Guardando...
-                                </>
-                            ) : (
-                                'Guardar'
-                            )}
+                            {isSaving ? 'Guardando...' : 'Guardar'}
                         </button>
                     </div>
                 </form>
