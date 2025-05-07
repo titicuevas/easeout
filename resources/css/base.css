@@ -1,0 +1,81 @@
+/* Variables CSS */
+:root {
+    /* Colores base relajantes */
+    --sage-100: #F1F5F2;
+    --sage-200: #E3EBE4;
+    --sage-300: #C5D1C7;
+    --sage-400: #A7B7AA;
+    --sage-500: #7C9885;
+    --sage-600: #5A7267;
+    --sage-700: #445A4F;
+
+    /* Colores de estado de ánimo */
+    --mood-happy: #98C9A3;
+    --mood-neutral: #B4B4B4;
+    --mood-sad: #92B6D5;
+    --mood-angry: #E6A4A4;
+    --mood-frustrated: #E6C9A4;
+    --mood-in_love: #FF69B4;
+    --mood-heartbroken: #C2185B;
+    --mood-grateful: #FFD700;
+    --mood-motivated: #00BFAE;
+    --mood-tired: #A0AEC0;
+    --mood-anxious: #FF9800;
+    --mood-hopeful: #4CAF50;
+    --mood-proud: #F4B400;
+    --mood-surprised: #7E57C2;
+    --mood-inspired: #00C853;
+
+    /* Variables del tema claro */
+    --background-color: var(--sage-100);
+    --paper-color: #FFFFFF;
+    --text-primary: var(--sage-700);
+    --text-secondary: var(--sage-600);
+    --primary-color: var(--sage-500);
+    --primary-hover: var(--sage-600);
+    --box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    --textarea-bg: #F8FAFC;
+    --border-color: rgba(0, 0, 0, 0.1);
+    --border-color-dark: rgba(255, 255, 255, 0.1);
+    --bg-hover: rgba(var(--primary-rgb), 0.1);
+
+    /* Espaciado */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+
+    /* Bordes y sombras */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 1rem;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+/* Estilos base */
+body {
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    transition: background-color 0.3s, color 0.3s;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Utilidades */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-2 { gap: var(--spacing-xs); }
+.gap-4 { gap: var(--spacing-sm); }
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.text-center { text-align: center; }
+.rounded { border-radius: var(--radius-md); }
+.shadow { box-shadow: var(--shadow-sm); }
+.transition { transition: all 0.3s ease; } 

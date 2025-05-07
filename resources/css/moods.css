@@ -1,0 +1,160 @@
+/* Botones de estado de ánimo */
+.mood-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    border: none;
+    border-radius: var(--radius-md);
+    background-color: var(--paper-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.mood-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.mood-button.selected {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.mood-button.selected .mood-emoji {
+    transform: scale(1.1);
+}
+
+.mood-emoji {
+    font-size: 2rem;
+    transition: transform 0.2s ease;
+}
+
+.mood-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+/* Estados de ánimo específicos */
+.mood-happy {
+    background-color: var(--mood-happy);
+    color: #2C5282;
+}
+
+.mood-neutral {
+    background-color: var(--mood-neutral);
+    color: #4A5568;
+}
+
+.mood-sad {
+    background-color: var(--mood-sad);
+    color: #2C5282;
+}
+
+.mood-angry {
+    background-color: var(--mood-angry);
+    color: #C53030;
+}
+
+.mood-frustrated {
+    background-color: var(--mood-frustrated);
+    color: #C05621;
+}
+
+.mood-in_love {
+    background-color: var(--mood-in_love);
+    color: #B83280;
+}
+
+.mood-heartbroken {
+    background-color: var(--mood-heartbroken);
+    color: #FFFFFF;
+}
+
+.mood-grateful {
+    background-color: var(--mood-grateful);
+    color: #744210;
+}
+
+.mood-motivated {
+    background-color: var(--mood-motivated);
+    color: #FFFFFF;
+}
+
+.mood-tired {
+    background-color: var(--mood-tired);
+    color: #2D3748;
+}
+
+.mood-anxious {
+    background-color: var(--mood-anxious);
+    color: #744210;
+}
+
+.mood-hopeful {
+    background-color: var(--mood-hopeful);
+    color: #FFFFFF;
+}
+
+.mood-proud {
+    background-color: var(--mood-proud);
+    color: #744210;
+}
+
+.mood-surprised {
+    background-color: var(--mood-surprised);
+    color: #FFFFFF;
+}
+
+.mood-inspired {
+    background-color: var(--mood-inspired);
+    color: #FFFFFF;
+}
+
+/* Filtros de estado de ánimo */
+.mood-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.mood-filter {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: var(--radius-md);
+    background-color: var(--paper-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1.25rem;
+}
+
+.mood-filter:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.mood-filter.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Emojis en el calendario */
+.entry-emoji {
+    font-size: 1.25rem;
+    transition: transform 0.2s ease;
+}
+
+.calendar-emoji-enhanced {
+    font-size: 1.5rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.entries-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+} 

@@ -40,6 +40,20 @@
     --border-color: rgba(0, 0, 0, 0.1);
     --border-color-dark: rgba(255, 255, 255, 0.1);
     --bg-hover: rgba(var(--primary-rgb), 0.1);
+
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+    --bg-primary: #f9fafb;
+    --bg-secondary: #ffffff;
+    --border-color: #e5e7eb;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --radius-lg: 0.5rem;
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
 }
 
 [data-theme="dark"] {
@@ -76,29 +90,33 @@ body {
 /* Estilos para el contenedor del diario */
 .journal-container {
     min-height: 100vh;
-    padding: 2rem;
-    background-color: var(--bg-paper);
+    padding: var(--spacing-md);
+    background-color: var(--bg-primary);
     display: flex;
     justify-content: center;
     align-items: flex-start;
 }
 
 .journal-paper {
-    background-color: var(--bg-paper);
-    border-radius: 1.5rem;
-    padding: 2rem;
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
     width: 100%;
     max-width: 800px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-sm);
     animation: fadeIn 0.5s ease-out;
 }
 
 .journal-title {
-    font-size: 2rem;
-    font-weight: 600;
+    font-size: 1.5rem;
+    font-weight: 700;
     color: var(--text-primary);
-    text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: var(--spacing-xs);
+}
+
+.journal-subtitle {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
 }
 
 .section-title {
@@ -115,38 +133,41 @@ body {
 
 .mood-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xs);
     padding: 1rem;
     justify-items: center;
 }
 
 /* Estilos base para los botones de estado de ánimo */
 .mood-button {
-    margin: 0.25rem;
-    padding: 0.75rem;
-    font-size: 1rem;
-    min-width: 90px;
-    height: 85px;
-    border-radius: 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    border: 2px solid;
-    cursor: pointer;
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-lg);
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
 }
 
-.mood-button .emoji {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
+.mood-button:hover {
+    background-color: rgba(79, 70, 229, 0.1);
 }
 
-.mood-button .label {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--text-primary);
+.mood-button.selected {
+    background-color: rgba(79, 70, 229, 0.1);
+    border-color: var(--primary-color);
+}
+
+.mood-emoji {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-xs);
+}
+
+.mood-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-align: center;
 }
 
 /* Estilos específicos para cada estado de ánimo */
@@ -384,18 +405,18 @@ body {
 .textarea-wrapper {
     position: relative;
     border-radius: 1rem;
-    background-color: var(--bg-paper);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    background-color: var(--bg-primary);
+    box-shadow: var(--shadow-sm);
 }
 
 .content-textarea {
     width: 100%;
-    padding: 1rem;
-    border: 2px solid var(--border-color);
-    border-radius: 1rem;
-    background-color: var(--bg-paper);
+    padding: var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background-color: var(--bg-primary);
     color: var(--text-primary);
-    font-size: 1rem;
+    font-size: 0.875rem;
     line-height: 1.5;
     resize: vertical;
     transition: all 0.3s ease;
@@ -404,7 +425,7 @@ body {
 .content-textarea:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
 }
 
 /* Sección de audio */
@@ -413,10 +434,10 @@ body {
 }
 
 .audio-preview {
-    background-color: var(--paper-color);
-    border-radius: 1rem;
-    padding: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
     animation: fadeIn 0.3s ease-out;
 }
 
@@ -587,37 +608,20 @@ body {
 /* Estilos para el campo de texto */
 .journal-textarea {
     width: 100%;
-    background-color: var(--textarea-bg);
-    border-radius: 16px;
-    transition: all 0.3s ease;
-    padding: 0.75rem;
-}
-
-.journal-textarea textarea {
-    min-height: 100px;
-    padding: 0;
-    font-size: 0.95rem;
-    line-height: 1.6;
+    height: 8rem;
+    padding: var(--spacing-sm);
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
     color: var(--text-primary);
-    border: none;
-    background: transparent;
-    width: 100%;
-    resize: vertical;
+    resize: none;
+    font-size: 0.875rem;
 }
 
-.journal-textarea:hover,
-.journal-textarea:focus-within {
-    background-color: var(--paper-color);
-    box-shadow: var(--box-shadow);
-}
-
-.journal-textarea textarea::placeholder {
-    color: var(--text-secondary);
-    opacity: 0.8;
-}
-
-.journal-textarea textarea:focus {
+.journal-textarea:focus {
     outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
 }
 
 /* Estilos para el botón de guardar */
@@ -702,7 +706,7 @@ body {
     align-items: center;
     gap: 1rem;
     padding: 0.75rem 1.5rem;
-    background-color: var(--bg-paper);
+    background-color: var(--bg-primary);
     border-radius: 2rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -713,7 +717,7 @@ body {
     align-items: center;
     margin-bottom: 0.5rem;
     padding: 0.5rem;
-    background-color: var(--paper-color);
+    background-color: var(--bg-secondary);
     border-radius: 0.5rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
@@ -730,7 +734,7 @@ body {
     color: var(--text-primary);
     padding: 0.5rem 1rem;
     border-radius: 1rem;
-    background-color: var(--bg-paper);
+    background-color: var(--bg-primary);
 }
 
 .recording-time.pulse {
@@ -759,7 +763,7 @@ body {
     width: 100%;
     max-width: 400px;
     padding: 1rem;
-    background-color: var(--paper-color);
+    background-color: var(--bg-secondary);
     border-radius: 1rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -780,7 +784,7 @@ body {
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem;
-    background-color: var(--paper-color);
+    background-color: var(--bg-secondary);
     border-radius: 1rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
@@ -885,7 +889,7 @@ body {
 }
 
 .entry-card {
-    background-color: var(--textarea-bg);
+    background-color: var(--bg-secondary);
     border-radius: 12px;
     padding: 1.25rem;
     transition: all 0.3s ease;
@@ -904,7 +908,7 @@ body {
     align-items: center;
     margin-bottom: 1rem;
     padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--paper-color);
+    border-bottom: 1px solid var(--bg-secondary);
 }
 
 .entry-date {
@@ -923,7 +927,7 @@ body {
 .entry-audio {
     margin-top: 1rem;
     padding: 0.5rem;
-    background-color: var(--paper-color);
+    background-color: var(--bg-secondary);
     border-radius: 0.5rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
@@ -935,7 +939,7 @@ body {
 }
 
 .entry-audio audio::-webkit-media-controls-panel {
-    background-color: var(--paper-color);
+    background-color: var(--bg-secondary);
 }
 
 .entry-audio audio::-webkit-media-controls-current-time-display,
@@ -1008,7 +1012,7 @@ body {
 }
 
 .calendar-nav-button {
-    background-color: var(--bg-paper);
+    background-color: var(--bg-primary);
     color: var(--text-primary);
     border: 2px solid var(--primary-color);
     border-radius: 50%;
@@ -1092,7 +1096,7 @@ body {
     margin-bottom: 1.5rem;
     padding: 0.5rem;
     border-radius: 0.75rem;
-    background-color: var(--bg-paper);
+    background-color: var(--bg-primary);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
@@ -1107,7 +1111,7 @@ body {
     padding: 0.5rem 1rem;
     border-radius: 2rem;
     border: 2px solid var(--border-color);
-    background-color: var(--bg-paper);
+    background-color: var(--bg-primary);
     color: var(--text-primary);
     cursor: pointer;
     transition: all 0.3s ease;
@@ -1163,7 +1167,7 @@ body {
 .entry-audio {
     margin-top: 1rem;
     padding: 1rem;
-    background-color: var(--bg-paper);
+    background-color: var(--bg-primary);
     border-radius: 1rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
@@ -1204,7 +1208,7 @@ body {
 }
 
 .modal-content {
-    background-color: var(--bg-paper);
+    background-color: var(--bg-secondary);
     border-radius: 1rem;
     padding: 1.5rem;
     width: 90%;
@@ -1247,7 +1251,7 @@ body {
 .entry-item {
     padding: 1rem;
     border-radius: 0.75rem;
-    background-color: var(--bg-paper);
+    background-color: var(--bg-secondary);
     margin-bottom: 1rem;
     transition: all 0.3s ease;
 }
@@ -1309,7 +1313,7 @@ body {
 }
 
 .audio-preview {
-    background-color: var(--paper-color);
+    background-color: var(--bg-secondary);
     border-radius: 1rem;
     padding: 1.5rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -1336,4 +1340,103 @@ body {
     background-color: rgba(0,0,0,0.10);
     box-shadow: 0 2px 8px rgba(0,0,0,0.12);
     transform: scale(1.15);
+}
+
+/* Media Queries */
+@media (min-width: 640px) {
+    .journal-container {
+        padding: var(--spacing-lg);
+    }
+
+    .journal-title {
+        font-size: 1.875rem;
+    }
+
+    .journal-subtitle {
+        font-size: 1rem;
+    }
+
+    .mood-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: var(--spacing-sm);
+    }
+
+    .mood-emoji {
+        font-size: 2rem;
+    }
+
+    .mood-label {
+        font-size: 0.875rem;
+    }
+
+    .journal-textarea {
+        height: 10rem;
+        font-size: 1rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .entries-grid {
+        grid-template-columns: 2fr 1fr;
+    }
+
+    .journal-card {
+        padding: var(--spacing-lg);
+    }
+
+    .journal-card-title {
+        font-size: 1.25rem;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.journal-card {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Loading States */
+.journal-loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Error States */
+.journal-error {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: var(--spacing-xs);
+}
+
+/* Accessibility */
+.journal-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.4);
+}
+
+.journal-button:focus:not(:focus-visible) {
+    box-shadow: none;
+}
+
+/* Print Styles */
+@media print {
+    .journal-container {
+        background: none;
+        padding: 0;
+    }
+
+    .journal-card {
+        box-shadow: none;
+        border: 1px solid var(--border-color);
+    }
 } 

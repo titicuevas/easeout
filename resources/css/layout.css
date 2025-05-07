@@ -1,0 +1,123 @@
+/* Contenedor principal */
+.journal-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-md);
+}
+
+/* Grid de entradas */
+.journal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+/* Grid del calendario */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    margin-top: var(--spacing-sm);
+}
+
+/* Grid de estados de ánimo */
+.mood-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+}
+
+/* Layout de entrada */
+.entry-item {
+    background-color: var(--paper-color);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+    box-shadow: var(--shadow-sm);
+}
+
+.entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xs);
+}
+
+.entry-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.entry-content {
+    margin-top: var(--spacing-xs);
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Layout del calendario */
+.calendar-container {
+    background-color: var(--paper-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+    box-shadow: var(--box-shadow);
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    margin-bottom: var(--spacing-xs);
+    text-align: center;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--background-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.calendar-day:hover:not(.empty) {
+    background-color: var(--bg-hover);
+}
+
+.calendar-day.empty {
+    background: none;
+    cursor: default;
+}
+
+/* Layout de audio */
+.entry-audio {
+    margin-top: var(--spacing-xs);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.audio-player {
+    flex: 1;
+    height: 2.5rem;
+    border-radius: var(--radius-sm);
+}
+
+.audio-duration {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+} 

@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import ClipLoader from 'react-spinners/ClipLoader';
+import Calendar from './Calendar';
 
 const moods = [
     { emoji: '😊', label: 'Alegre', value: 'happy' },
@@ -34,6 +35,7 @@ const JournalEntry = () => {
     const [audioDuration, setAudioDuration] = useState(null);
     const [error, setError] = useState(null);
     const [isSaving, setIsSaving] = useState(false);
+    const [entries, setEntries] = useState([]);
 
     const handleMoodSelect = (mood, e) => {
         if (e) e.preventDefault();
@@ -149,82 +151,94 @@ const JournalEntry = () => {
         }
     };
 
+    const handleEntryClick = (entry) => {
+        // Implementa la lógica para manejar el clic en una entrada
+        console.log('Entrada seleccionada:', entry);
+    };
+
     return (
-        <div className="journal-container min-h-screen p-4 md:p-6 lg:p-8">
-            <div className="journal-paper max-w-4xl mx-auto">
-                <form onSubmit={handleSubmit}>
-                    <h1 className="journal-title text-2xl md:text-3xl lg:text-4xl mb-6">¿Cómo te sientes hoy?</h1>
+        <div className="journal-container">
+            <div className="journal-content">
+                {/* Header */}
+                <div className="journal-header">
+                    <h1 className="journal-title">Mi Diario</h1>
+                    <p className="journal-subtitle">Comparte tus pensamientos y emociones del día</p>
+                </div>
 
-                    {error && (
-                        <div className="error-message">
-                            {error}
+                {/* Main Content */}
+                <div className="journal-grid">
+                    {/* Left Column - Form */}
+                    <div className="journal-form">
+                        {/* Mood Selection */}
+                        <div className="journal-card">
+                            <h2 className="journal-card-title">¿Cómo te sientes hoy?</h2>
+                            <div className="mood-grid">
+                                {moods.map((mood) => (
+                                    <button
+                                        key={mood.value}
+                                        onClick={() => setSelectedMood(mood.value)}
+                                        className={`mood-button ${selectedMood === mood.value ? 'selected' : ''}`}
+                                        title={mood.label}
+                                    >
+                                        <span className="mood-emoji">{mood.emoji}</span>
+                                        <span className="mood-label">{mood.label}</span>
+                                    </button>
+                                ))}
+                            </div>
                         </div>
-                    )}
 
-                    <div className="mood-section mb-8">
-                        <div className="mood-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 md:gap-4">
-                            {moods.map((mood) => (
-                                <button
-                                    key={mood.value}
-                                    className={`mood-button mood-${mood.value} ${selectedMood?.value === mood.value ? 'selected' : ''}`}
-                                    onClick={(e) => handleMoodSelect(mood, e)}
-                                    title={mood.label}
-                                    type="button"
-                                >
-                                    <span className="emoji text-2xl md:text-3xl">{mood.emoji}</span>
-                                    <span className="label text-sm md:text-base">{mood.label}</span>
-                                </button>
-                            ))}
+                        {/* Text Input */}
+                        <div className="journal-card">
+                            <h2 className="journal-card-title">Escribe tus pensamientos</h2>
+                            <textarea
+                                value={content}
+                                onChange={(e) => setContent(e.target.value)}
+                                placeholder="¿Qué te gustaría compartir hoy?"
+                                className="journal-textarea"
+                            />
+                        </div>
+
+                        {/* Audio Recorder */}
+                        <div className="journal-card">
+                            <h2 className="journal-card-title">Graba un mensaje de voz</h2>
+                            <AudioRecorder
+                                onAudioSave={handleRecordingComplete}
+                                disabled={isSaving}
+                            />
+                        </div>
+
+                        {/* Save Button */}
+                        <div className="flex justify-end">
+                            <button
+                                type="submit"
+                                disabled={isSaving || (!selectedMood && !content && !audioBlob)}
+                                className={`journal-button journal-button-primary ${
+                                    isSaving || (!selectedMood && !content && !audioBlob) ? 'journal-loading' : ''
+                                }`}
+                                title={isSaving ? 'Guardando...' : 'Guardar entrada'}
+                            >
+                                {isSaving ? (
+                                    <>
+                                        <ClipLoader size={20} color="#fff" className="mr-2" />
+                                        Guardando...
+                                    </>
+                                ) : (
+                                    'Guardar'
+                                )}
+                            </button>
                         </div>
                     </div>
 
-                    <div className="content-section mb-8">
-                        <h2 className="section-title text-xl md:text-2xl mb-4">
-                            ¿Qué quieres compartir?
-                        </h2>
-                        <div className="textarea-wrapper">
-                            <textarea
-                                rows={6}
-                                value={content}
-                                onChange={handleContentChange}
-                                placeholder="Escribe lo que sientes..."
-                                className="content-textarea p-4 text-base md:text-lg"
+                    {/* Right Column - Calendar */}
+                    <div className="journal-calendar">
+                        <div className="journal-card">
+                            <Calendar
+                                entries={entries}
+                                onEntryClick={handleEntryClick}
                             />
                         </div>
                     </div>
-
-                    <div className="audio-section mb-8">
-                        <h2 className="section-title text-xl md:text-2xl mb-4">
-                            O graba un mensaje de voz
-                        </h2>
-                        <AudioRecorder 
-                            onRecordingComplete={handleRecordingComplete}
-                            disabled={isSaving}
-                        />
-                    </div>
-
-                    <div className="actions-section flex justify-end">
-                        <button
-                            type="submit"
-                            disabled={isSaving || (!selectedMood && !content && !audioBlob)}
-                            className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white \
-                                ${isSaving || (!selectedMood && !content && !audioBlob)
-                                    ? 'bg-gray-400 cursor-not-allowed'
-                                    : 'bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                                }`}
-                            title={isSaving ? 'Guardando...' : 'Guardar entrada'}
-                        >
-                            {isSaving ? (
-                                <>
-                                    <ClipLoader size={20} color="#fff" className="mr-2" />
-                                    Guardando...
-                                </>
-                            ) : (
-                                'Guardar'
-                            )}
-                        </button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     );

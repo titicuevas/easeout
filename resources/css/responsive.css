@@ -1,0 +1,131 @@
+/* Breakpoints */
+@media (min-width: 640px) {
+    .journal-container {
+        padding: var(--spacing-lg);
+    }
+
+    .journal-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .mood-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .calendar-day {
+        padding: 0.75rem;
+    }
+
+    .entry-emoji {
+        font-size: 1.5rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .journal-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .mood-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .modal-content {
+        width: 700px;
+    }
+
+    .entry-content {
+        font-size: 1rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .journal-container {
+        max-width: 1280px;
+    }
+
+    .journal-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .mood-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    .calendar-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+}
+
+/* Ajustes para dispositivos móviles */
+@media (max-width: 639px) {
+    .journal-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    .mood-button {
+        padding: 0.75rem;
+    }
+
+    .mood-emoji {
+        font-size: 1.5rem;
+    }
+
+    .mood-label {
+        font-size: 0.75rem;
+    }
+
+    .calendar-weekday {
+        font-size: 0.75rem;
+    }
+
+    .calendar-day {
+        padding: 0.25rem;
+    }
+
+    .entry-emoji {
+        font-size: 1rem;
+    }
+
+    .modal-content {
+        width: 95%;
+        padding: var(--spacing-sm);
+    }
+
+    .modal-title {
+        font-size: 1.25rem;
+    }
+}
+
+/* Ajustes para tablets */
+@media (min-width: 640px) and (max-width: 1023px) {
+    .journal-container {
+        padding: var(--spacing-md);
+    }
+
+    .calendar-container {
+        margin: 0 var(--spacing-sm);
+    }
+}
+
+/* Ajustes para pantallas grandes */
+@media (min-width: 1280px) {
+    .journal-container {
+        max-width: 1440px;
+    }
+
+    .journal-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+/* Ajustes para modo oscuro en diferentes tamaños */
+@media (prefers-color-scheme: dark) {
+    @media (max-width: 639px) {
+        .modal-content {
+            background-color: var(--dark-paper-color);
+        }
+    }
+} 

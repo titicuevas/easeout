@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 export default function Calendar({ entries, onEntryClick }) {
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -180,11 +183,29 @@ export default function Calendar({ entries, onEntryClick }) {
     ];
 
     return (
-        <div className="calendar-container p-4 sm:p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-            <div className="calendar-filters mb-6">
-                <div className="mood-filters flex flex-wrap gap-2 justify-center">
+        <div className="calendar-container">
+            <div className="calendar-header">
+                <button
+                    onClick={() => changeMonth(-1)}
+                    className="calendar-nav-button"
+                    title="Mes anterior"
+                >
+                    <FaChevronLeft />
+                </button>
+                <h2>{format(currentDate, 'MMMM yyyy', { locale: es })}</h2>
+                <button
+                    onClick={() => changeMonth(1)}
+                    className="calendar-nav-button"
+                    title="Mes siguiente"
+                >
+                    <FaChevronRight />
+                </button>
+            </div>
+
+            <div className="calendar-filters">
+                <div className="mood-filters">
                     <button 
-                        className={`mood-filter px-4 py-2 rounded-full text-sm sm:text-base ${!moodFilter ? 'active' : ''}`}
+                        className={`mood-filter ${!moodFilter ? 'active' : ''}`}
                         onClick={() => setMoodFilter(null)}
                     >
                         Todos
@@ -192,9 +213,9 @@ export default function Calendar({ entries, onEntryClick }) {
                     {moods.map(mood => (
                         <button
                             key={mood}
-                            className={`mood-filter px-4 py-2 rounded-full text-sm sm:text-base ${moodFilter === mood ? 'active' : ''}`}
                             onClick={() => setMoodFilter(mood)}
-                            title={getMoodLabel(mood)}
+                            className={`mood-filter ${moodFilter === mood ? 'active' : ''}`}
+                            title={`${getMoodLabel(mood)}`}
                         >
                             {getMoodEmoji(mood)}
                         </button>
@@ -202,35 +223,13 @@ export default function Calendar({ entries, onEntryClick }) {
                 </div>
             </div>
 
-            <div className="calendar-header flex items-center justify-between mb-6">
-                <button 
-                    onClick={() => changeMonth(-1)}
-                    className="calendar-nav-button p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
-                    title="Mes anterior"
-                >
-                    ←
-                </button>
-                <h2 className="text-lg sm:text-xl md:text-2xl font-semibold">
-                    {currentDate.toLocaleString('es-ES', { month: 'long', year: 'numeric' }).replace(' de ', ' ')}
-                </h2>
-                <button 
-                    onClick={() => changeMonth(1)}
-                    className="calendar-nav-button p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
-                    title="Mes siguiente"
-                >
-                    →
-                </button>
+            <div className="calendar-weekdays">
+                {['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map(day => (
+                    <div key={day} className="calendar-weekday">{day}</div>
+                ))}
             </div>
-            <div className="calendar-weekdays grid grid-cols-7 gap-1 mb-2 text-sm sm:text-base font-medium">
-                <div>Lun</div>
-                <div>Mar</div>
-                <div>Mié</div>
-                <div>Jue</div>
-                <div>Vie</div>
-                <div>Sáb</div>
-                <div>Dom</div>
-            </div>
-            <div className="calendar-grid grid grid-cols-7 gap-1">
+
+            <div className="calendar-grid">
                 {renderCalendar()}
             </div>
         </div>
