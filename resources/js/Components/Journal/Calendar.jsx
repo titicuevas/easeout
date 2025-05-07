@@ -49,7 +49,9 @@ export default function Calendar({ entries, onEntryClick }) {
             case 'proud': return '🦁';
             case 'surprised': return '😲';
             case 'inspired': return '💡';
-            default: return '❓';
+            default:
+                // Fallback: mostrar el valor crudo si es string
+                return typeof mood === 'string' ? mood : '❓';
         }
     };
 
@@ -70,7 +72,8 @@ export default function Calendar({ entries, onEntryClick }) {
             case 'proud': return 'Orgulloso';
             case 'surprised': return 'Sorprendido';
             case 'inspired': return 'Inspirado';
-            default: return 'Desconocido';
+            default:
+                return typeof mood === 'string' ? mood : 'Desconocido';
         }
     };
 
@@ -100,7 +103,7 @@ export default function Calendar({ entries, onEntryClick }) {
                 <div
                     key={day}
                     className={`calendar-day ${hasEntries ? 'has-entries' : ''}`}
-                    onClick={() => hasEntries && !disabled && onEntryClick(entriesForDay)}
+                    onClick={() => hasEntries && !disabled && onEntryClick(entriesForDay[0])}
                     style={{ cursor: hasEntries && !disabled ? 'pointer' : 'default' }}
                 >
                     <span className="day-number">{day}</span>

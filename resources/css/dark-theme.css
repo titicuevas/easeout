@@ -14,78 +14,93 @@
 }
 
 /* Ajustes específicos para el tema oscuro */
-[data-theme="dark"] .journal-card {
-    background-color: var(--paper-color);
-    box-shadow: var(--box-shadow);
+[data-theme="dark"] .journal-card,
+[data-theme="dark"] .modal-content,
+[data-theme="dark"] .calendar-container {
+    background-color: #23272f;
+    color: #f3f4f6;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 
-[data-theme="dark"] .journal-button {
-    background-color: var(--paper-color);
-    color: var(--text-primary);
+[data-theme="dark"] .journal-title,
+[data-theme="dark"] .journal-card-title,
+[data-theme="dark"] .modal-title {
+    color: #fff;
+}
+
+[data-theme="dark"] .journal-subtitle {
+    color: #b0b3b8;
 }
 
 [data-theme="dark"] .journal-button-primary {
-    background-color: var(--primary-color);
-    color: white;
+    background-color: #6366f1;
+    color: #fff;
+    border: none;
+}
+
+[data-theme="dark"] .journal-button-primary:hover:not(:disabled) {
+    background-color: #818cf8;
+}
+
+[data-theme="dark"] .journal-button:disabled {
+    background-color: #6b7280;
+    color: #d1d5db;
 }
 
 [data-theme="dark"] .journal-textarea {
-    background-color: var(--textarea-bg);
-    color: var(--text-primary);
-    border-color: var(--border-color);
+    background-color: #23272f;
+    color: #f3f4f6;
+    border-color: #374151;
 }
 
 [data-theme="dark"] .journal-textarea:focus {
-    border-color: var(--primary-color);
+    border-color: #6366f1;
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
 }
 
-[data-theme="dark"] .modal-content {
-    background-color: var(--paper-color);
-    box-shadow: var(--box-shadow);
+[data-theme="dark"] .audio-player {
+    background-color: #23272f;
+    color: #fff;
 }
 
-[data-theme="dark"] .modal-title {
-    color: var(--text-primary);
-}
-
-[data-theme="dark"] .modal-close {
-    color: var(--text-secondary);
-}
-
-[data-theme="dark"] .modal-close:hover {
-    background-color: var(--bg-hover);
-    color: var(--text-primary);
+[data-theme="dark"] .journal-error {
+    background-color: #7f1d1d !important;
+    color: #fff !important;
 }
 
 [data-theme="dark"] .calendar-day {
-    background-color: var(--paper-color);
+    background-color: #23272f;
+    border-color: #374151;
 }
 
-[data-theme="dark"] .calendar-day:hover:not(.empty) {
-    background-color: var(--bg-hover);
+[data-theme="dark"] .calendar-day.has-entries {
+    background-color: #2d3748;
+    border-color: #6366f1;
 }
 
 [data-theme="dark"] .calendar-weekday {
-    color: var(--text-secondary);
+    color: #b0b3b8;
 }
 
-[data-theme="dark"] .entry-item {
-    background-color: var(--paper-color);
-    box-shadow: var(--box-shadow);
+[data-theme="dark"] .mood-filter {
+    background-color: #23272f;
+    color: #f3f4f6;
+    border-color: #374151;
 }
 
-[data-theme="dark"] .entry-content {
-    color: var(--text-secondary);
+[data-theme="dark"] .mood-filter.active {
+    background-color: #6366f1;
+    color: #fff;
+    border-color: #6366f1;
 }
 
-[data-theme="dark"] .audio-player {
-    background-color: var(--paper-color);
-    border-color: var(--border-color);
+[data-theme="dark"] .modal-close {
+    color: #b0b3b8;
 }
 
-[data-theme="dark"] .audio-duration {
-    color: var(--text-secondary);
+[data-theme="dark"] .modal-close:hover {
+    background-color: #6366f1;
+    color: #fff;
 }
 
 /* Ajustes para los estados de ánimo en tema oscuro */
@@ -99,21 +114,6 @@
 }
 
 [data-theme="dark"] .mood-button.selected {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-/* Ajustes para los filtros en tema oscuro */
-[data-theme="dark"] .mood-filter {
-    background-color: var(--paper-color);
-    color: var(--text-primary);
-}
-
-[data-theme="dark"] .mood-filter:hover {
-    background-color: var(--bg-hover);
-}
-
-[data-theme="dark"] .mood-filter.active {
     background-color: var(--primary-color);
     color: white;
 }
