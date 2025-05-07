@@ -218,9 +218,7 @@ const JournalEntry = () => {
                         <button
                             type="submit"
                             disabled={isSaving || (!selectedMood && !content && !audioBlob)}
-                            className={`journal-button journal-button-primary ${
-                                isSaving ? 'journal-loading' : ''
-                            }`}
+                            className={`journal-button journal-button-primary ${isSaving ? 'journal-loading' : ''}`}
                             title={isSaving ? 'Guardando...' : 'Guardar entrada'}
                             style={{ minWidth: 110 }}
                         >
