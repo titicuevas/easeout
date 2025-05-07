@@ -3,7 +3,7 @@ import { FaMicrophone, FaStop, FaTrash, FaPlay, FaPause } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import ClipLoader from 'react-spinners/ClipLoader';
 
-const AudioRecorder = ({ onRecordingComplete, disabled }) => {
+const AudioRecorder = ({ onAudioSave, disabled }) => {
     const [isRecording, setIsRecording] = useState(false);
     const [recordingDuration, setRecordingDuration] = useState(0);
     const [audioUrl, setAudioUrl] = useState(null);
@@ -52,11 +52,15 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                     
                     const url = URL.createObjectURL(audioFile);
                     setAudioUrl(url);
-                    onRecordingComplete(audioFile, recordingDuration);
+                    if (typeof onAudioSave === 'function') {
+                        onAudioSave(audioFile, recordingDuration);
+                    } else {
+                        console.error('onAudioSave no es una función', onAudioSave);
+                    }
                     setError(null);
                 } catch (error) {
                     console.error('Error al procesar el audio:', error);
-                    setError('Error al procesar el audio. Por favor, inténtalo de nuevo.');
+                    setError('Error al procesar el audio. Puede que el archivo no se haya guardado correctamente. Por favor, revisa tu conexión o contacta con soporte.');
                 } finally {
                     setIsProcessing(false);
                 }
@@ -109,12 +113,16 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                         
                         const url = URL.createObjectURL(audioFile);
                         setAudioUrl(url);
-                        onRecordingComplete(audioFile, recordingDuration);
+                        if (typeof onAudioSave === 'function') {
+                            onAudioSave(audioFile, recordingDuration);
+                        } else {
+                            console.error('onAudioSave no es una función', onAudioSave);
+                        }
                         setError(null);
                         resolve();
                     } catch (error) {
                         console.error('Error al procesar el audio:', error);
-                        setError('Error al procesar el audio. Por favor, inténtalo de nuevo.');
+                        setError('Error al procesar el audio. Puede que el archivo no se haya guardado correctamente. Por favor, revisa tu conexión o contacta con soporte.');
                         resolve();
                     }
                 };
@@ -163,7 +171,11 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                     setAudioUrl(null);
                     setIsPlaying(false);
                     setRecordingDuration(0);
-                    onRecordingComplete(null, 0);
+                    if (typeof onAudioSave === 'function') {
+                        onAudioSave(null, 0);
+                    } else {
+                        console.error('onAudioSave no es una función', onAudioSave);
+                    }
                     await Swal.fire('¡Borrado!', 'El audio ha sido eliminado.', 'success');
                 }
                 setIsProcessing(false);
@@ -209,7 +221,11 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                 setIsRecording(false);
                 chunks.current = [];
                 setRecordingDuration(0);
-                onRecordingComplete(null, 0);
+                if (typeof onAudioSave === 'function') {
+                    onAudioSave(null, 0);
+                } else {
+                    console.error('onAudioSave no es una función', onAudioSave);
+                }
                 resolve();
             });
         } catch (error) {
