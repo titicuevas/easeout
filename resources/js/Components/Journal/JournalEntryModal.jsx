@@ -162,24 +162,24 @@ export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, 
                                 </button>
                             </div>
 
-                            {entryItem.content && (
+                            {entryItem.content && entryItem.content.trim() !== '' && (
                                 <p className="entry-content" style={{ color: isDark ? '#f3f4f6' : undefined }}>{entryItem.content}</p>
                             )}
 
-                            {entryItem.metadata && entryItem.metadata.hasAudio && entryItem.metadata.audioUrl && (
+                            {entryItem.metadata && (entryItem.metadata.audioUrl || entryItem.metadata.audio_url) && (
                                 <div className="entry-audio">
                                     <audio
-                                        src={entryItem.metadata.audioUrl}
+                                        src={entryItem.metadata.audioUrl || entryItem.metadata.audio_url}
                                         controls
                                         className="audio-player"
                                     />
                                     <span className="audio-duration" style={{ color: isDark ? '#b0b3b8' : undefined }}>
-                                        Duración: {formatDuration(entryItem.metadata.duration)}
+                                        Duración: {formatDuration(entryItem.metadata.duration || entryItem.metadata.audio_duration || 0)}
                                     </span>
                                 </div>
                             )}
 
-                            {(!entryItem.content && !(entryItem.metadata && entryItem.metadata.hasAudio)) && (
+                            {(!entryItem.content || entryItem.content.trim() === '') && !(entryItem.metadata && (entryItem.metadata.audioUrl || entryItem.metadata.audio_url)) && (
                                 <p className="entry-content" style={{ color: '#aaa', fontStyle: 'italic' }}>Sin datos</p>
                             )}
                         </div>
