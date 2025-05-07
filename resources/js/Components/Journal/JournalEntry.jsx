@@ -228,16 +228,6 @@ const JournalEntry = () => {
                             </button>
                         </div>
                     </div>
-
-                    {/* Right Column - Calendar */}
-                    <div className="journal-calendar">
-                        <div className="journal-card">
-                            <Calendar
-                                entries={entries}
-                                onEntryClick={handleEntryClick}
-                            />
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

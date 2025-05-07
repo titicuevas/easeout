@@ -5,12 +5,18 @@
     padding: var(--spacing-md);
 }
 
-/* Grid de entradas */
+/* Grid de entradas: SOLO dos columnas en escritorio, una columna en móvil */
 .journal-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: 1fr;
     gap: var(--spacing-md);
     margin-top: var(--spacing-md);
+}
+
+@media (min-width: 1024px) {
+    .journal-grid {
+        grid-template-columns: 2fr 1fr;
+    }
 }
 
 /* Grid del calendario */
