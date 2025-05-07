@@ -157,8 +157,8 @@ const JournalEntry = () => {
     };
 
     return (
-        <div className="journal-container">
-            <div className="journal-content">
+        <div className="journal-container flex justify-center items-start min-h-screen">
+            <div className="journal-content w-full max-w-xl">
                 {/* Header */}
                 <div className="journal-header">
                     <h1 className="journal-title">Mi Diario</h1>
@@ -166,69 +166,74 @@ const JournalEntry = () => {
                 </div>
 
                 {/* Main Content */}
-                <div className="journal-grid">
-                    {/* Left Column - Form */}
-                    <div className="journal-form">
-                        {/* Mood Selection */}
-                        <div className="journal-card">
-                            <h2 className="journal-card-title">¿Cómo te sientes hoy?</h2>
-                            <div className="mood-grid">
-                                {moods.map((mood) => (
-                                    <button
-                                        key={mood.value}
-                                        onClick={() => setSelectedMood(mood.value)}
-                                        className={`mood-button ${selectedMood === mood.value ? 'selected' : ''}`}
-                                        title={mood.label}
-                                    >
-                                        <span className="mood-emoji">{mood.emoji}</span>
-                                        <span className="mood-label">{mood.label}</span>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Text Input */}
-                        <div className="journal-card">
-                            <h2 className="journal-card-title">Escribe tus pensamientos</h2>
-                            <textarea
-                                value={content}
-                                onChange={(e) => setContent(e.target.value)}
-                                placeholder="¿Qué te gustaría compartir hoy?"
-                                className="journal-textarea"
-                            />
-                        </div>
-
-                        {/* Audio Recorder */}
-                        <div className="journal-card">
-                            <h2 className="journal-card-title">Graba un mensaje de voz</h2>
-                            <AudioRecorder
-                                onAudioSave={handleRecordingComplete}
-                                disabled={isSaving}
-                            />
-                        </div>
-
-                        {/* Save Button */}
-                        <div className="flex justify-end">
-                            <button
-                                type="submit"
-                                disabled={isSaving || (!selectedMood && !content && !audioBlob)}
-                                className={`journal-button journal-button-primary ${
-                                    isSaving || (!selectedMood && !content && !audioBlob) ? 'journal-loading' : ''
-                                }`}
-                                title={isSaving ? 'Guardando...' : 'Guardar entrada'}
-                            >
-                                {isSaving ? (
-                                    <>
-                                        <ClipLoader size={20} color="#fff" className="mr-2" />
-                                        Guardando...
-                                    </>
-                                ) : (
-                                    'Guardar'
-                                )}
-                            </button>
+                <form className="journal-form space-y-6" onSubmit={handleSubmit}>
+                    {/* Mood Selection */}
+                    <div className="journal-card">
+                        <h2 className="journal-card-title">¿Cómo te sientes hoy?</h2>
+                        <div className="mood-grid">
+                            {moods.map((mood) => (
+                                <button
+                                    key={mood.value}
+                                    type="button"
+                                    onClick={() => setSelectedMood(mood.value)}
+                                    className={`mood-button mood-${mood.value} ${selectedMood === mood.value ? 'selected' : ''}`}
+                                    title={mood.label}
+                                >
+                                    <span className="mood-emoji">{mood.emoji}</span>
+                                    <span className="mood-label">{mood.label}</span>
+                                </button>
+                            ))}
                         </div>
                     </div>
-                </div>
+
+                    {/* Text Input */}
+                    <div className="journal-card">
+                        <h2 className="journal-card-title">Escribe tus pensamientos</h2>
+                        <textarea
+                            value={content}
+                            onChange={handleContentChange}
+                            placeholder="¿Qué te gustaría compartir hoy?"
+                            className="journal-textarea"
+                        />
+                    </div>
+
+                    {/* Audio Recorder */}
+                    <div className="journal-card">
+                        <h2 className="journal-card-title">Graba un mensaje de voz</h2>
+                        <AudioRecorder
+                            onAudioSave={handleRecordingComplete}
+                            disabled={isSaving}
+                        />
+                    </div>
+
+                    {/* Error Message */}
+                    {error && (
+                        <div className="journal-card journal-error bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300">
+                            {error}
+                        </div>
+                    )}
+
+                    {/* Save Button */}
+                    <div className="flex justify-end">
+                        <button
+                            type="submit"
+                            disabled={isSaving || (!selectedMood && !content && !audioBlob)}
+                            className={`journal-button journal-button-primary ${
+                                isSaving || (!selectedMood && !content && !audioBlob) ? 'journal-loading' : ''
+                            }`}
+                            title={isSaving ? 'Guardando...' : 'Guardar entrada'}
+                        >
+                            {isSaving ? (
+                                <>
+                                    <ClipLoader size={20} color="#fff" className="mr-2" />
+                                    Guardando...
+                                </>
+                            ) : (
+                                'Guardar'
+                            )}
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     );
