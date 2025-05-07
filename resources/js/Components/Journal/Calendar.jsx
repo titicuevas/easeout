@@ -110,16 +110,19 @@ export default function Calendar({ entries, onEntryClick }) {
                 >
                     <span className="day-number">{day}</span>
                     {hasEntries && (
-                        <div className="entries-preview" style={{ display: 'flex', flexWrap: 'wrap', gap: 2, maxHeight: 28, overflow: 'hidden', alignItems: 'center' }}>
-                            {entriesForDay.slice(0, 4).map((entry, index) => (
-                                <span
-                                    key={index}
-                                    className={`entry-emoji mood-${entry.mood} ${disabled ? 'opacity-50' : ''} calendar-emoji-enhanced`}
-                                    title={`${getMoodLabel(entry.mood)}${!isNaN(new Date(entry.created_at)) && entry.created_at ? ' - ' + (new Date(entry.created_at).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })) : ''}`}
-                                >
-                                    {getMoodEmoji(entry.mood)}
-                                </span>
-                            ))}
+                        <div className="entries-preview" style={{ display: 'flex', flexWrap: 'wrap', gap: 4, maxHeight: 32, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                            {entriesForDay.slice(0, 4).map((entry, index) => {
+                                console.log('Mood en calendario:', entry.mood);
+                                return (
+                                    <span
+                                        key={index}
+                                        className={`entry-emoji mood-${entry.mood} ${disabled ? 'opacity-50' : ''} calendar-emoji-enhanced`}
+                                        title={`${getMoodLabel(entry.mood)}${!isNaN(new Date(entry.created_at)) && entry.created_at ? ' - ' + (new Date(entry.created_at).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })) : ''}`}
+                                    >
+                                        {getMoodEmoji(entry.mood)}
+                                    </span>
+                                );
+                            })}
                             {entriesForDay.length > 4 && (
                                 <span className="entry-emoji" title={`+${entriesForDay.length - 4} más`}>+{entriesForDay.length - 4}</span>
                             )}

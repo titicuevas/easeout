@@ -256,7 +256,7 @@ const AudioRecorder = ({ onRecordingComplete, disabled }) => {
                 </button>
             ) : isRecording ? (
                 <div className="flex flex-col sm:flex-row items-center gap-4">
-                    <div className="recording-time pulse text-lg md:text-xl" style={{ color: '#7c3aed', fontWeight: 700 }}>
+                    <div className="recording-time pulse text-2xl font-bold" style={{ color: '#7c3aed', textShadow: '0 1px 4px #0008' }}>
                         {formatTime(recordingDuration)}
                     </div>
                     <div className="flex gap-2">
