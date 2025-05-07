@@ -56,9 +56,13 @@ class JournalEntryController extends Controller
 
         try {
             $request->validate([
-                'mood' => 'required_without_all:content,audio|string',
+                'mood' => 'required_without_all:content,audio|string|in:happy,neutral,sad,angry,frustrated,in_love,heartbroken,grateful,motivated,tired,anxious,hopeful,proud,surprised,inspired',
                 'content' => 'nullable|string',
                 'audio' => 'nullable|file|mimes:webm,mp3,wav,m4a,mpeg,ogg|max:20480' // 20MB max
+            ], [
+                'mood.in' => 'El estado de ánimo seleccionado no es válido',
+                'audio.mimes' => 'El formato del archivo de audio no es válido. Formatos permitidos: webm, mp3, wav, m4a, mpeg, ogg',
+                'audio.max' => 'El archivo de audio no puede ser mayor a 20MB'
             ]);
 
             DB::beginTransaction();

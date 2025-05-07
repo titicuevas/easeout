@@ -175,9 +175,9 @@ export default function Index({ entries }) {
             </div>
 
             <JournalEntryModal
-                entry={selectedEntry}
-                isOpen={showModal}
-                onClose={handleModalClose}
+                entries={selectedEntry ? [selectedEntry] : []}
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
                 onDelete={handleDelete}
                 isDeletingId={isDeletingId}
             />

@@ -47,18 +47,20 @@ export default function Calendar({ entries, onEntryClick }) {
         hopeful: '🌱',
         proud: '🦁',
         surprised: '😲',
-        inspired: '💡',
+        inspired: '💡'
     };
 
     const getMoodEmoji = (mood) => {
         if (!mood) return '❓';
         // Normalizar guiones y minúsculas
         const key = mood.replace(/-/g, '_').toLowerCase();
-        return moodMap[key] || mood || '❓';
+        return moodMap[key] || '❓';
     };
 
     const getMoodLabel = (mood) => {
-        switch (mood) {
+        if (!mood) return 'Desconocido';
+        const key = mood.replace(/-/g, '_').toLowerCase();
+        switch (key) {
             case 'happy': return 'Alegre';
             case 'neutral': return 'Normal';
             case 'sad': return 'Triste';
@@ -74,8 +76,7 @@ export default function Calendar({ entries, onEntryClick }) {
             case 'proud': return 'Orgulloso';
             case 'surprised': return 'Sorprendido';
             case 'inspired': return 'Inspirado';
-            default:
-                return typeof mood === 'string' ? mood : 'Desconocido';
+            default: return 'Desconocido';
         }
     };
 
