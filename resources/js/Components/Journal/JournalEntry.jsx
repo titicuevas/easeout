@@ -241,14 +241,6 @@ const JournalEntry = () => {
                     </div>
                 </form>
             </div>
-            <Calendar entries={entries} onEntryClick={handleEntryClick} />
-            <JournalEntryModal
-                entries={selectedDayEntries}
-                isOpen={modalOpen}
-                onClose={() => setModalOpen(false)}
-                onDelete={() => {}}
-                isDeletingId={null}
-            />
         </div>
     );
 };
