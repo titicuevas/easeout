@@ -154,9 +154,12 @@ const JournalEntry = () => {
     };
 
     const handleEntryClick = (entries) => {
-        if (entries && entries.length > 0) {
+        if (Array.isArray(entries) && entries.length > 0) {
             setSelectedDayEntries(entries);
             setModalOpen(true);
+        } else {
+            setSelectedDayEntries([]);
+            setModalOpen(false);
         }
     };
 
@@ -238,6 +241,14 @@ const JournalEntry = () => {
                     </div>
                 </form>
             </div>
+            <Calendar entries={entries} onEntryClick={handleEntryClick} />
+            <JournalEntryModal
+                entries={selectedDayEntries}
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+                onDelete={() => {}}
+                isDeletingId={null}
+            />
         </div>
     );
 };
