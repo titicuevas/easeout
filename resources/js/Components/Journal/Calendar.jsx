@@ -43,7 +43,7 @@ export default function Calendar({ entries, onEntryClick }) {
         grateful: '🙏',
         motivated: '🚀',
         tired: '😴',
-        anxious: '��',
+        anxious: '😰',
         hopeful: '🌱',
         proud: '🦁',
         surprised: '😲',
