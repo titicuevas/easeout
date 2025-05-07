@@ -95,7 +95,7 @@ class JournalEntryController extends Controller
             // Crear la entrada
             $entry = new JournalEntry();
             $entry->user_id = auth()->id();
-            $entry->mood = in_array($request->input('mood'), ['happy', 'neutral', 'sad', 'angry', 'frustrated']) ? $request->input('mood') : null;
+            $entry->mood = $request->input('mood');
             $entry->content = $request->input('content');
             $entry->metadata = $metadata;
             $entry->save();

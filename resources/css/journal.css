@@ -1439,4 +1439,9 @@ body {
         box-shadow: none;
         border: 1px solid var(--border-color);
     }
+}
+
+[data-theme="dark"] .recording-time {
+    color: #fff !important;
+    background-color: #23272f !important;
 } 

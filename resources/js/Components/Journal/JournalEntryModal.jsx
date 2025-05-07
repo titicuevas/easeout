@@ -41,7 +41,7 @@ export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, 
             case 'proud': return '🦁';
             case 'surprised': return '😲';
             case 'inspired': return '💡';
-            default: return '';
+            default: return '❓';
         }
     };
 
@@ -115,28 +115,19 @@ export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, 
                             <div className="entry-header">
                                 <div className="entry-info">
                                     <span className="entry-time">
-                                        {entryItem.created_at && !isNaN(new Date(entryItem.created_at)) ?
-                                            format(new Date(entryItem.created_at), 'HH:mm') :
-                                            'Hora desconocida'}
+                                        {entryItem.created_at && !isNaN(new Date(entryItem.created_at))
+                                            ? new Date(entryItem.created_at).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
+                                            : 'Hora desconocida'}
                                     </span>
                                     <span className="entry-mood">
-                                        {getMoodEmoji(entryItem.mood)}
+                                        {getMoodEmoji(entryItem.mood) || '❓'}
                                     </span>
                                 </div>
                                 <button
-                                    type="button"
-                                    onClick={e => {
-                                        if (isDeletingId === null) {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                            onDelete(entryItem.id);
-                                        }
-                                    }}
+                                    className="delete-entry"
+                                    onClick={() => onDelete(entryItem.id)}
                                     disabled={isDeletingId === entryItem.id}
-                                    className={`journal-button journal-button-primary ${
-                                        isDeletingId === entryItem.id ? 'journal-loading' : ''
-                                    }`}
-                                    title={isDeletingId === entryItem.id ? "Borrando..." : "Borrar entrada"}
+                                    style={{ background: '#6366f1', color: '#fff', borderRadius: 8, padding: '0.5rem 1rem', border: 'none', cursor: 'pointer' }}
                                 >
                                     {isDeletingId === entryItem.id ? (
                                         <ClipLoader size={18} color="#e53e3e" />
@@ -145,6 +136,10 @@ export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, 
                                     )}
                                 </button>
                             </div>
+
+                            {(!entryItem.content && !entryItem.mood) && (
+                                <p className="entry-content" style={{ color: '#aaa', fontStyle: 'italic' }}>Sin datos</p>
+                            )}
 
                             {entryItem.content && (
                                 <p className="entry-content">{entryItem.content}</p>
