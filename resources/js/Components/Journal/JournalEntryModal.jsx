@@ -22,6 +22,9 @@ export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, 
         exit: { opacity: 0, scale: 0.95, y: 40 }
     };
 
+    // Detectar si el tema es oscuro
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
     if (!isOpen || !entries || entries.length === 0) return null;
 
     const getMoodEmoji = (mood) => {
@@ -42,6 +45,27 @@ export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, 
             case 'surprised': return '😲';
             case 'inspired': return '💡';
             default: return '❓';
+        }
+    };
+
+    const getMoodLabel = (mood) => {
+        switch (mood) {
+            case 'happy': return 'Alegre';
+            case 'neutral': return 'Normal';
+            case 'sad': return 'Triste';
+            case 'angry': return 'Enfadado';
+            case 'frustrated': return 'Rallado';
+            case 'in_love': return 'Enamorado';
+            case 'heartbroken': return 'Desamor';
+            case 'grateful': return 'Agradecido';
+            case 'motivated': return 'Motivado';
+            case 'tired': return 'Cansado';
+            case 'anxious': return 'Ansioso';
+            case 'hopeful': return 'Esperanzado';
+            case 'proud': return 'Orgulloso';
+            case 'surprised': return 'Sorprendido';
+            case 'inspired': return 'Inspirado';
+            default: return 'Desconocido';
         }
     };
 
@@ -94,8 +118,8 @@ export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, 
     };
 
     return (
-        <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content" onClick={e => e.stopPropagation()}>
+        <div className="modal-overlay" onClick={onClose} data-theme={isDark ? 'dark' : undefined}>
+            <div className="modal-content" onClick={e => e.stopPropagation()} data-theme={isDark ? 'dark' : undefined}>
                 <div className="modal-header">
                     <h2 className="modal-title">
                         {entries[0] && entries[0].created_at ? format(new Date(entries[0].created_at), 'EEEE d MMMM yyyy', { locale: es }) : 'Sin fecha'}
@@ -119,8 +143,8 @@ export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, 
                                             ? new Date(entryItem.created_at).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
                                             : 'Hora desconocida'}
                                     </span>
-                                    <span className="entry-mood">
-                                        {getMoodEmoji(entryItem.mood) || '❓'}
+                                    <span className="entry-mood" title={getMoodLabel(entryItem.mood)}>
+                                        {getMoodEmoji(entryItem.mood) || '❓'} {getMoodLabel(entryItem.mood)}
                                     </span>
                                 </div>
                                 <button
@@ -137,25 +161,25 @@ export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, 
                                 </button>
                             </div>
 
-                            {(!entryItem.content && !entryItem.mood) && (
-                                <p className="entry-content" style={{ color: '#aaa', fontStyle: 'italic' }}>Sin datos</p>
-                            )}
-
                             {entryItem.content && (
                                 <p className="entry-content">{entryItem.content}</p>
                             )}
 
-                            {entryItem.audio_url && (
+                            {entryItem.metadata && entryItem.metadata.hasAudio && entryItem.metadata.audioUrl && (
                                 <div className="entry-audio">
                                     <audio
-                                        src={entryItem.audio_url}
+                                        src={entryItem.metadata.audioUrl}
                                         controls
                                         className="audio-player"
                                     />
                                     <span className="audio-duration">
-                                        Duración: {formatDuration(entryItem.audio_duration)}
+                                        Duración: {formatDuration(entryItem.metadata.duration)}
                                     </span>
                                 </div>
+                            )}
+
+                            {(!entryItem.content && !(entryItem.metadata && entryItem.metadata.hasAudio)) && (
+                                <p className="entry-content" style={{ color: '#aaa', fontStyle: 'italic' }}>Sin datos</p>
                             )}
                         </div>
                     ))}

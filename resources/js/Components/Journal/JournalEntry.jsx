@@ -9,6 +9,7 @@ import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import ClipLoader from 'react-spinners/ClipLoader';
 import Calendar from './Calendar';
+import JournalEntryModal from './JournalEntryModal';
 
 const moods = [
     { emoji: '😊', label: 'Alegre', value: 'happy' },
@@ -36,6 +37,8 @@ const JournalEntry = () => {
     const [error, setError] = useState(null);
     const [isSaving, setIsSaving] = useState(false);
     const [entries, setEntries] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [selectedDayEntries, setSelectedDayEntries] = useState([]);
 
     const handleMoodSelect = (mood, e) => {
         if (e) e.preventDefault();
@@ -85,8 +88,7 @@ const JournalEntry = () => {
             const formData = new FormData();
             
             if (selectedMood) {
-                console.log('Mood enviado:', selectedMood);
-                formData.append('mood', selectedMood.value);
+                formData.append('mood', selectedMood);
             }
             
             if (content) {
@@ -151,9 +153,11 @@ const JournalEntry = () => {
         }
     };
 
-    const handleEntryClick = (entry) => {
-        // Implementa la lógica para manejar el clic en una entrada
-        console.log('Entrada seleccionada:', entry);
+    const handleEntryClick = (entries) => {
+        if (entries && entries.length > 0) {
+            setSelectedDayEntries(entries);
+            setModalOpen(true);
+        }
     };
 
     return (
@@ -234,6 +238,14 @@ const JournalEntry = () => {
                     </div>
                 </form>
             </div>
+            <Calendar entries={entries} onEntryClick={handleEntryClick} />
+            <JournalEntryModal
+                entries={selectedDayEntries}
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+                onDelete={() => {}}
+                isDeletingId={null}
+            />
         </div>
     );
 };
