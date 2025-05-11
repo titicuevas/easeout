@@ -25,7 +25,7 @@ export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, 
     // Detectar si el tema es oscuro
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
 
-    if (!isOpen || !entries || entries.length === 0) return null;
+    if (!isOpen) return null;
 
     const getMoodEmoji = (mood) => {
         switch (mood) {
@@ -111,56 +111,60 @@ export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, 
                 </div>
 
                 <div className="entries-list">
-                    {entries.map((entryItem) => (
-                        <div key={entryItem.id} className="entry-item" style={{ background: isDark ? '#23272f' : undefined, color: isDark ? '#f3f4f6' : undefined }}>
-                            <div className="entry-header">
-                                <div className="entry-info">
-                                    <span className="entry-time" style={{ color: isDark ? '#b0b3b8' : undefined }}>
-                                        {entryItem.created_at && !isNaN(new Date(entryItem.created_at))
-                                            ? new Date(entryItem.created_at).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
-                                            : 'Hora desconocida'}
-                                    </span>
-                                    <span className="entry-mood" title={getMoodLabel(entryItem.mood)} style={{ fontSize: '1.5rem', marginLeft: 8 }}>
-                                        {getMoodEmoji(entryItem.mood) || '❓'} <span style={{ fontSize: '1rem', marginLeft: 4 }}>{getMoodLabel(entryItem.mood)}</span>
-                                    </span>
+                    {entries.length === 0 ? (
+                        <p className="entry-content" style={{ color: '#aaa', fontStyle: 'italic', textAlign: 'center' }}>No hay entradas para este día.</p>
+                    ) : (
+                        entries.map((entryItem) => (
+                            <div key={entryItem.id} className="entry-item" style={{ background: isDark ? '#23272f' : undefined, color: isDark ? '#f3f4f6' : undefined }}>
+                                <div className="entry-header">
+                                    <div className="entry-info">
+                                        <span className="entry-time" style={{ color: isDark ? '#b0b3b8' : undefined }}>
+                                            {entryItem.created_at && !isNaN(new Date(entryItem.created_at))
+                                                ? new Date(entryItem.created_at).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
+                                                : 'Hora desconocida'}
+                                        </span>
+                                        <span className="entry-mood" title={getMoodLabel(entryItem.mood)} style={{ fontSize: '1.5rem', marginLeft: 8 }}>
+                                            {getMoodEmoji(entryItem.mood) || '❓'} <span style={{ fontSize: '1rem', marginLeft: 4 }}>{getMoodLabel(entryItem.mood)}</span>
+                                        </span>
+                                    </div>
+                                    <button
+                                        className="delete-entry"
+                                        onClick={() => handleDeleteClick(entryItem.id)}
+                                        disabled={isDeletingId !== null}
+                                        style={{ background: '#e53e3e', color: '#fff', borderRadius: 8, padding: '0.5rem 1rem', border: 'none', cursor: isDeletingId !== null ? 'not-allowed' : 'pointer' }}
+                                    >
+                                        {isDeletingId === entryItem.id ? (
+                                            <ClipLoader size={18} color="#fff" />
+                                        ) : (
+                                            '🗑️'
+                                        )}
+                                    </button>
                                 </div>
-                                <button
-                                    className="delete-entry"
-                                    onClick={() => handleDeleteClick(entryItem.id)}
-                                    disabled={isDeletingId !== null}
-                                    style={{ background: '#e53e3e', color: '#fff', borderRadius: 8, padding: '0.5rem 1rem', border: 'none', cursor: isDeletingId !== null ? 'not-allowed' : 'pointer' }}
-                                >
-                                    {isDeletingId === entryItem.id ? (
-                                        <ClipLoader size={18} color="#fff" />
-                                    ) : (
-                                        '🗑️'
-                                    )}
-                                </button>
+
+                                {entryItem.content && entryItem.content.trim() !== '' && (
+                                    <p className="entry-content" style={{ color: isDark ? '#f3f4f6' : undefined }}>{entryItem.content}</p>
+                                )}
+
+                                {entryItem.metadata && (entryItem.metadata.audioUrl || entryItem.metadata.audio_url) && (
+                                    <div className="entry-audio" style={{ background: isDark ? '#181a20' : '#f8fafc', borderRadius: 12, padding: 16, margin: '12px 0', boxShadow: isDark ? '0 2px 8px #0004' : '0 2px 8px #0001' }}>
+                                        <audio
+                                            src={entryItem.metadata.audioUrl || entryItem.metadata.audio_url}
+                                            controls
+                                            className="audio-player"
+                                            style={{ width: '100%', borderRadius: 8, background: isDark ? '#23272f' : '#fff' }}
+                                        />
+                                        <span className="audio-duration" style={{ color: isDark ? '#b0b3b8' : '#4b5563', float: 'right', fontSize: 14 }}>
+                                            Duración: {formatDuration(entryItem.metadata.duration || entryItem.metadata.audio_duration || 0)}
+                                        </span>
+                                    </div>
+                                )}
+
+                                {(!entryItem.content || entryItem.content.trim() === '') && !(entryItem.metadata && (entryItem.metadata.audioUrl || entryItem.metadata.audio_url)) && (
+                                    <p className="entry-content" style={{ color: '#aaa', fontStyle: 'italic' }}>Sin datos</p>
+                                )}
                             </div>
-
-                            {entryItem.content && entryItem.content.trim() !== '' && (
-                                <p className="entry-content" style={{ color: isDark ? '#f3f4f6' : undefined }}>{entryItem.content}</p>
-                            )}
-
-                            {entryItem.metadata && (entryItem.metadata.audioUrl || entryItem.metadata.audio_url) && (
-                                <div className="entry-audio" style={{ background: isDark ? '#181a20' : '#f8fafc', borderRadius: 12, padding: 16, margin: '12px 0', boxShadow: isDark ? '0 2px 8px #0004' : '0 2px 8px #0001' }}>
-                                    <audio
-                                        src={entryItem.metadata.audioUrl || entryItem.metadata.audio_url}
-                                        controls
-                                        className="audio-player"
-                                        style={{ width: '100%', borderRadius: 8, background: isDark ? '#23272f' : '#fff' }}
-                                    />
-                                    <span className="audio-duration" style={{ color: isDark ? '#b0b3b8' : '#4b5563', float: 'right', fontSize: 14 }}>
-                                        Duración: {formatDuration(entryItem.metadata.duration || entryItem.metadata.audio_duration || 0)}
-                                    </span>
-                                </div>
-                            )}
-
-                            {(!entryItem.content || entryItem.content.trim() === '') && !(entryItem.metadata && (entryItem.metadata.audioUrl || entryItem.metadata.audio_url)) && (
-                                <p className="entry-content" style={{ color: '#aaa', fontStyle: 'italic' }}>Sin datos</p>
-                            )}
-                        </div>
-                    ))}
+                        ))
+                    )}
                 </div>
             </div>
 
