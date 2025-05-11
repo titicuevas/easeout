@@ -54,7 +54,7 @@ export default function Welcome({ auth }) {
                     </header>
 
                     {/* Hero Section */}
-                    <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 mt-16">
+                    <main className="main-welcome flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 mt-16">
                         <div className="text-center max-w-3xl mx-auto">
                             <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
                                 Tu espacio seguro para expresarte
