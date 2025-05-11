@@ -325,10 +325,16 @@
     }
 
     body .main-welcome {
-        padding-top: 80px !important;
+        padding-top: 160px !important;
         margin-top: 0 !important;
-        background: none !important;
-        border: none !important;
+    }
+    .main-welcome h1 {
+        font-size: 1.1rem !important;
+        line-height: 1.2 !important;
+        margin-top: 0 !important;
+        margin-bottom: 0.5rem !important;
+        padding: 0 !important;
+        word-break: break-word !important;
     }
     .welcome-header {
         background: none !important;
