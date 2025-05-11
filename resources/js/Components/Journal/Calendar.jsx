@@ -146,8 +146,13 @@ export default function Calendar({ entries, onEntryClick }) {
 
     // Mostrar todas las entradas del día al pulsar '+ Ver más'
     const handleShowMore = (events, date) => {
+        // Normalizar la fecha a YYYY-MM-DD para comparar solo el día
         const dateKey = date.toISOString().split('T')[0];
-        const dayEntries = groupedEntries[dateKey] || [];
+        // Buscar todas las entradas de ese día (ignorando la hora)
+        const dayEntries = entries.filter(entry => {
+            const entryDate = (entry.entry_date || entry.created_at).split('T')[0];
+            return entryDate === dateKey;
+        });
         onEntryClick(dayEntries);
     };
 
