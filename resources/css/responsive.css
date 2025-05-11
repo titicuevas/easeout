@@ -304,7 +304,7 @@
     .welcome-header + main,
     .welcome-header ~ main,
     .main-welcome {
-        padding-top: 120px !important;
+        padding-top: 80px !important;
         margin-top: 0 !important;
     }
     .main-welcome.mt-16 {
@@ -316,6 +316,12 @@
         margin-bottom: 0.5rem !important;
         font-size: 1.5rem !important;
         line-height: 1.2 !important;
+    }
+    .welcome-header .flex {
+        gap: 0.25rem !important;
+    }
+    .welcome-header img {
+        margin-bottom: 0 !important;
     }
 }
 
