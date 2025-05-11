@@ -117,13 +117,8 @@ export default function Calendar({ entries, onEntryClick }) {
 
     // Mostrar todas las entradas del día al pulsar '+ Ver más' o al hacer clic en un día
     const handleShowMore = (events, date) => {
-        const dateKey = date.toISOString().split('T')[0];
-        const dayEntries = entries.filter(entry => {
-            const entryDate = (entry.entry_date || entry.created_at).split('T')[0];
-            return entryDate === dateKey;
-        });
-        if (dayEntries.length > 0) {
-            onEntryClick(dayEntries);
+        if (events && events.length > 0) {
+            onEntryClick(events.map(e => e.resource));
         }
     };
 
