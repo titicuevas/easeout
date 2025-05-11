@@ -166,8 +166,8 @@ export default function Calendar({ entries, onEntryClick }) {
                     onSelectEvent={handleSelectEvent}
                     onSelectSlot={handleSelectSlot}
                     selectable
-                    views={window.innerWidth < 640 ? ['day'] : ['month', 'week', 'day']}
-                    defaultView={defaultView}
+                    views={['month']}
+                    defaultView={'month'}
                     messages={{
                         next: "Siguiente",
                         previous: "Anterior",
