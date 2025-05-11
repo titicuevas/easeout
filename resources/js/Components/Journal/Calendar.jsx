@@ -117,13 +117,14 @@ export default function Calendar({ entries, onEntryClick }) {
 
     // Mostrar todas las entradas del día al pulsar '+ Ver más' o al hacer clic en un día
     const handleShowMore = (events, date) => {
-        console.log('Show more clicked', events, date);
         const dateKey = date.toISOString().split('T')[0];
         const dayEntries = entries.filter(entry => {
             const entryDate = (entry.entry_date || entry.created_at).split('T')[0];
             return entryDate === dateKey;
         });
-        onEntryClick(dayEntries);
+        if (dayEntries.length > 0) {
+            onEntryClick(dayEntries);
+        }
     };
 
     // Al hacer clic en un día, usar handleShowMore para unificar la lógica
@@ -160,8 +161,9 @@ export default function Calendar({ entries, onEntryClick }) {
             const entryDate = (entry.entry_date || entry.created_at).split('T')[0];
             return entryDate === dateKey;
         });
-        onEntryClick(dayEntries);
-        // Evitar que react-big-calendar cambie de vista
+        if (dayEntries.length > 0) {
+            onEntryClick(dayEntries);
+        }
         return null;
     };
 
