@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar as BigCalendar, dateFnsLocalizer } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -18,6 +18,20 @@ const localizer = dateFnsLocalizer({
 
 export default function Calendar({ entries, onEntryClick }) {
     const [moodFilter, setMoodFilter] = useState(null);
+    const [defaultView, setDefaultView] = useState('month');
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 640) {
+                setDefaultView('day');
+            } else {
+                setDefaultView('month');
+            }
+        };
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const moodMap = {
         happy: '😊',
@@ -82,11 +96,22 @@ export default function Calendar({ entries, onEntryClick }) {
     // Convertir las entradas al formato que espera react-big-calendar
     const events = entries
         .filter(entry => !moodFilter || entry.mood === moodFilter)
+        .sort((a, b) => {
+            // Ordenar por fecha (entry_date o created_at) y luego por hora de creación
+            const dateA = new Date(a.entry_date || a.created_at);
+            const dateB = new Date(b.entry_date || b.created_at);
+            if (dateA.getTime() !== dateB.getTime()) {
+                return dateA - dateB;
+            }
+            // Si es el mismo día, ordenar por hora de creación
+            return new Date(a.created_at) - new Date(b.created_at);
+        })
         .map(entry => ({
             id: entry.id,
             title: `${getMoodEmoji(entry.mood)} ${entry.content ? entry.content.substring(0, 30) + '...' : ''}`,
             start: new Date(entry.entry_date || entry.created_at),
             end: new Date(entry.entry_date || entry.created_at),
+            allDay: true,
             resource: entry
         }));
 
@@ -141,7 +166,8 @@ export default function Calendar({ entries, onEntryClick }) {
                     onSelectEvent={handleSelectEvent}
                     onSelectSlot={handleSelectSlot}
                     selectable
-                    views={['month', 'week', 'day']}
+                    views={window.innerWidth < 640 ? ['day'] : ['month', 'week', 'day']}
+                    defaultView={defaultView}
                     messages={{
                         next: "Siguiente",
                         previous: "Anterior",
@@ -172,6 +198,8 @@ export default function Calendar({ entries, onEntryClick }) {
                             format(date, "EEEE d MMMM", { locale: es }),
                         weekdayFormat: (date, culture, localizer) =>
                             format(date, "EEE", { locale: es }),
+                        dayRangeHeaderFormat: ({ start, end }, culture, localizer) =>
+                            `${format(start, "d 'de' MMMM", { locale: es })} – ${format(end, "d 'de' MMMM", { locale: es })}`,
                     }}
                     eventPropGetter={(event) => ({
                         className: `mood-${event.resource.mood}`,
@@ -181,7 +209,9 @@ export default function Calendar({ entries, onEntryClick }) {
                             opacity: 0.8,
                             color: 'white',
                             border: '0',
-                            display: 'block'
+                            display: 'block',
+                            fontSize: window.innerWidth < 640 ? '0.95rem' : '1rem',
+                            padding: window.innerWidth < 640 ? '0.25rem 0.5rem' : '0.25rem 1rem',
                         }
                     })}
                 />
