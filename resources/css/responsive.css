@@ -299,6 +299,13 @@
         text-align: center !important;
         box-sizing: border-box !important;
     }
+
+    /* Asegura que el main de Welcome no quede oculto bajo el header fijo */
+    .welcome-header + main,
+    .welcome-header ~ main,
+    .main-welcome {
+        padding-top: 4.5rem !important;
+    }
 }
 
 /* Ajustes para tablets */
