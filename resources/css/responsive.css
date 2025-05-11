@@ -323,6 +323,28 @@
     .welcome-header img {
         margin-bottom: 0 !important;
     }
+
+    body .main-welcome {
+        padding-top: 130px !important;
+        background: rgba(255,0,0,0.1) !important; /* solo para ver el área */
+        border: 2px solid red !important;         /* solo para ver el área */
+    }
+    .welcome-header {
+        background: rgba(0,255,0,0.1) !important; /* solo para ver el área */
+        border: 2px solid green !important;       /* solo para ver el área */
+    }
+    .main-welcome h1 {
+        margin-top: 0 !important;
+        margin-bottom: 0.5rem !important;
+        font-size: 1.5rem !important;
+        line-height: 1.2 !important;
+    }
+    .welcome-header .flex {
+        gap: 0.25rem !important;
+    }
+    .welcome-header img {
+        margin-bottom: 0 !important;
+    }
 }
 
 /* Ajustes para tablets */
