@@ -156,6 +156,18 @@ export default function Calendar({ entries, onEntryClick }) {
         onEntryClick(dayEntries);
     };
 
+    // Al hacer clic en un día del mes (o en '+ Ver más'), mostrar todas las entradas de ese día
+    const handleDrillDown = (date) => {
+        const dateKey = date.toISOString().split('T')[0];
+        const dayEntries = entries.filter(entry => {
+            const entryDate = (entry.entry_date || entry.created_at).split('T')[0];
+            return entryDate === dateKey;
+        });
+        onEntryClick(dayEntries);
+        // Evitar que react-big-calendar cambie de vista
+        return null;
+    };
+
     return (
         <div className="calendar-container">
             <div className="calendar-filters mb-4">
@@ -195,6 +207,7 @@ export default function Calendar({ entries, onEntryClick }) {
                         toolbar: customToolbar
                     }}
                     onShowMore={handleShowMore}
+                    onDrillDown={handleDrillDown}
                     messages={{
                         next: "Siguiente",
                         previous: "Anterior",
