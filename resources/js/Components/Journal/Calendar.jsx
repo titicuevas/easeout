@@ -133,6 +133,24 @@ export default function Calendar({ entries, onEntryClick }) {
         'anxious', 'hopeful', 'proud', 'surprised', 'inspired'
     ];
 
+    // Eliminar el botón 'Hoy' de la barra de herramientas
+    const customToolbar = (toolbar) => (
+        <div className="rbc-toolbar">
+            <span className="rbc-btn-group">
+                <button type="button" onClick={() => toolbar.onNavigate('PREV')}>Anterior</button>
+                <button type="button" onClick={() => toolbar.onNavigate('NEXT')}>Siguiente</button>
+            </span>
+            <span className="rbc-toolbar-label">{toolbar.label}</span>
+        </div>
+    );
+
+    // Mostrar todas las entradas del día al pulsar '+ Ver más'
+    const handleShowMore = (events, date) => {
+        const dateKey = date.toISOString().split('T')[0];
+        const dayEntries = groupedEntries[dateKey] || [];
+        onEntryClick(dayEntries);
+    };
+
     return (
         <div className="calendar-container">
             <div className="calendar-filters mb-4">
@@ -168,6 +186,10 @@ export default function Calendar({ entries, onEntryClick }) {
                     selectable
                     views={['month']}
                     defaultView={'month'}
+                    components={{
+                        toolbar: customToolbar
+                    }}
+                    onShowMore={handleShowMore}
                     messages={{
                         next: "Siguiente",
                         previous: "Anterior",
@@ -201,19 +223,22 @@ export default function Calendar({ entries, onEntryClick }) {
                         dayRangeHeaderFormat: ({ start, end }, culture, localizer) =>
                             `${format(start, "d 'de' MMMM", { locale: es })} – ${format(end, "d 'de' MMMM", { locale: es })}`,
                     }}
-                    eventPropGetter={(event) => ({
-                        className: `mood-${event.resource.mood}`,
-                        style: {
-                            backgroundColor: 'var(--primary-color)',
-                            borderRadius: '4px',
-                            opacity: 0.8,
-                            color: 'white',
-                            border: '0',
-                            display: 'block',
-                            fontSize: window.innerWidth < 640 ? '0.95rem' : '1rem',
-                            padding: window.innerWidth < 640 ? '0.25rem 0.5rem' : '0.25rem 1rem',
-                        }
-                    })}
+                    eventPropGetter={(event) => {
+                        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                        return {
+                            className: `mood-${event.resource.mood}`,
+                            style: {
+                                backgroundColor: isDark ? 'var(--primary-color)' : 'var(--primary-color)',
+                                borderRadius: '4px',
+                                opacity: 0.9,
+                                color: isDark ? '#fff' : 'white',
+                                border: '0',
+                                display: 'block',
+                                fontSize: window.innerWidth < 640 ? '0.95rem' : '1rem',
+                                padding: window.innerWidth < 640 ? '0.25rem 0.5rem' : '0.25rem 1rem',
+                            }
+                        };
+                    }}
                 />
             </div>
         </div>
