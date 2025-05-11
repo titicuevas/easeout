@@ -325,27 +325,15 @@
     }
 
     body .main-welcome {
-        padding-top: 130px !important;
-        background: rgba(255,0,0,0.1) !important; /* solo para ver el área */
-        border: 2px solid red !important;         /* solo para ver el área */
+        padding-top: 80px !important;
+        margin-top: 0 !important;
+        background: none !important;
+        border: none !important;
     }
     .welcome-header {
-        background: rgba(0,255,0,0.1) !important; /* solo para ver el área */
-        border: 2px solid green !important;       /* solo para ver el área */
+        background: none !important;
+        border: none !important;
     }
-    .main-welcome h1 {
-        margin-top: 0 !important;
-        margin-bottom: 0.5rem !important;
-        font-size: 1.5rem !important;
-        line-height: 1.2 !important;
-    }
-    .welcome-header .flex {
-        gap: 0.25rem !important;
-    }
-    .welcome-header img {
-        margin-bottom: 0 !important;
-    }
-
     .main-welcome h1,
     .main-welcome .text-4xl,
     .main-welcome .sm\:text-6xl {
