@@ -115,11 +115,20 @@ export default function Calendar({ entries, onEntryClick }) {
             resource: entry
         }));
 
-    // Al hacer clic en un día, mostrar todas las entradas de ese día
-    const handleSelectSlot = (slotInfo) => {
-        const dateKey = slotInfo.start.toISOString().split('T')[0];
-        const dayEntries = groupedEntries[dateKey] || [];
+    // Mostrar todas las entradas del día al pulsar '+ Ver más' o al hacer clic en un día
+    const handleShowMore = (events, date) => {
+        console.log('Show more clicked', events, date);
+        const dateKey = date.toISOString().split('T')[0];
+        const dayEntries = entries.filter(entry => {
+            const entryDate = (entry.entry_date || entry.created_at).split('T')[0];
+            return entryDate === dateKey;
+        });
         onEntryClick(dayEntries);
+    };
+
+    // Al hacer clic en un día, usar handleShowMore para unificar la lógica
+    const handleSelectSlot = (slotInfo) => {
+        handleShowMore([], slotInfo.start);
     };
 
     // Al hacer clic en un evento (entrada individual)
@@ -143,18 +152,6 @@ export default function Calendar({ entries, onEntryClick }) {
             <span className="rbc-toolbar-label">{toolbar.label}</span>
         </div>
     );
-
-    // Mostrar todas las entradas del día al pulsar '+ Ver más'
-    const handleShowMore = (events, date) => {
-        // Normalizar la fecha a YYYY-MM-DD para comparar solo el día
-        const dateKey = date.toISOString().split('T')[0];
-        // Buscar todas las entradas de ese día (ignorando la hora)
-        const dayEntries = entries.filter(entry => {
-            const entryDate = (entry.entry_date || entry.created_at).split('T')[0];
-            return entryDate === dateKey;
-        });
-        onEntryClick(dayEntries);
-    };
 
     // Al hacer clic en un día del mes (o en '+ Ver más'), mostrar todas las entradas de ese día
     const handleDrillDown = (date) => {
