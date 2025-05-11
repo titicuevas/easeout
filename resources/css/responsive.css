@@ -207,9 +207,15 @@
         width: 100% !important;
     }
     .welcome-header img {
-        height: 2rem !important;
+        height: 2.5rem !important;
         width: auto !important;
-        margin-bottom: 0.5rem !important;
+        max-width: 90vw !important;
+        object-fit: contain !important;
+        aspect-ratio: unset !important;
+    }
+    .welcome-header .flex.items-center {
+        flex-wrap: nowrap !important;
+        min-width: 0 !important;
     }
     .welcome-header span {
         font-size: 1rem !important;
@@ -229,6 +235,69 @@
         margin-bottom: 0.25rem !important;
         font-size: 1rem !important;
         justify-content: center !important;
+    }
+
+    /* Mood grid: 2 columnas, botones cuadrados y centrados */
+    .mood-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem !important;
+    }
+    .mood-button {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-width: 90px !important;
+        min-height: 90px !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        font-size: 1rem !important;
+        padding: 0.5rem !important;
+        box-sizing: border-box !important;
+        text-align: center !important;
+    }
+    .mood-emoji {
+        font-size: 2rem !important;
+        margin-bottom: 0.25rem !important;
+        line-height: 1 !important;
+        display: block !important;
+    }
+    .mood-label {
+        font-size: 0.85rem !important;
+        line-height: 1.1 !important;
+        margin: 0 !important;
+        display: block !important;
+        width: 100% !important;
+        text-align: center !important;
+        word-break: break-word !important;
+    }
+
+    /* Filtros del calendario: scroll horizontal si hay muchos */
+    .calendar-filters, .mood-filters {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        gap: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+    .calendar-filters > *, .mood-filters > * {
+        flex: 0 0 auto !important;
+    }
+
+    /* Grid de días del calendario: días cuadrados y adaptables */
+    .calendar-grid {
+        display: grid !important;
+        grid-template-columns: repeat(7, 1fr) !important;
+        gap: 0.25rem !important;
+    }
+    .calendar-day {
+        aspect-ratio: 1 / 1 !important;
+        min-width: 0 !important;
+        min-height: 36px !important;
+        font-size: 0.95rem !important;
+        padding: 0.15rem !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
     }
 }
 
