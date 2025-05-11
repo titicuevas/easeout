@@ -39,6 +39,7 @@ const JournalEntry = () => {
     const [entries, setEntries] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedDayEntries, setSelectedDayEntries] = useState([]);
+    const [entryDate, setEntryDate] = useState(new Date().toISOString().split('T')[0]);
 
     const handleMoodSelect = (mood, e) => {
         if (e) e.preventDefault();
@@ -99,6 +100,8 @@ const JournalEntry = () => {
                 formData.append('audio', audioBlob);
                 formData.append('audioDuration', audioDuration);
             }
+
+            formData.append('entry_date', entryDate);
 
             // Preparar los metadatos
             const metadata = {
@@ -231,6 +234,19 @@ const JournalEntry = () => {
                     {/* Text Input */}
                     <div className="journal-card">
                         <h2 className="journal-card-title">Escribe tus pensamientos</h2>
+                        <div className="mb-4">
+                            <label htmlFor="entry-date" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Fecha de la entrada
+                            </label>
+                            <input
+                                type="date"
+                                id="entry-date"
+                                value={entryDate}
+                                onChange={(e) => setEntryDate(e.target.value)}
+                                max={new Date().toISOString().split('T')[0]}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            />
+                        </div>
                         <textarea
                             value={content}
                             onChange={handleContentChange}

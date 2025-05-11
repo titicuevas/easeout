@@ -1444,4 +1444,147 @@ body {
 [data-theme="dark"] .recording-time {
     color: #fff !important;
     background-color: #23272f !important;
+}
+
+/* Estilos para react-big-calendar */
+.rbc-calendar {
+    background-color: var(--paper-color);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    box-shadow: var(--box-shadow);
+}
+
+.rbc-toolbar {
+    margin-bottom: 1rem;
+}
+
+.rbc-toolbar button {
+    color: var(--text-primary);
+    background-color: var(--paper-color);
+    border: 1px solid var(--calendar-border);
+    border-radius: var(--radius-md);
+    padding: 0.5rem 1rem;
+    margin: 0 0.25rem;
+}
+
+.rbc-toolbar button:hover {
+    background-color: var(--calendar-day-hover);
+}
+
+.rbc-toolbar button.rbc-active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.rbc-header {
+    padding: 0.5rem;
+    font-weight: 600;
+    color: var(--calendar-weekday);
+    border-bottom: 1px solid var(--calendar-border);
+}
+
+.rbc-event {
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--primary-color);
+    color: white;
+    cursor: pointer;
+}
+
+.rbc-event:hover {
+    opacity: 0.9;
+}
+
+.rbc-today {
+    background-color: var(--calendar-day-hover);
+}
+
+.rbc-off-range-bg {
+    background-color: var(--calendar-day-empty);
+}
+
+.rbc-month-view {
+    border: 1px solid var(--calendar-border);
+    border-radius: var(--radius-md);
+}
+
+.rbc-month-row {
+    border-top: 1px solid var(--calendar-border);
+}
+
+.rbc-day-bg + .rbc-day-bg {
+    border-left: 1px solid var(--calendar-border);
+}
+
+/* Estilos para los filtros de estado de ánimo */
+.mood-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.mood-filter {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    background-color: var(--paper-color);
+    border: 1px solid var(--calendar-border);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.mood-filter:hover {
+    background-color: var(--calendar-day-hover);
+}
+
+.mood-filter.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Ajustes para el tema oscuro */
+[data-theme="dark"] .rbc-calendar {
+    background-color: var(--modal-bg);
+}
+
+[data-theme="dark"] .rbc-toolbar button {
+    background-color: var(--modal-bg);
+    border-color: var(--calendar-border);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .rbc-toolbar button:hover {
+    background-color: var(--calendar-day-hover);
+}
+
+[data-theme="dark"] .rbc-toolbar button.rbc-active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+[data-theme="dark"] .rbc-header {
+    color: var(--calendar-weekday);
+    border-color: var(--calendar-border);
+}
+
+[data-theme="dark"] .rbc-month-view {
+    border-color: var(--calendar-border);
+}
+
+[data-theme="dark"] .rbc-month-row {
+    border-color: var(--calendar-border);
+}
+
+[data-theme="dark"] .rbc-day-bg + .rbc-day-bg {
+    border-color: var(--calendar-border);
+}
+
+[data-theme="dark"] .rbc-today {
+    background-color: var(--calendar-day-hover);
+}
+
+[data-theme="dark"] .rbc-off-range-bg {
+    background-color: var(--calendar-day-empty);
 } 

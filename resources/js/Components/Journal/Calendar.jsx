@@ -1,36 +1,23 @@
 import React, { useState } from 'react';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import { format } from 'date-fns';
+import { Calendar as BigCalendar, dateFnsLocalizer } from 'react-big-calendar';
+import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { es } from 'date-fns/locale';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+
+const locales = {
+    'es': es,
+};
+
+const localizer = dateFnsLocalizer({
+    format,
+    parse,
+    startOfWeek,
+    getDay,
+    locales,
+});
 
 export default function Calendar({ entries, onEntryClick }) {
-    const [currentDate, setCurrentDate] = useState(new Date());
     const [moodFilter, setMoodFilter] = useState(null);
-    const [playingAudio, setPlayingAudio] = useState(null);
-    const [disabled, setDisabled] = useState(false);
-
-    const getDaysInMonth = (date) => {
-        return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-    };
-
-    const getFirstDayOfMonth = (date) => {
-        // Convertir domingo (0) a 7 para que la semana empiece en lunes (1)
-        const day = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
-        return day === 0 ? 6 : day - 1;
-    };
-
-    const getEntriesForDate = (date) => {
-        let filteredEntries = entries.filter(entry => {
-            const entryDate = new Date(entry.created_at);
-            return entryDate.toDateString() === date.toDateString();
-        });
-
-        if (moodFilter) {
-            filteredEntries = filteredEntries.filter(entry => entry.mood === moodFilter);
-        }
-
-        return filteredEntries;
-    };
 
     const moodMap = {
         happy: '😊',
@@ -52,7 +39,6 @@ export default function Calendar({ entries, onEntryClick }) {
 
     const getMoodEmoji = (mood) => {
         if (!mood) return '❓';
-        // Normalizar guiones y minúsculas
         const key = mood.replace(/-/g, '_').toLowerCase();
         return moodMap[key] || '❓';
     };
@@ -80,109 +66,19 @@ export default function Calendar({ entries, onEntryClick }) {
         }
     };
 
-    const formatDuration = (seconds) => {
-        const mins = Math.floor(seconds / 60);
-        const secs = Math.floor(seconds % 60);
-        return `${mins}:${secs.toString().padStart(2, '0')}`;
-    };
+    // Convertir las entradas al formato que espera react-big-calendar
+    const events = entries
+        .filter(entry => !moodFilter || entry.mood === moodFilter)
+        .map(entry => ({
+            id: entry.id,
+            title: `${getMoodEmoji(entry.mood)} ${entry.content ? entry.content.substring(0, 30) + '...' : ''}`,
+            start: new Date(entry.entry_date || entry.created_at),
+            end: new Date(entry.entry_date || entry.created_at),
+            resource: entry
+        }));
 
-    const renderCalendar = () => {
-        const daysInMonth = getDaysInMonth(currentDate);
-        const firstDay = getFirstDayOfMonth(currentDate);
-        const days = [];
-
-        // Agregar días vacíos al principio
-        for (let i = 0; i < firstDay; i++) {
-            days.push(<div key={`empty-${i}`} className="calendar-day empty"></div>);
-        }
-
-        // Agregar días del mes
-        for (let day = 1; day <= daysInMonth; day++) {
-            const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-            const entriesForDay = getEntriesForDate(date);
-            const hasEntries = entriesForDay.length > 0;
-
-            days.push(
-                <div
-                    key={day}
-                    className={`calendar-day ${hasEntries ? 'has-entries' : ''}`}
-                    onClick={() => !disabled && onEntryClick(entriesForDay)}
-                    style={{ cursor: hasEntries && !disabled ? 'pointer' : 'default' }}
-                >
-                    <span className="day-number">{day}</span>
-                    {hasEntries && (
-                        <div className="entries-preview" style={{ display: 'flex', flexWrap: 'wrap', gap: 2, maxHeight: 24, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                            {entriesForDay.slice(0, 4).map((entry, index) => (
-                                <span
-                                    key={index}
-                                    className={`entry-emoji mood-${entry.mood} ${disabled ? 'opacity-50' : ''} calendar-emoji-enhanced`}
-                                    title={`${getMoodLabel(entry.mood)}${!isNaN(new Date(entry.created_at)) && entry.created_at ? ' - ' + (new Date(entry.created_at).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })) : ''}`}
-                                    style={{ fontSize: '1.1em', margin: '0 1px', minWidth: 18, minHeight: 18, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                                >
-                                    {getMoodEmoji(entry.mood)}
-                                </span>
-                            ))}
-                            {entriesForDay.length > 4 && (
-                                <span className="entry-emoji" title={`+${entriesForDay.length - 4} más`} style={{ fontSize: '1em', marginLeft: 2, color: '#6366f1', minWidth: 18, minHeight: 18, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+{entriesForDay.length - 4}</span>
-                            )}
-                        </div>
-                    )}
-                </div>
-            );
-        }
-
-        return days;
-    };
-
-    const renderEntryDetails = (entry) => {
-        return (
-            <div className="entry-details">
-                <div className="entry-time">
-                    {entry.created_at && !isNaN(new Date(entry.created_at)) ?
-                        new Date(entry.created_at).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }) :
-                        'Hora desconocida'}
-                </div>
-                <div className="entry-mood" title={getMoodLabel(entry.mood)}>
-                    {getMoodEmoji(entry.mood)}
-                </div>
-                {entry.content && (
-                    <div className="entry-content">
-                        {entry.content}
-                    </div>
-                )}
-                {entry.metadata?.hasAudio && (
-                    <div className="entry-audio">
-                        <audio
-                            controls
-                            src={entry.metadata.audioUrl}
-                            onPlay={() => {
-                                // Pausar cualquier otro audio que esté reproduciéndose
-                                if (playingAudio && playingAudio !== entry.id) {
-                                    const previousAudio = document.querySelector(`audio[data-entry-id="${playingAudio}"]`);
-                                    if (previousAudio) previousAudio.pause();
-                                }
-                                setPlayingAudio(entry.id);
-                            }}
-                            onEnded={() => setPlayingAudio(null)}
-                            onPause={() => setPlayingAudio(null)}
-                            className="w-full"
-                            data-entry-id={entry.id}
-                        >
-                            Tu navegador no soporta el elemento de audio.
-                        </audio>
-                        {entry.metadata.duration > 0 && (
-                            <span className="audio-duration">
-                                {formatDuration(entry.metadata.duration)}
-                            </span>
-                        )}
-                    </div>
-                )}
-            </div>
-        );
-    };
-
-    const changeMonth = (increment) => {
-        setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + increment));
+    const handleSelectEvent = (event) => {
+        onEntryClick([event.resource]);
     };
 
     const moods = [
@@ -193,28 +89,10 @@ export default function Calendar({ entries, onEntryClick }) {
 
     return (
         <div className="calendar-container">
-            <div className="calendar-header">
-                <button
-                    onClick={() => changeMonth(-1)}
-                    className="calendar-nav-button"
-                    title="Mes anterior"
-                >
-                    <FaChevronLeft />
-                </button>
-                <h2>{format(currentDate, 'MMMM yyyy', { locale: es })}</h2>
-                <button
-                    onClick={() => changeMonth(1)}
-                    className="calendar-nav-button"
-                    title="Mes siguiente"
-                >
-                    <FaChevronRight />
-                </button>
-            </div>
-
-            <div className="calendar-filters">
-                <div className="mood-filters">
+            <div className="calendar-filters mb-4">
+                <div className="mood-filters flex flex-wrap gap-2">
                     <button 
-                        className={`mood-filter ${!moodFilter ? 'active' : ''}`}
+                        className={`mood-filter ${!moodFilter ? 'active' : ''} px-3 py-1 rounded-full text-sm`}
                         onClick={() => setMoodFilter(null)}
                     >
                         Todos
@@ -223,8 +101,8 @@ export default function Calendar({ entries, onEntryClick }) {
                         <button
                             key={mood}
                             onClick={() => setMoodFilter(mood)}
-                            className={`mood-filter ${moodFilter === mood ? 'active' : ''}`}
-                            title={`${getMoodLabel(mood)}`}
+                            className={`mood-filter ${moodFilter === mood ? 'active' : ''} px-3 py-1 rounded-full text-sm`}
+                            title={getMoodLabel(mood)}
                         >
                             {getMoodEmoji(mood)}
                         </button>
@@ -232,14 +110,35 @@ export default function Calendar({ entries, onEntryClick }) {
                 </div>
             </div>
 
-            <div className="calendar-weekdays">
-                {['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map(day => (
-                    <div key={day} className="calendar-weekday">{day}</div>
-                ))}
-            </div>
-
-            <div className="calendar-grid">
-                {renderCalendar()}
+            <div className="calendar-wrapper" style={{ height: '600px' }}>
+                <BigCalendar
+                    localizer={localizer}
+                    events={events}
+                    startAccessor="start"
+                    endAccessor="end"
+                    style={{ height: '100%' }}
+                    onSelectEvent={handleSelectEvent}
+                    views={['month', 'week', 'day']}
+                    messages={{
+                        next: "Siguiente",
+                        previous: "Anterior",
+                        today: "Hoy",
+                        month: "Mes",
+                        week: "Semana",
+                        day: "Día"
+                    }}
+                    eventPropGetter={(event) => ({
+                        className: `mood-${event.resource.mood}`,
+                        style: {
+                            backgroundColor: 'var(--primary-color)',
+                            borderRadius: '4px',
+                            opacity: 0.8,
+                            color: 'white',
+                            border: '0',
+                            display: 'block'
+                        }
+                    })}
+                />
             </div>
         </div>
     );

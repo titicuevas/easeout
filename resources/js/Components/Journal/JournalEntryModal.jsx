@@ -96,7 +96,9 @@ export default function JournalEntryModal({ entries, isOpen, onClose, onDelete, 
             <div className="modal-content" onClick={e => e.stopPropagation()} data-theme={isDark ? 'dark' : undefined} style={{ background: isDark ? '#23272f' : undefined, color: isDark ? '#f3f4f6' : undefined }}>
                 <div className="modal-header">
                     <h2 className="modal-title">
-                        {entries[0] && entries[0].created_at ? format(new Date(entries[0].created_at), 'EEEE d MMMM yyyy', { locale: es }) : 'Sin fecha'}
+                        {entries[0] && (entries[0].entry_date || entries[0].created_at) ? 
+                            format(new Date(entries[0].entry_date || entries[0].created_at), 'EEEE d MMMM yyyy', { locale: es }) : 
+                            'Sin fecha'}
                     </h2>
                     <button
                         onClick={onClose}

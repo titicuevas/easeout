@@ -63,11 +63,14 @@ class JournalEntryController extends Controller
             $request->validate([
                 'mood' => 'required_without_all:content,audio|string|in:happy,neutral,sad,angry,frustrated,in_love,heartbroken,grateful,motivated,tired,anxious,hopeful,proud,surprised,inspired',
                 'content' => 'nullable|string',
-                'audio' => 'nullable|file|mimes:webm,mp3,wav,m4a,mpeg,ogg|max:20480' // 20MB max
+                'audio' => 'nullable|file|mimes:webm,mp3,wav,m4a,mpeg,ogg|max:20480', // 20MB max
+                'entry_date' => 'nullable|date|before_or_equal:now'
             ], [
                 'mood.in' => 'El estado de ánimo seleccionado no es válido',
                 'audio.mimes' => 'El formato del archivo de audio no es válido. Formatos permitidos: webm, mp3, wav, m4a, mpeg, ogg',
-                'audio.max' => 'El archivo de audio no puede ser mayor a 20MB'
+                'audio.max' => 'El archivo de audio no puede ser mayor a 20MB',
+                'entry_date.date' => 'La fecha de la entrada no es válida',
+                'entry_date.before_or_equal' => 'La fecha de la entrada no puede ser futura'
             ]);
 
             DB::beginTransaction();
@@ -103,6 +106,7 @@ class JournalEntryController extends Controller
             $entry->mood = $request->input('mood');
             $entry->content = $request->input('content');
             $entry->metadata = $metadata;
+            $entry->entry_date = $request->input('entry_date') ? new \DateTime($request->input('entry_date')) : now();
             $entry->save();
 
             DB::commit();

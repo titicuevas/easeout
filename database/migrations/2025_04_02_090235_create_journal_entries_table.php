@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('content')->nullable();
             $table->string('mood')->nullable();
             $table->json('metadata')->nullable();
+            $table->timestamp('entry_date')->nullable();
             $table->timestamps();
         });
     }
