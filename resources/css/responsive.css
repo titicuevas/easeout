@@ -304,7 +304,7 @@
     .welcome-header + main,
     .welcome-header ~ main,
     .main-welcome {
-        padding-top: 4.5rem !important;
+        padding-top: 120px !important;
         margin-top: 0 !important;
     }
     .main-welcome.mt-16 {
