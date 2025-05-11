@@ -97,6 +97,90 @@
     .modal-title {
         font-size: 1.25rem;
     }
+
+    /* Header: navegación apilada y botones más pequeños */
+    header .flex {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.5rem !important;
+    }
+    header nav {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+    }
+    header .px-4, header .sm\:px-6, header .lg\:px-8 {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+    header .py-4 {
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+    header img {
+        height: 2rem !important;
+        width: auto !important;
+    }
+    header span {
+        font-size: 1rem !important;
+    }
+
+    /* Títulos y textos grandes */
+    h1, .text-4xl, .sm\:text-6xl {
+        font-size: 2rem !important;
+        line-height: 2.2rem !important;
+    }
+    h2, .text-2xl {
+        font-size: 1.25rem !important;
+        line-height: 1.5rem !important;
+    }
+    .mt-32 {
+        margin-top: 1.5rem !important;
+    }
+    .py-12 {
+        padding-top: 1.5rem !important;
+        padding-bottom: 1.5rem !important;
+    }
+    .px-4, .sm\:px-6, .lg\:px-8 {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+    .max-w-7xl, .max-w-3xl, .max-w-xl {
+        max-width: 100% !important;
+    }
+
+    /* Grids de emociones y filtros: 2 columnas */
+    .mood-grid, .mood-filters, .calendar-filters {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.5rem !important;
+    }
+    .mood-button, .mood-filter {
+        min-width: 0 !important;
+        font-size: 1rem !important;
+        padding: 0.5rem !important;
+    }
+
+    /* Tarjetas y contenedores */
+    .bg-gray-800, .bg-paper, .bg-white, .modal-content {
+        padding: 0.75rem !important;
+        border-radius: 0.75rem !important;
+    }
+    .shadow-lg, .shadow, .shadow-sm {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.10) !important;
+    }
+
+    /* Botones principales */
+    .rounded-md, .rounded-xl {
+        border-radius: 0.5rem !important;
+    }
+    .px-6, .py-3\.5 {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+    .gap-x-6, .gap-4, .gap-8 {
+        gap: 0.5rem !important;
+    }
 }
 
 /* Ajustes para tablets */
