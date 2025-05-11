@@ -11,7 +11,7 @@ const locales = {
 const localizer = dateFnsLocalizer({
     format,
     parse,
-    startOfWeek,
+    startOfWeek: (date, options) => startOfWeek(date, { weekStartsOn: 1, ...options }),
     getDay,
     locales,
 });
@@ -125,7 +125,22 @@ export default function Calendar({ entries, onEntryClick }) {
                         today: "Hoy",
                         month: "Mes",
                         week: "Semana",
-                        day: "Día"
+                        day: "Día",
+                        date: "Fecha",
+                        time: "Hora",
+                        event: "Evento",
+                        showMore: total => `+ Ver más (${total})`,
+                        work_week: "Semana laboral",
+                        agenda: "Agenda",
+                        noEventsInRange: "No hay eventos en este rango.",
+                        allDay: "Todo el día",
+                        sunday: "Domingo",
+                        monday: "Lunes",
+                        tuesday: "Martes",
+                        wednesday: "Miércoles",
+                        thursday: "Jueves",
+                        friday: "Viernes",
+                        saturday: "Sábado",
                     }}
                     eventPropGetter={(event) => ({
                         className: `mood-${event.resource.mood}`,
