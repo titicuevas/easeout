@@ -97,6 +97,11 @@ export default function Calendar({ entries, onEntryClick }) {
         onEntryClick(dayEntries);
     };
 
+    // Al hacer clic en un evento (entrada individual)
+    const handleSelectEvent = (event) => {
+        onEntryClick([event.resource]);
+    };
+
     const moods = [
         'happy', 'neutral', 'sad', 'angry', 'frustrated',
         'in_love', 'heartbroken', 'grateful', 'motivated', 'tired',
