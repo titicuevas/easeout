@@ -66,6 +66,19 @@ export default function Calendar({ entries, onEntryClick }) {
         }
     };
 
+    // Agrupar entradas por fecha (usando entry_date o created_at)
+    const groupEntriesByDate = (entries) => {
+        const map = {};
+        entries.forEach(entry => {
+            const dateKey = (entry.entry_date || entry.created_at).split('T')[0];
+            if (!map[dateKey]) map[dateKey] = [];
+            map[dateKey].push(entry);
+        });
+        return map;
+    };
+
+    const groupedEntries = groupEntriesByDate(entries);
+
     // Convertir las entradas al formato que espera react-big-calendar
     const events = entries
         .filter(entry => !moodFilter || entry.mood === moodFilter)
@@ -77,8 +90,11 @@ export default function Calendar({ entries, onEntryClick }) {
             resource: entry
         }));
 
-    const handleSelectEvent = (event) => {
-        onEntryClick([event.resource]);
+    // Al hacer clic en un día, mostrar todas las entradas de ese día
+    const handleSelectSlot = (slotInfo) => {
+        const dateKey = slotInfo.start.toISOString().split('T')[0];
+        const dayEntries = groupedEntries[dateKey] || [];
+        onEntryClick(dayEntries);
     };
 
     const moods = [
@@ -118,6 +134,8 @@ export default function Calendar({ entries, onEntryClick }) {
                     endAccessor="end"
                     style={{ height: '100%' }}
                     onSelectEvent={handleSelectEvent}
+                    onSelectSlot={handleSelectSlot}
+                    selectable
                     views={['month', 'week', 'day']}
                     messages={{
                         next: "Siguiente",
@@ -141,6 +159,14 @@ export default function Calendar({ entries, onEntryClick }) {
                         thursday: "Jueves",
                         friday: "Viernes",
                         saturday: "Sábado",
+                    }}
+                    formats={{
+                        monthHeaderFormat: (date, culture, localizer) =>
+                            format(date, "MMMM yyyy", { locale: es }),
+                        dayHeaderFormat: (date, culture, localizer) =>
+                            format(date, "EEEE d MMMM", { locale: es }),
+                        weekdayFormat: (date, culture, localizer) =>
+                            format(date, "EEE", { locale: es }),
                     }}
                     eventPropGetter={(event) => ({
                         className: `mood-${event.resource.mood}`,

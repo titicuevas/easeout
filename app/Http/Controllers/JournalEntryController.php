@@ -29,6 +29,7 @@ class JournalEntryController extends Controller
                     'mood' => $entry->mood,
                     'content' => $entry->content,
                     'metadata' => $metadata,
+                    'entry_date' => $entry->entry_date,
                     'created_at' => $entry->created_at,
                     'updated_at' => $entry->updated_at,
                 ];
