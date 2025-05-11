@@ -181,6 +181,55 @@
     .gap-x-6, .gap-4, .gap-8 {
         gap: 0.5rem !important;
     }
+
+    /* Refuerzo para grid de emociones: 2 columnas sí o sí */
+    body .mood-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem !important;
+    }
+    body .mood-button {
+        min-width: 44px !important;
+        min-height: 44px !important;
+        font-size: 1.1rem !important;
+        padding: 0.75rem !important;
+    }
+
+    /* SOLO para el header de Welcome */
+    .welcome-header .flex {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.5rem !important;
+    }
+    .welcome-header nav {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+        width: 100% !important;
+    }
+    .welcome-header img {
+        height: 2rem !important;
+        width: auto !important;
+        margin-bottom: 0.5rem !important;
+    }
+    .welcome-header span {
+        font-size: 1rem !important;
+    }
+    .welcome-header .px-4, 
+    .welcome-header .sm\:px-6, 
+    .welcome-header .lg\:px-8 {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+    .welcome-header .py-4 {
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+    .welcome-header nav a, .welcome-header nav button {
+        width: 100% !important;
+        margin-bottom: 0.25rem !important;
+        font-size: 1rem !important;
+        justify-content: center !important;
+    }
 }
 
 /* Ajustes para tablets */

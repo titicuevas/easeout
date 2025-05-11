@@ -7,7 +7,7 @@ export default function Welcome({ auth }) {
             <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
                 <div className="relative flex min-h-screen flex-col items-center justify-center">
                     {/* Header con navegación */}
-                    <header className="fixed top-0 w-full bg-gray-900/90 backdrop-blur-md shadow-lg z-50">
+                    <header className="welcome-header fixed top-0 w-full bg-gray-900/90 backdrop-blur-md shadow-lg z-50">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                             <div className="flex justify-between items-center">
                                 <div className="flex items-center">
